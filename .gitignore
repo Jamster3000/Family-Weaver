@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.svelte-kit
+/.vs
+/node_modules
+/src-tauri/target

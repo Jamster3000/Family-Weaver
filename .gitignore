@@ -6,3 +6,7 @@
 /.vs
 /node_modules
 /src-tauri/target
+/build
+*.db
+*.db-shm
+*.db-wal

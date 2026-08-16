@@ -1,8 +1,9 @@
 use std::sync::{Arc, Mutex};
 use tauri::Manager;
 
-mod database;
-mod state;
+pub mod database;
+pub mod state;
+pub mod models;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -33,6 +34,11 @@ pub fn run() {
 
             Ok(())
         })
+        .invoke_handler(tauri::generate_handler![
+            database::create::create_tree,
+            database::check::check_tree_exists,
+            database::get::get_active_tree_name
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

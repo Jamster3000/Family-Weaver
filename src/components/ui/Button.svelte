@@ -82,7 +82,8 @@
   .secondary {
     background: transparent;
     color: var(--secondary-colour);
-    border: 1.5px solid var(--secondary-colour);
+    font-weight: 800px;
+    border: 2.5px solid var(--secondary-colour);
     box-shadow: none;
   }
 

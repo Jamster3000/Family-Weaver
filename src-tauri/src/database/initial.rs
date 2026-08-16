@@ -3,8 +3,10 @@ use rusqlite::{Connection, Result};
 pub fn open(path: &str) -> Result<Connection> {
     let conn = Connection::open(path)?;
 
+    //        PRAGMA journal_mode=WAL;
+
+
     conn.execute_batch("
-        PRAGMA journal_mode=WAL;
         PRAGMA foreign_keys=ON;
 
         CREATE TABLE IF NOT EXISTS persons (
@@ -75,6 +77,7 @@ pub fn open(path: &str) -> Result<Connection> {
         CREATE TABLE IF NOT EXISTS trees (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
+            active_tree BOOLEAN NOT NULL DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );

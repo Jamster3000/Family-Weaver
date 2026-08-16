@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Network, type Node, type Edge, type Options } from 'vis-network/standalone';
+  import { networkStore } from '$stores';
 
   let container: HTMLDivElement;
   let network: Network;
@@ -64,6 +65,8 @@
 
     network = new Network(container, { nodes, edges }, options);
 
+    networkStore.set(network);
+
     return () => {
       if (network) {
         network.destroy();
@@ -83,4 +86,12 @@
     border-radius: 6px;
     background: var(--primary-background);
   }
+
+  :global(.vis-navigation) {
+  display: none !important;
+}
+
+:global(.vis-button) {
+  display: none !important;
+}
 </style>

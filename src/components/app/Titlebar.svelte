@@ -1,13 +1,28 @@
 <script lang="ts">
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { onMount } from 'svelte';
-  import { IconMinus, IconSquares, IconX, IconTree, IconCircleArrowLeft, IconCircleArrowRight  } from '@tabler/icons-svelte-runes';
+  import { invoke } from '@tauri-apps/api/core';
+  import { listen } from '@tauri-apps/api/event';
+  import { IconMinus, IconSquares, IconX, IconCircleArrowLeft, IconCircleArrowRight  } from '@tabler/icons-svelte-runes';
   import Button from '$components/ui/Button.svelte';
 
   let appWindow: any;
+  let active_tree_name: string | null = null;
 
   onMount(async () => {
     appWindow = await getCurrentWindow();
+
+    // load the tree name
+    active_tree_name = await invoke('get_active_tree_name');
+
+    // listen for when switching tree names
+    const unlisten = await listen('tree-changed', (event: any) => {
+        active_tree_name = event.payload.name;
+    });
+
+    return () => {
+        unlisten();
+    };
   });
 </script>
 
@@ -21,8 +36,11 @@
       <IconCircleArrowRight size={24} color="var(--text-colour)" />
     </Button>
 
-    <p class="title-text">Family Weaver</p>
-    <IconTree size={18} color="var(--text-colour)" />
+    {#if active_tree_name}
+        <p class="title-text">Family Weaver - {active_tree_name}</p>
+    {:else}
+        <p class="title-text">Family Weaver</p>
+    {/if}
   </div>
 
   <div class="titlebar-controls">

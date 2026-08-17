@@ -11,7 +11,7 @@
 	let activeTab: String = "";
 </script>
 
-<Popup {isOpen} closeOnBackdrop={true}>
+<Popup bind:isOpen closeOnBackdrop={true}>
 	<Card width="100%" padding="small">
 		<Close onClick={() => (isOpen = false)} />
 

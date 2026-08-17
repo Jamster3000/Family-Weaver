@@ -191,7 +191,7 @@
 		border-radius: 12px;
 		padding: 14px 20px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-		z-index: 1000;
+		z-index: 999;
 		width: fit-content;
 	}
 
@@ -231,7 +231,7 @@
 		border-radius: 8px;
 		box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
 		min-width: 240px;
-		z-index: 1001;
+		z-index: 1000;
 		overflow: hidden;
 		opacity: 0;
 		transform: translateY(8px);
@@ -277,7 +277,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		z-index: 999;
+		z-index: 998;
 	}
 
 	@media (max-width: 768px) {

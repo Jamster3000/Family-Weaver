@@ -2,13 +2,36 @@
 	import Card from "$components/ui/Card.svelte";
 	import Popup from "$components/app/Popup.svelte";
 	import Close from "$components/ui/Close.svelte";
+	import Button from "$components/ui/Button.svelte";
 	import PersonOverview from "$components/app/person/PersonOverview.svelte";
 	import PersonUpload from "$components/app/person/PersonUpload.svelte";
 	import PersonRelationships from "$components/app/person/PersonRelationships.svelte";
 	import PersonTimelines from "$components/app/person/PersonTimelines.svelte";
+	import Tooltip from "$components/ui/Tooltip.svelte";
+	import { hasPersonChanged, resetPersonData } from "$stores";
 
 	export let isOpen: boolean = false;
-	let activeTab: String = "";
+
+	let activeTab: string = "overview";
+	let confirmDiscard: boolean = false;
+
+	function handlePersonDiscard() {
+		const hasPersonDataChanged = hasPersonChanged();
+
+		if (hasPersonDataChanged) {
+			confirmDiscard = true;
+		} else {
+			isOpen = false;
+		}
+	}
+
+	function handleDiscard() {
+		resetPersonData();
+		confirmDiscard = false;
+		setTimeout(() => {
+			isOpen = false;
+		}, 300);
+	}
 </script>
 
 <Popup bind:isOpen closeOnBackdrop={true}>
@@ -20,23 +43,43 @@
 		</div>
 
 		<div class="tabs">
-			<button
-				class:active={activeTab === "overview"}
-				on:click={() => (activeTab = "overview")}>Overview</button
+			<Tooltip
+				text="The basic details of the person like name and birth date."
+				position="top"
 			>
-			<button
-				class:active={activeTab === "upload"}
-				on:click={() => (activeTab = "upload")}>Upload</button
+				<button
+					class:active={activeTab === "overview"}
+					on:click={() => (activeTab = "overview")}>Overview</button
+				>
+			</Tooltip>
+			<Tooltip
+				text="Add photos, documents, or other files for this person."
+				position="top"
 			>
-			<button
-				class:active={activeTab === "relationships"}
-				on:click={() => (activeTab = "relationships")}
-				>Relationships</button
+				<button
+					class:active={activeTab === "upload"}
+					on:click={() => (activeTab = "upload")}>Upload</button
+				>
+			</Tooltip>
+			<Tooltip
+				text="Connect this person to parents, partners, or children."
+				position="top"
 			>
-			<button
-				class:active={activeTab === "timelines"}
-				on:click={() => (activeTab = "timelines")}>Timelines</button
+				<button
+					class:active={activeTab === "relationships"}
+					on:click={() => (activeTab = "relationships")}
+					>Relationships</button
+				>
+			</Tooltip>
+			<Tooltip
+				text="Track work history, education, and life events over time."
+				position="top"
 			>
+				<button
+					class:active={activeTab === "timelines"}
+					on:click={() => (activeTab = "timelines")}>Timelines</button
+				>
+			</Tooltip>
 		</div>
 
 		<div class="tab-content">
@@ -52,91 +95,139 @@
 		</div>
 
 		<div class="modal-footer">
-			<button>Save</button>
-			<button>Close</button>
+			<Tooltip
+				text="Save this person and return to your family tree."
+				position="top"
+			>
+				<Button>Save</Button>
+			</Tooltip>
+			<Tooltip
+				text="Discard this person, deleting any progress and returning to your family tree."
+				position="top"
+			>
+				<Button variant="secondary" on:click={handlePersonDiscard}
+					>Discard</Button
+				>
+			</Tooltip>
+		</div>
+	</Card>
+</Popup>
+
+<Popup bind:isOpen={confirmDiscard} closeOnBackdrop={true}>
+	<Card width="50%" padding="small">
+		<Close onClick={() => (confirmDiscard = false)} />
+
+		<div class="confirm-header">
+			<h2>Discard Changes?</h2>
+		</div>
+
+		<p class="confirm-message">
+			You have unsaved changes. Are you sure you want to discard this
+			person?
+		</p>
+
+		<div class="confirm-footer">
+			<Button
+				variant="secondary"
+				on:click={() => (confirmDiscard = false)}
+				>No, continue editing</Button
+			>
+			<Button on:click={handleDiscard}>Yes, discard</Button>
 		</div>
 	</Card>
 </Popup>
 
 <style>
-  .modal-header {
-    margin-bottom: 24px;
-    border-bottom: 1px solid var(--border-colour);
-    padding-bottom: 16px;
-  }
+	.modal-header {
+		margin-bottom: 24px;
+		width: 100%;
+	}
 
-  .modal-header h1 {
-    font-size: var(--font-xlarge);
-    margin: 0;
-    color: var(--text-colour);
-  }
+	.modal-header h1 {
+		font-size: var(--font-xlarge);
+		margin: 0;
+		color: var(--text-colour);
+		text-align: center;
+	}
 
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid var(--border-colour);
-  }
+	.tabs {
+		display: flex;
+		margin-bottom: 32px;
+		width: 100%;
+		border: 1px solid var(--border-colour);
+		border-radius: 8px;
+		overflow: hidden;
+	}
 
-  .tabs button {
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
-    color: var(--text-colour);
-    font-size: var(--font-medium);
-    font-family: var(--font-primary);
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease;
-    opacity: 0.6;
-  }
+	.tabs button {
+		flex: 1;
+		padding: 12px 16px;
+		background: transparent;
+		border: none;
+		border-right: 1px solid var(--border-colour);
+		color: var(--text-colour);
+		font-size: var(--font-medium);
+		font-family: var(--font-primary);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		opacity: 0.7;
+		text-align: center;
+	}
 
-  .tabs button:hover {
-    opacity: 0.8;
-  }
+	.tabs button:last-child {
+		border-right: none;
+	}
 
-  .tabs button.active {
-    color: var(--primary-colour);
-    border-bottom-color: var(--primary-colour);
-    opacity: 1;
-  }
+	.tabs button:hover {
+		opacity: 1;
+		background: color-mix(in srgb, var(--primary-colour) 10%, transparent);
+	}
 
-  .tab-content {
-    min-height: 400px;
-    margin-bottom: 24px;
-  }
+	.tabs button.active {
+		color: var(--text-colour);
+		opacity: 1;
+		background: color-mix(in srgb, var(--primary-colour) 20%, transparent);
+		font-weight: bold;
+	}
 
-  .modal-footer {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-colour);
-  }
+	.tab-content {
+		min-height: 400px;
+		margin-bottom: 24px;
+		width: 100%;
+	}
 
-  .modal-footer button {
-    padding: 10px 20px;
-    background: var(--primary-colour);
-    color: var(--text-colour);
-    border: none;
-    border-radius: 6px;
-    font-size: var(--font-medium);
-    font-family: var(--font-primary);
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
+	.modal-footer {
+		display: flex;
+		gap: 12px;
+		justify-content: flex-end;
+		padding-top: 24px;
+		width: 100%;
+	}
 
-  .modal-footer button:hover {
-    background: color-mix(in srgb, var(--primary-colour) 85%, black);
-  }
+	.confirm-header {
+		width: 100%;
+		margin-bottom: 16px;
+	}
 
-  .modal-footer button:last-child {
-    background: transparent;
-    border: 1.5px solid var(--border-colour);
-    color: var(--text-colour);
-  }
+	.confirm-header h2 {
+		font-size: var(--font-large);
+		margin: 0;
+		color: var(--text-colour);
+		text-align: center;
+	}
 
-  .modal-footer button:last-child:hover {
-    background: color-mix(in srgb, var(--primary-colour) 10%, transparent);
-  }
+	.confirm-message {
+		color: var(--text-colour);
+		opacity: 0.8;
+		text-align: center;
+		margin-bottom: 24px;
+		font-size: var(--font-medium);
+	}
+
+	.confirm-footer {
+		display: flex;
+		gap: 12px;
+		justify-content: center;
+		width: 100%;
+	}
 </style>

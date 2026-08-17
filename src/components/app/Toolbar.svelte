@@ -167,7 +167,9 @@
 </div>
 
 {#if openDropup}
-	<div class="backdrop" on:click={closeDropup} />
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="backdrop" on:click={closeDropup}></div>
 {/if}
 
 <style>

@@ -11,7 +11,7 @@
 </script>
 
 <Popup isOpen={isOpen} closeOnBackdrop={true}>
-    <Card width="100%">
+    <Card width="100%" padding="small">
         <Close onClick={() => (isOpen = false)} />
         <h1> Welcome to Family Weaver</h1>
 

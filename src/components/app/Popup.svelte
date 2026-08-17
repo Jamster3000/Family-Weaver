@@ -7,7 +7,6 @@
   export let isOpen = false;
   export let onClose: (() => void) | undefined = undefined;
   export let closeOnBackdrop = false;
-  export let width = 'fit-content';
 
   function handleBackdropClick(e: MouseEvent) {
     if (closeOnBackdrop && e.target === e.currentTarget) {
@@ -38,7 +37,7 @@
       on:click={handleBackdropClick}
       transition:fly={{ y: 20, duration: 300, easing: quintOut }}
     >
-      <div class="content-wrapper" style:width={width}>
+      <div class="content-wrapper">
         <slot />
       </div>
     </div>
@@ -70,8 +69,9 @@
   }
 
   .content-wrapper {
-    position: relative;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 </style>

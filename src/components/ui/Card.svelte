@@ -23,6 +23,7 @@
     border-radius: 12px;
     border: 1px solid var(--border-colour);
     color: var(--text-colour);
+    box-sizing: border-box;
   }
 
   .card.center {

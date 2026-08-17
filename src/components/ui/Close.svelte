@@ -4,7 +4,7 @@
 
   export let onClick: (() => void) | undefined = undefined;
   export let tooltipText = 'Close';
-  export let size = 20;
+  export let size = 28;
 </script>
 
 <div class="close-button-wrapper">
@@ -33,7 +33,7 @@
     border: 1px solid var(--border-colour, #3f4252);
     color: var(--text-colour, #fff);
     cursor: pointer;
-    padding: 6px;
+    padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;

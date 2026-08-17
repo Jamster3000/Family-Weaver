@@ -214,7 +214,7 @@
 	}
 
 	:global(.toolbar-item .chevron) {
-		transition: transform 0.2s ease;
+		transition: transform 0.5s ease;
 		margin-left: 4px;
 	}
 

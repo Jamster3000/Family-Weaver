@@ -13,7 +13,7 @@
 	import { fade } from "svelte/transition";
 	import Create_tree from "$components/app/Create_tree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
-	import Person from "$components/app/Person.svelte";
+	import Person from "$components/app/person/Person.svelte";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;

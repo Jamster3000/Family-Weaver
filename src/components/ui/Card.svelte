@@ -17,6 +17,7 @@
   }
 
   .card {
+    position: relative;
     width: var(--card-width);
     height: var(--card-height);
     border-radius: 12px;

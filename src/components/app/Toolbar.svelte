@@ -13,9 +13,11 @@
 	import { fade } from "svelte/transition";
 	import Create_tree from "$components/app/Create_tree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
+	import Person from "$components/app/Person.svelte";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;
+	let person_modal_open: boolean = false;
 
 	interface ToolbarItem {
 		id: string;
@@ -38,7 +40,7 @@
 					label: "Add Person",
 					tooltip: "Add a new person to the active family tree.",
 					icon: IconUserPlus,
-					action: () => console.log("create person"),
+					action: () => (person_modal_open = true),
 				},
 				{
 					id: "create-tree",
@@ -102,6 +104,8 @@
 	bind:open_popup={create_tree_open}
 	firstTime={create_tree_first_time}
 />
+
+<Person bind:isOpen={person_modal_open} />
 
 <div class="toolbar">
 	<div class="toolbar-left">

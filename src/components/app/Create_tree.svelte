@@ -6,6 +6,7 @@
     import Button from '$components/ui/Button.svelte';
     import { invoke } from '@tauri-apps/api/core';
     import { goto } from '$app/navigation';
+    import Close from '$components/ui/Close.svelte';
 
     let tree_name: string = "";
     export let firstTime: boolean = true;
@@ -28,7 +29,7 @@
     }
 </script>
 
-<Popup isOpen={open_popup} showCloseButton={true} onClose={() => open_popup = false}>
+<Popup isOpen={open_popup} onClose={() => open_popup = false}>
     <Card width="70%">
         {#if firstTime}
             <h1><IconTree size={42} /> Welcome to Family Weaver</h1>
@@ -37,6 +38,7 @@
 
             <p>Let's create your first family tree to get started.</p>
         {:else}
+            <Close onClick={() => (open_popup = false)} />
             <h1><IconTree size={42} /> Create New Family Tree</h1>
 
             <p>You already have a family tree. Creating a new one will switch your active tree.</p>

@@ -7,7 +7,7 @@
   export let isOpen = false;
   export let onClose: (() => void) | undefined = undefined;
   export let closeOnBackdrop = false;
-  export let showCloseButton = false;
+  export let width = 'fit-content';
 
   function handleBackdropClick(e: MouseEvent) {
     if (closeOnBackdrop && e.target === e.currentTarget) {
@@ -24,13 +24,13 @@
 
 {#if isOpen}
   <div
-      class="dialog-backdrop"
-      on:click={handleBackdropClick}
-      data-testid="popup-backdrop"
-      role="presentation"
-      tabindex="-1"
-      transition:fade={{ duration: 500 }}
-    >
+    class="dialog-backdrop"
+    on:click={handleBackdropClick}
+    data-testid="popup-backdrop"
+    role="presentation"
+    tabindex="-1"
+    transition:fade={{ duration: 500 }}
+  >
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div
@@ -38,19 +38,7 @@
       on:click={handleBackdropClick}
       transition:fly={{ y: 20, duration: 300, easing: quintOut }}
     >
-      <div class="content-wrapper">
-        {#if showCloseButton}
-          <Tooltip text="Close popup" position="top">
-            <button
-              class="close-button"
-              on:click={handleCloseClick}
-              aria-label="Close popup"
-              type="button"
-            >
-              <IconX size={24} />
-            </button>
-          </Tooltip>
-        {/if}
+      <div class="content-wrapper" style:width={width}>
         <slot />
       </div>
     </div>
@@ -58,10 +46,6 @@
 {/if}
 
 <style>
-  .content-wrapper {
-    position: relative;
-  }
-
   .dialog-backdrop {
     position: fixed;
     left: 0;
@@ -85,29 +69,9 @@
     justify-content: center;
   }
 
-  .close-button {
-      position: absolute;
-      top: 16px;
-      right: 180px;
-      background: transparent;
-      border: 1px solid var(--border-colour);
-      color: var(--text-colour);
-      cursor: pointer;
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      transition: background 0.15s, border-color 0.15s;
-      z-index: 1001;
-    }
-
-    .close-button:hover {
-      background: color-mix(in srgb, var(--primary-colour) 40%, transparent);
-      border-color: var(--primary-colour);
-    }
-
-    .close-button:active {
-      background: color-mix(in srgb, var(--primary-colour) 20%, transparent);
-    }
+  .content-wrapper {
+    position: relative;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 </style>

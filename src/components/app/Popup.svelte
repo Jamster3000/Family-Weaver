@@ -51,7 +51,7 @@
     right: 0;
     top: calc(var(--titlebar-height, 0px) + var(--header-height, 0px));
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.6);
     z-index: 1000;
   }
 

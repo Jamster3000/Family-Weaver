@@ -44,12 +44,10 @@
   $: safeType = validTypes.includes(type) ? type : 'text';
 
   // Calculate width based on placeholder length
-  // Approximate character width for Lora font at 1rem
   $: charWidth = 8.5;
   $: bufferPixels = 56; // padding (10px + 14px) + extra buffer
   $: calculatedWidth = placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : 'auto';
 </script>
-
 
 <div class="field">
   {#if label}
@@ -110,12 +108,19 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    text-align: left;
+    width: 100%;
   }
 
   label {
     font-size: var(--font-medium);
     font-weight: 400;
     color: var(--text-colour);
+  }
+
+  .field:focus-within label {
+    color: var(--secondary-colour);
+    font-weight: 600;
   }
 
   .required {
@@ -126,20 +131,21 @@
   .input-wrap {
     display: flex;
     align-items: center;
-    background: var(--secondary-background);
-    border: 1.5px solid var(--border-colour);
+    background: color-mix(in srgb, var(--secondary-background) 75%, black);
+    border: 2px solid color-mix(in srgb, var(--border-colour) 50%, transparent);
     border-radius: 8px;
-    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
+  }
+
+  .input-wrap:focus-within {
+    border: 2px solid var(--primary-colour);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-colour) 40%, transparent);
+    background: color-mix(in srgb, var(--secondary-background) 80%, white 10%);
   }
 
   .input-wrap.multiline {
     align-items: flex-start;
     padding: 0;
-  }
-
-  .input-wrap:focus-within {
-    border-color: var(--primary-colour);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-colour) 15%, transparent);
   }
 
   .input-wrap.error {
@@ -164,6 +170,7 @@
     font-family: var(--font-primary);
     color: var(--text-colour);
     width: 100%;
+    caret-color: var(--primary-colour);
   }
 
   textarea {

@@ -35,7 +35,7 @@
 </script>
 
 <Popup bind:isOpen closeOnBackdrop={true}>
-	<Card width="100%" padding="small">
+	<Card width="100%" padding="medium">
 		<Close onClick={() => (isOpen = false)} />
 
 		<div class="modal-header">
@@ -191,9 +191,11 @@
 	}
 
 	.tab-content {
-		min-height: 400px;
+		height: 450px;
 		margin-bottom: 24px;
 		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	.modal-footer {

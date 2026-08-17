@@ -12,14 +12,14 @@ pub fn open(path: &str) -> Result<Connection> {
         CREATE TABLE IF NOT EXISTS persons (
             id TEXT PRIMARY KEY,
             tree_id TEXT NOT NULL,
-            first_name TEXT NOT NULL,
+            first_name TEXT DEFAULT '',
             middle_names TEXT DEFAULT '',
-            last_name TEXT NOT NULL,
+            last_name TEXT DEFAULT '',
             dob DATETIME,
             birth_location TEXT DEFAULT '',
             dod DATETIME,
             death_location TEXT DEFAULT '',
-            key_facts TEXT DEFAULT '',
+            important_notes TEXT DEFAULT '',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (tree_id) REFERENCES trees(id) ON DELETE CASCADE

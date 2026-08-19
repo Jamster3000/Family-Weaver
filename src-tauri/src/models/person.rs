@@ -178,7 +178,11 @@ impl std::fmt::Display for ValidationError {
                 write!(f, "Death location must be {} characters or less", max)
             }
             Self::ImportantNotesTooLong { max } => {
-                write!(f, "Biography & important notes must be {} characters or less", max)
+                write!(
+                    f,
+                    "Biography & important notes must be {} characters or less",
+                    max
+                )
             }
         }
     }

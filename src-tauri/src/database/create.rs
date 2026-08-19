@@ -1,13 +1,17 @@
-use crate::state::AppState;
-use rusqlite::params;
-use chrono::Utc;
-use crate::models::tree::Tree;
 use crate::models::person::{Person, PersonValidator};
+use crate::models::tree::Tree;
+use crate::state::AppState;
+use chrono::Utc;
+use rusqlite::params;
 use tauri::AppHandle;
 use tauri::Emitter;
 
 #[tauri::command]
-pub async fn create_tree(tree: Tree, state: tauri::State<'_, AppState>, app: AppHandle) -> Result<Tree, String> {
+pub async fn create_tree(
+    tree: Tree,
+    state: tauri::State<'_, AppState>,
+    app: AppHandle,
+) -> Result<Tree, String> {
     let conn = state.conn.lock().map_err(|e| e.to_string())?;
     let now = Utc::now().to_rfc3339();
     let tree_id = uuid::Uuid::new_v4().to_string();
@@ -34,7 +38,10 @@ pub async fn create_tree(tree: Tree, state: tauri::State<'_, AppState>, app: App
 }
 
 #[tauri::command]
-pub async fn create_person(person: Person, state: tauri::State<'_, AppState>, app: AppHandle) -> Result<String, String> {
+pub async fn create_person(
+    person: Person,
+    state: tauri::State<'_, AppState>,
+) -> Result<String, String> {
     let validator = PersonValidator::default();
 
     // Validate the person data
@@ -67,7 +74,8 @@ pub async fn create_person(person: Person, state: tauri::State<'_, AppState>, ap
         conn.execute(
             "INSERT INTO person_parents (person_id, parent_id) VALUES (?1, ?2)",
             params![&person.id, parent_id],
-        ).map_err(|e| e.to_string())?;
+        )
+        .map_err(|e| e.to_string())?;
     }
 
     // Insert relationships (partners)
@@ -75,7 +83,8 @@ pub async fn create_person(person: Person, state: tauri::State<'_, AppState>, ap
         conn.execute(
             "INSERT INTO person_partners (person_id, partner_id) VALUES (?1, ?2)",
             params![&person.id, partner_id],
-        ).map_err(|e| e.to_string())?;
+        )
+        .map_err(|e| e.to_string())?;
     }
 
     // Insert relationships (children)
@@ -83,7 +92,8 @@ pub async fn create_person(person: Person, state: tauri::State<'_, AppState>, ap
         conn.execute(
             "INSERT INTO person_children (person_id, child_id) VALUES (?1, ?2)",
             params![&person.id, child_id],
-        ).map_err(|e| e.to_string())?;
+        )
+        .map_err(|e| e.to_string())?;
     }
 
     // Insert marriages
@@ -157,7 +167,6 @@ pub async fn create_person(person: Person, state: tauri::State<'_, AppState>, ap
 
     Ok(person.id)
 }
-
 
 /*
 let validator = PersonValidator::default();

@@ -5,8 +5,8 @@ pub fn open(path: &str) -> Result<Connection> {
 
     //        PRAGMA journal_mode=WAL;
 
-
-    conn.execute_batch("
+    conn.execute_batch(
+        "
         PRAGMA foreign_keys=ON;
 
         CREATE TABLE IF NOT EXISTS person (
@@ -87,6 +87,7 @@ pub fn open(path: &str) -> Result<Connection> {
         CREATE INDEX IF NOT EXISTS idx_marriages_person_id ON marriages(person_id);
         CREATE INDEX IF NOT EXISTS idx_person_parents_parent_id ON person_parents(parent_id);
         CREATE INDEX IF NOT EXISTS idx_person_children_child_id ON person_children(child_id);
-    ")?;
+    ",
+    )?;
     Ok(conn)
 }

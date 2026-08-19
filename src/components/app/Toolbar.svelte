@@ -138,6 +138,7 @@
 
 		try {
 			await invoke("delete_tree", { treeId: tree_id });
+			await invoke("set_new_active_tree");
 		} catch (error) {
 			console.error("Error deleting tree:", error);
 		}

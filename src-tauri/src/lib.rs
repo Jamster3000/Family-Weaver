@@ -2,8 +2,8 @@ use std::sync::{Arc, Mutex};
 use tauri::Manager;
 
 pub mod database;
-pub mod state;
 pub mod models;
+pub mod state;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,10 +21,11 @@ pub fn run() {
     };
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
             let conn = Arc::new(Mutex::new(
-                database::initial::open(db_path.to_str().unwrap()).unwrap()
+                database::initial::open(db_path.to_str().unwrap()).unwrap(),
             ));
 
             app.manage(state::AppState {
@@ -39,7 +40,8 @@ pub fn run() {
             database::create::create_person,
             database::check::check_tree_exists,
             database::get::get_active_tree,
-            database::delete::delete_tree
+            database::delete::delete_tree,
+            database::set::set_new_active_tree
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

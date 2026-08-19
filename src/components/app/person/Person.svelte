@@ -8,12 +8,37 @@
 	import PersonRelationships from "$components/app/person/PersonRelationships.svelte";
 	import PersonTimelines from "$components/app/person/PersonTimelines.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
-	import { hasPersonChanged, resetPersonData } from "$stores";
+	import { fade } from "svelte/transition";
+	import {
+		personData,
+		hasPersonChanged,
+		resetPersonData,
+		getPersonData,
+		getActiveTree,
+	} from "$stores";
+	import { invoke } from "@tauri-apps/api/core";
 
 	export let isOpen: boolean = false;
 
 	let activeTab: string = "overview";
 	let confirmDiscard: boolean = false;
+	let isAddingTimelineEvent: boolean = false;
+
+	$: hasChanges = $personData ? hasPersonChanged() : false;
+
+	async function handlePersonSave() {
+		const personData = getPersonData();
+		const activeTree = getActiveTree();
+
+		let createdPerson = await invoke("create_person", {
+			person: {
+				...personData,
+				id: crypto.randomUUID(),
+				tree_id: activeTree?.id,
+			},
+		});
+		isOpen = false;
+	}
 
 	function handlePersonDiscard() {
 		const hasPersonDataChanged = hasPersonChanged();
@@ -83,24 +108,44 @@
 		</div>
 
 		<div class="tab-content">
-			{#if activeTab === "overview"}
-				<PersonOverview />
-			{:else if activeTab === "upload"}
-				<PersonUpload />
-			{:else if activeTab === "relationships"}
-				<PersonRelationships />
-			{:else if activeTab === "timelines"}
-				<PersonTimelines />
-			{/if}
+			{#key activeTab}
+				<div in:fade={{ duration: 275 }} class="tab-panel">
+					{#if activeTab === "overview"}
+						<PersonOverview />
+					{:else if activeTab === "upload"}
+						<PersonUpload />
+					{:else if activeTab === "relationships"}
+						<PersonRelationships />
+					{:else if activeTab === "timelines"}
+						<PersonTimelines bind:isAddingEntry={isAddingTimelineEvent} />
+					{/if}
+				</div>
+			{/key}
 		</div>
 
 		<div class="modal-footer">
-			<Tooltip
-				text="Save this person and return to your family tree."
-				position="top"
-			>
-				<Button>Save</Button>
-			</Tooltip>
+			{#if isAddingTimelineEvent}
+				<Tooltip
+					text="You must finish adding the timeline event before saving this person."
+					position="top"
+				>
+					<Button disabled={true}>Save</Button>
+				</Tooltip>
+			{:else if !hasChanges}
+				<Tooltip
+					text="Please add some information about this person before saving."
+					position="top"
+				>
+					<Button disabled={true}>Save</Button>
+				</Tooltip>
+			{:else}
+				<Tooltip
+					text="Save this person and return to your family tree."
+					position="top"
+				>
+					<Button on:click={handlePersonSave}>Save</Button>
+				</Tooltip>
+			{/if}
 			<Tooltip
 				text="Discard this person, deleting any progress and returning to your family tree."
 				position="top"

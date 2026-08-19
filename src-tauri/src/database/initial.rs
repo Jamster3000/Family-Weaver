@@ -9,7 +9,7 @@ pub fn open(path: &str) -> Result<Connection> {
     conn.execute_batch("
         PRAGMA foreign_keys=ON;
 
-        CREATE TABLE IF NOT EXISTS persons (
+        CREATE TABLE IF NOT EXISTS person (
             id TEXT PRIMARY KEY,
             tree_id TEXT NOT NULL,
             first_name TEXT DEFAULT '',
@@ -29,24 +29,24 @@ pub fn open(path: &str) -> Result<Connection> {
             person_id TEXT NOT NULL,
             parent_id TEXT NOT NULL,
             PRIMARY KEY (person_id, parent_id),
-            FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE,
-            FOREIGN KEY (parent_id) REFERENCES persons(id) ON DELETE CASCADE
+            FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE,
+            FOREIGN KEY (parent_id) REFERENCES person(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS person_partners (
             person_id TEXT NOT NULL,
             partner_id TEXT NOT NULL,
             PRIMARY KEY (person_id, partner_id),
-            FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE,
-            FOREIGN KEY (partner_id) REFERENCES persons(id) ON DELETE CASCADE
+            FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE,
+            FOREIGN KEY (partner_id) REFERENCES person(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS person_children (
             person_id TEXT NOT NULL,
             child_id TEXT NOT NULL,
             PRIMARY KEY (person_id, child_id),
-            FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE,
-            FOREIGN KEY (child_id) REFERENCES persons(id) ON DELETE CASCADE
+            FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE,
+            FOREIGN KEY (child_id) REFERENCES person(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS marriages (
@@ -57,8 +57,8 @@ pub fn open(path: &str) -> Result<Connection> {
             marriage_location TEXT,
             divorce_date DATETIME,
             divorce_location TEXT,
-            FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE,
-            FOREIGN KEY (partner_id) REFERENCES persons(id) ON DELETE CASCADE,
+            FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE,
+            FOREIGN KEY (partner_id) REFERENCES person(id) ON DELETE CASCADE,
             UNIQUE(person_id, partner_id)
         );
 
@@ -71,7 +71,7 @@ pub fn open(path: &str) -> Result<Connection> {
             start_date DATETIME,
             end_date DATETIME,
             location TEXT,
-            FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE
+            FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS trees (
@@ -82,7 +82,7 @@ pub fn open(path: &str) -> Result<Connection> {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
-        CREATE INDEX IF NOT EXISTS idx_persons_tree_id ON persons(tree_id);
+        CREATE INDEX IF NOT EXISTS idx_persons_tree_id ON person(tree_id);
         CREATE INDEX IF NOT EXISTS idx_timeline_entries_person_id ON timeline_entries(person_id);
         CREATE INDEX IF NOT EXISTS idx_marriages_person_id ON marriages(person_id);
         CREATE INDEX IF NOT EXISTS idx_person_parents_parent_id ON person_parents(parent_id);

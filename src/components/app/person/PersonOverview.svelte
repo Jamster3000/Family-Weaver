@@ -89,8 +89,8 @@
     <Input
       label="Biography & Important Notes"
       placeholder="Add military service, occupations, nicknames, or notable achievements..."
-      value={$personData.keyFacts}
-      on:input={(e) => handleTextareaInput('keyFacts', e)}
+      value={$personData.importantNotes}
+      on:input={(e) => handleTextareaInput('importantNotes', e)}
       multiline={true}
       centerPlaceholder={false}
     />

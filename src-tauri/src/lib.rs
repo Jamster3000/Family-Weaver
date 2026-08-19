@@ -36,8 +36,9 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             database::create::create_tree,
+            database::create::create_person,
             database::check::check_tree_exists,
-            database::get::get_active_tree_name
+            database::get::get_active_tree
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

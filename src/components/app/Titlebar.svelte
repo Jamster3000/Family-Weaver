@@ -5,19 +5,21 @@
   import { listen } from '@tauri-apps/api/event';
   import { IconMinus, IconSquares, IconX, IconCircleArrowLeft, IconCircleArrowRight  } from '@tabler/icons-svelte-runes';
   import Button from '$components/ui/Button.svelte';
+  import { activeTree, setActiveTree, type Tree } from "$stores";
 
   let appWindow: any;
-  let active_tree_name: string | null = null;
 
   onMount(async () => {
     appWindow = await getCurrentWindow();
 
     // load the tree name
-    active_tree_name = await invoke('get_active_tree_name');
+    const treeData: Tree = await invoke('get_active_tree');
+    setActiveTree(treeData);
 
     // listen for when switching tree names
     const unlisten = await listen('tree-changed', (event: any) => {
-        active_tree_name = event.payload.name;
+        const newTree: Tree = event.payload;
+        setActiveTree(newTree);
     });
 
     return () => {
@@ -36,8 +38,8 @@
       <IconCircleArrowRight size={24} color="var(--text-colour)" />
     </Button>
 
-    {#if active_tree_name}
-        <p class="title-text">Family Weaver - {active_tree_name}</p>
+    {#if $activeTree}
+        <p class="title-text">Family Weaver - {$activeTree.name}</p>
     {:else}
         <p class="title-text">Family Weaver</p>
     {/if}

@@ -122,13 +122,13 @@ pub struct Person {
 }
 
 impl Person {
-    pub fn new(first_name: String, last_name: String, tree_id: String) -> Self {
+    pub fn new(tree_id: String) -> Self {
         Self {
             id: Uuid::new_v4().to_string(),
             tree_id,
-            first_name: Some(first_name),
+            first_name: None,
             middle_names: None,
-            last_name: Some(last_name),
+            last_name: None,
             dob: None,
             birth_location: None,
             dod: None,
@@ -152,9 +152,7 @@ impl Person {
 
 #[derive(Debug, Clone)]
 pub enum ValidationError {
-    FirstNameRequired,
     FirstNameTooLong { max: usize },
-    LastNameRequired,
     LastNameTooLong { max: usize },
     MiddleNamesTooLong { max: usize },
     BirthLocationTooLong { max: usize },
@@ -165,11 +163,9 @@ pub enum ValidationError {
 impl std::fmt::Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::FirstNameRequired => write!(f, "First name is required"),
             Self::FirstNameTooLong { max } => {
                 write!(f, "First name must be {} characters or less", max)
             }
-            Self::LastNameRequired => write!(f, "Last name is required"),
             Self::LastNameTooLong { max } => {
                 write!(f, "Last name must be {} characters or less", max)
             }
@@ -213,31 +209,25 @@ impl PersonValidator {
     }
 
     pub fn validate(&self, person: &Person) -> Result<(), ValidationError> {
-        // First Name Validation (Required)
-        match &person.first_name {
-            Some(name) if name.trim().is_empty() => return Err(ValidationError::FirstNameRequired),
-            Some(name) if name.len() > self.limits.first_name_max => {
+        // First Name Validation
+        if let Some(name) = &person.first_name {
+            if name.len() > self.limits.first_name_max {
                 return Err(ValidationError::FirstNameTooLong {
                     max: self.limits.first_name_max,
-                })
+                });
             }
-            None => return Err(ValidationError::FirstNameRequired),
-            _ => {} // Valid
         }
 
-        // Last Name Validation (Required)
-        match &person.last_name {
-            Some(name) if name.trim().is_empty() => return Err(ValidationError::LastNameRequired),
-            Some(name) if name.len() > self.limits.last_name_max => {
+        // Last Name Validation
+        if let Some(name) = &person.last_name {
+            if name.len() > self.limits.last_name_max {
                 return Err(ValidationError::LastNameTooLong {
                     max: self.limits.last_name_max,
-                })
+                });
             }
-            None => return Err(ValidationError::LastNameRequired),
-            _ => {} // Valid
         }
 
-        // Middle Names Validation (Optional)
+        // Middle Names Validation
         if let Some(names) = &person.middle_names {
             if names.len() > self.limits.middle_names_max {
                 return Err(ValidationError::MiddleNamesTooLong {
@@ -246,7 +236,7 @@ impl PersonValidator {
             }
         }
 
-        // Birth Location Validation (Optional)
+        // Birth Location Validation
         if let Some(loc) = &person.birth_location {
             if loc.len() > self.limits.location_max {
                 return Err(ValidationError::BirthLocationTooLong {
@@ -255,7 +245,7 @@ impl PersonValidator {
             }
         }
 
-        // Death Location Validation (Optional)
+        // Death Location Validation
         if let Some(loc) = &person.death_location {
             if loc.len() > self.limits.location_max {
                 return Err(ValidationError::DeathLocationTooLong {
@@ -264,7 +254,7 @@ impl PersonValidator {
             }
         }
 
-        // Important Notes Validation (Optional)
+        // Important Notes Validation
         if let Some(notes) = &person.important_notes {
             if notes.len() > self.limits.important_notes_max {
                 return Err(ValidationError::ImportantNotesTooLong {

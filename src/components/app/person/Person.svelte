@@ -27,16 +27,25 @@
 	$: hasChanges = $personData ? hasPersonChanged() : false;
 
 	async function handlePersonSave() {
-		const personData = getPersonData();
+		const rawData = getPersonData();
 		const activeTree = getActiveTree();
 
+		const cleanedPerson = {
+			...rawData,
+			firstName: rawData.firstName.trim(),
+			middleNames: rawData.middleNames.trim(),
+			lastName: rawData.lastName.trim(),
+			birthLocation: rawData.birthLocation.trim(),
+			deathLocation: rawData.deathLocation.trim(),
+			importantNotes: rawData.importantNotes.trim(),
+			id: crypto.randomUUID(),
+			tree_id: activeTree?.id,
+		};
+
 		let createdPerson = await invoke("create_person", {
-			person: {
-				...personData,
-				id: crypto.randomUUID(),
-				tree_id: activeTree?.id,
-			},
+			person: cleanedPerson
 		});
+
 		isOpen = false;
 	}
 

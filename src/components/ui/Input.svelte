@@ -1,4 +1,11 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  import Tooltip from '$components/ui/Tooltip.svelte';
+  import flatpickr from 'flatpickr';
+  import 'flatpickr/dist/flatpickr.min.css';
+  import 'flatpickr/dist/themes/dark.css';
+  import { IconCalendarWeek } from '@tabler/icons-svelte-runes';
+
   export let label: string = '';
   export let type:
     | 'text'
@@ -41,12 +48,47 @@
     'week',
     'color',
   ];
-  $: safeType = validTypes.includes(type) ? type : 'text';
+
+  //If the user selects 'date' render 'text' so users can type freely anything they want but have the option of date picker
+  $: safeType = type === 'date' ? 'text' : validTypes.includes(type) ? type : 'text';
 
   // Calculate width based on placeholder length
   $: charWidth = 8.5;
   $: bufferPixels = 56; // padding (10px + 14px) + extra buffer
   $: calculatedWidth = placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : 'auto';
+
+  let inputNode: HTMLInputElement;
+  let fp: flatpickr.Instance;
+
+  onMount(() => {
+    if (type === 'date' && inputNode) {
+      fp = flatpickr(inputNode, {
+        dateFormat: 'd-m-Y',
+        allowInput: true,
+        clickOpens: false,
+        onChange: (selectedDates, dateStr) => {
+          value = dateStr;
+          inputNode.dispatchEvent(new Event('input', { bubbles: true }));
+        },
+      });
+    }
+  });
+
+  onDestroy(() => {
+    if (fp) fp.destroy();
+  });
+
+  $: if (fp && value !== fp.input.value) {
+    fp.setDate(value || '', false);
+  }
+
+  function openCalendar(e: Event) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (fp && !disabled) {
+      fp.open();
+    }
+  }
 </script>
 
 <div class="field">
@@ -73,6 +115,7 @@
       ></textarea>
     {:else}
       <input
+        bind:this={inputNode}
         {id}
         type={safeType}
         {placeholder}
@@ -85,6 +128,11 @@
         on:blur
         on:focus
       />
+      {#if type === 'date'}
+        <button type="button" class="calendar-btn" on:click={openCalendar} {disabled} title="Open Calendar">
+          <IconCalendarWeek size={22} />
+        </button>
+      {/if}
     {/if}
   </div>
 
@@ -129,12 +177,14 @@
   }
 
   .input-wrap {
+    position: relative;
     display: flex;
     align-items: center;
     background: color-mix(in srgb, var(--secondary-background) 75%, black);
     border: 2px solid color-mix(in srgb, var(--border-colour) 50%, transparent);
     border-radius: 8px;
     transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
+    padding-right: 6px; /* Space for the bordered button */
   }
 
   .input-wrap:focus-within {
@@ -197,6 +247,32 @@
   input:disabled,
   textarea:disabled {
     cursor: not-allowed;
+  }
+
+  .calendar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--secondary-background) 90%, white 5%);
+    border: 1px solid color-mix(in srgb, var(--border-colour) 70%, transparent);
+    border-radius: 6px;
+    padding: 4px 6px;
+    color: var(--text-colour);
+    opacity: 0.8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .calendar-btn:hover:not(:disabled) {
+    opacity: 1;
+    color: var(--primary-colour);
+    border-color: var(--primary-colour);
+    background: color-mix(in srgb, var(--primary-colour) 10%, transparent);
+  }
+
+  .calendar-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
   }
 
   .helper {

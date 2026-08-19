@@ -92,12 +92,14 @@
 			placeholder="e.g. 1915 or 14 May 1915"
 			bind:value={startDate}
 			centerPlaceholder={false}
+			type="date"
 		/>
 		<Input
 			label="End Date"
 			placeholder="e.g. 1919"
 			bind:value={endDate}
 			centerPlaceholder={false}
+			type="date"
 		/>
 	</div>
 

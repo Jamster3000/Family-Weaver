@@ -53,6 +53,7 @@
           value={$personData.dob ?? ""}
           on:input={(e) => handleInput('dob', e)}
           centerPlaceholder={false}
+          type="date"
         />
         <Input
           label="Birth Location"
@@ -73,6 +74,7 @@
           value={$personData.dod ?? ""}
           on:input={(e) => handleInput('dod', e)}
           centerPlaceholder={false}
+          type="date"
         />
         <Input
           label="Death Location"

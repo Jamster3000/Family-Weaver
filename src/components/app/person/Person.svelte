@@ -68,7 +68,7 @@
 	}
 </script>
 
-<Popup bind:isOpen closeOnBackdrop={true}>
+<Popup bind:isOpen>
 	<Card width="100%" padding="medium">
 		<Close onClick={() => (isOpen = false)} />
 

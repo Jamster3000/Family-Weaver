@@ -7,6 +7,8 @@
 		IconUserPlus,
 		IconTree,
 		IconSettings,
+		IconEdit,
+		IconTrash,
 	} from "@tabler/icons-svelte-runes";
 	import Button from "$components/ui/Button.svelte";
 	import { zoomIn, zoomOut } from "$stores";
@@ -14,10 +16,17 @@
 	import Create_tree from "$components/app/Create_tree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
+	import Popup from "$components/app/Popup.svelte";
+	import Card from "$components/ui/Card.svelte";
+	import { getActiveTree } from "$stores";
+	import { invoke } from "@tauri-apps/api/core";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;
+
 	let person_modal_open: boolean = false;
+
+	let open_confirm_deletion: boolean = false;
 
 	interface ToolbarItem {
 		id: string;
@@ -48,6 +57,35 @@
 					tooltip: "Create a new family tree",
 					icon: IconTree,
 					action: () => (create_tree_open = true),
+				},
+			],
+		},
+		{
+			id: "tree",
+			label: "Tree",
+			tooltip: "Open tree options.",
+			icon: IconTree,
+			submenu: [
+				{
+					id: "switch-tree",
+					label: "Switch Tree",
+					tooltip: "Switch to a different family tree.",
+					icon: IconTree,
+					action: () => console.log("switch tree"),
+				},
+				{
+					id: "delete-tree",
+					label: "Delete Tree",
+					tooltip: "Delete the current family tree.",
+					icon: IconTrash,
+					action: () => (open_confirm_deletion = true),
+				},
+				{
+					id: "rename-tree",
+					label: "Rename Tree",
+					tooltip: "Rename the current family tree.",
+					icon: IconEdit,
+					action: () => console.log("rename tree"),
 				},
 			],
 		},
@@ -93,6 +131,16 @@
 			item.action();
 		}
 		openDropup = null;
+	}
+
+	async function handleTreeDeletion() {
+		const tree_id = getActiveTree()?.id;
+
+		try {
+			await invoke("delete_tree", { treeId: tree_id });
+		} catch (error) {
+			console.error("Error deleting tree:", error);
+		}
 	}
 
 	function closeDropup() {
@@ -169,6 +217,31 @@
 		{/each}
 	</div>
 </div>
+
+<Popup bind:isOpen={open_confirm_deletion}>
+	<Card width="40%">
+		<p>
+			Are you sure you want to delete this tree? This will also delete all
+			people associated with this tree. This action cannot be undone.
+		</p>
+		<div class="popup-actions">
+			<Button
+				variant="secondary"
+				on:click={() => (open_confirm_deletion = false)}
+			>
+				Cancel
+			</Button>
+			<Button
+				on:click={() => {
+					handleTreeDeletion();
+					open_confirm_deletion = false;
+				}}
+			>
+				Delete
+			</Button>
+		</div>
+	</Card>
+</Popup>
 
 {#if openDropup}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->

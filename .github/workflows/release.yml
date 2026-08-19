@@ -46,9 +46,7 @@ jobs:
           releaseBody: |
             ## Family Weaver v__VERSION__
 
-            - Direct portable executable release.
-            - Bug fixes and performance updates.
+            - Official installer release.
+            - Bug fixes and updates.
           releaseDraft: false
           prerelease: false
-          args: --no-bundle
-          uploadPlainBinary: true

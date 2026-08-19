@@ -14,11 +14,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-22.04, windows-latest, macos-latest]
+        platform: [windows-latest, macos-latest, ubuntu-22.04]
 
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
@@ -42,7 +42,13 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: v__VERSION__
-          releaseName: 'App v__VERSION__'
-          releaseBody: ''
-          releaseDraft: true
+          releaseName: 'Family Weaver v__VERSION__'
+          releaseBody: |
+            ## Family Weaver v__VERSION__
+
+            - Direct portable executable release.
+            - Bug fixes and performance updates.
+          releaseDraft: false
           prerelease: false
+          args: --no-bundle
+          uploadPlainBinary: true

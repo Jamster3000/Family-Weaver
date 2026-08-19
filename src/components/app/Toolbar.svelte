@@ -61,12 +61,6 @@
 			],
 		},
 		{
-			id: "Hello",
-			label: "Hi there",
-			tooltip: "Nothing interesting here.",
-			icon: IconPlus
-		},
-		{
 			id: "tree",
 			label: "Tree",
 			tooltip: "Open tree options.",

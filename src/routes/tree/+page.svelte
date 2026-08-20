@@ -1,8 +1,34 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+    import { getVersion } from '@tauri-apps/api/app';
+    import { invoke } from '@tauri-apps/api/core';
     import TreeContainer from '$components/app/TreeContainer.svelte';
     import Toolbar from '$components/app/Toolbar.svelte';
     import WhatsNewButton from '$components/app/whatsNew/WhatsNewButton.svelte';
     import { zoomIn, zoomOut } from '$stores';
+
+    let releaseNotes = '';
+
+    onMount(async () => {
+        try {
+            const currentVersion = await getVersion();
+            const cachedVersion = localStorage.getItem('cached_release_version');
+            const cachedNotes = localStorage.getItem('cached_release_notes');
+
+            if (cachedVersion === currentVersion && cachedNotes) {
+                releaseNotes = cachedNotes;
+            } else {
+                const response: any = await invoke('fetch_version_release', { version: currentVersion });
+                if (response && response.notes) {
+                    releaseNotes = response.notes;
+                    localStorage.setItem('cached_release_version', currentVersion);
+                    localStorage.setItem('cached_release_notes', response.notes);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load release notes:', error);
+        }
+    });
 </script>
 
 <TreeContainer />

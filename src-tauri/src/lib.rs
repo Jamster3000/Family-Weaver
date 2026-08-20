@@ -2,6 +2,7 @@ use std::sync::{Arc, Mutex};
 use tauri::Manager;
 
 pub mod database;
+pub mod commands;
 pub mod models;
 pub mod state;
 
@@ -45,7 +46,8 @@ pub fn run() {
             database::delete::delete_tree,
             database::set::set_new_active_tree,
             database::set::set_tree_name,
-            database::set::switch_active_tree
+            database::set::switch_active_tree,
+            commands::release::fetch_version_release
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

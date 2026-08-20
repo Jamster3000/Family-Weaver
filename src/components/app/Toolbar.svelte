@@ -1,3 +1,4 @@
+<!-- Toolbar.svelte -->
 <script lang="ts">
 	import {
 		IconPlus,
@@ -260,11 +261,6 @@
 
 <style>
 	.toolbar {
-		position: fixed;
-		bottom: 30px;
-		left: 0;
-		right: 0;
-		margin: 0 auto;
 		display: flex;
 		align-items: center;
 		gap: 24px;
@@ -273,7 +269,6 @@
 		border-radius: 12px;
 		padding: 14px 20px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-		z-index: 999;
 		width: fit-content;
 	}
 
@@ -360,26 +355,5 @@
 		right: 0;
 		bottom: 0;
 		z-index: 998;
-	}
-
-	@media (max-width: 768px) {
-		.toolbar {
-			bottom: 10px;
-			left: 10px;
-			right: 10px;
-			transform: none;
-			flex-wrap: wrap;
-			justify-content: center;
-		}
-
-		.toolbar-right {
-			margin-left: 0;
-			padding-left: 0;
-			border-left: none;
-			border-top: 1px solid var(--border-colour);
-			padding-top: 12px;
-			margin-top: 12px;
-			width: 100%;
-		}
 	}
 </style>

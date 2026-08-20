@@ -41,9 +41,11 @@ pub fn run() {
             database::create::create_person,
             database::check::check_tree_exists,
             database::get::get_active_tree,
+            database::get::get_all_trees,
             database::delete::delete_tree,
             database::set::set_new_active_tree,
-            database::set::set_tree_name
+            database::set::set_tree_name,
+            database::set::switch_active_tree
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -75,3 +75,41 @@ pub async fn set_tree_name(
         Err(e) => Err(e.to_string()),
     }
 }
+
+#[tauri::command]
+pub async fn switch_active_tree(
+    tree_id: String,
+    state: tauri::State<'_, AppState>,
+    app: AppHandle,
+) -> Result<Tree, String> {
+    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+
+    //set active trees to deactive
+    conn.execute("UPDATE trees SET active_tree = 0",
+        []
+    ).map_err(|e| e.to_string())?;
+
+    //set the selected tree to active
+    conn.execute(
+        "UPDATE trees SET active_tree = 1 WHERE id = ?1",
+        [&tree_id],
+    ).map_err(|e| e.to_string())?;
+
+    //select the tree so we can return the entire tree data for the frontend to store
+    let tree = conn.query_row(
+        "SELECT id, name, active_tree, created_at, updated_at FROM trees WHERE id = ?1",
+        [&tree_id],
+        |row| {
+            Ok(Tree {
+                id: row.get(0)?,
+                name: row.get(1)?,
+                active_tree: row.get(2)?,
+                created_at: row.get(3)?,
+                updated_at: row.get(4)?,
+            })
+        },
+    ).map_err(|e| e.to_string())?;
+
+    let _ = app.emit("tree-changed", &tree);
+    Ok(tree)
+}

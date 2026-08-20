@@ -21,12 +21,14 @@
 	import { getActiveTree } from "$stores";
 	import { invoke } from "@tauri-apps/api/core";
 	import RenameTreeTitle from "$components/app/RenameTreeTitle.svelte";
+	import SwitchTreeModal from "$components/app/SwitchTreeModal.svelte";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;
 
 	let person_modal_open: boolean = false;
 	let rename_tree_open: boolean = false;
+	let switch_tree_modal_open: boolean = false;
 
 	let open_confirm_deletion: boolean = false;
 
@@ -73,7 +75,7 @@
 					label: "Switch Tree",
 					tooltip: "Switch to a different family tree.",
 					icon: IconTree,
-					action: () => console.log("switch tree"),
+					action: () => (switch_tree_modal_open = true),
 				},
 				{
 					id: "delete-tree",
@@ -159,6 +161,8 @@
 <Person bind:isOpen={person_modal_open} />
 
 <RenameTreeTitle bind:isOpen={rename_tree_open} />
+
+<SwitchTreeModal bind:isOpen={switch_tree_modal_open} />
 
 <div class="toolbar">
 	<div class="toolbar-left">

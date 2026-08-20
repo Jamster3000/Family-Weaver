@@ -20,11 +20,13 @@
 	import Card from "$components/ui/Card.svelte";
 	import { getActiveTree } from "$stores";
 	import { invoke } from "@tauri-apps/api/core";
+	import RenameTreeTitle from "$components/app/RenameTreeTitle.svelte";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;
 
 	let person_modal_open: boolean = false;
+	let rename_tree_open: boolean = false;
 
 	let open_confirm_deletion: boolean = false;
 
@@ -85,7 +87,7 @@
 					label: "Rename Tree",
 					tooltip: "Rename the current family tree.",
 					icon: IconEdit,
-					action: () => console.log("rename tree"),
+					action: () => (rename_tree_open = true),
 				},
 			],
 		},
@@ -155,6 +157,8 @@
 />
 
 <Person bind:isOpen={person_modal_open} />
+
+<RenameTreeTitle bind:isOpen={rename_tree_open} />
 
 <div class="toolbar">
 	<div class="toolbar-left">

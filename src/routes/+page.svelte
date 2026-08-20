@@ -23,7 +23,7 @@
     }
 
     onMount(() => {
-        checkForAppUpdates();
+        //checkForAppUpdates();
         checkTreeExists();
     });
 </script>

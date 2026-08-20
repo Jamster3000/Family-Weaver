@@ -42,7 +42,8 @@ pub fn run() {
             database::check::check_tree_exists,
             database::get::get_active_tree,
             database::delete::delete_tree,
-            database::set::set_new_active_tree
+            database::set::set_new_active_tree,
+            database::set::set_tree_name
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

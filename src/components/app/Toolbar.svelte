@@ -61,6 +61,13 @@
 			],
 		},
 		{
+			id: "import",
+			label: "Import",
+			tooltip: "Import a GEDCOM file to add people to the active family tree.",
+			icon: IconPlus,
+			action: () => console.log("import gedcom"),
+		},
+		{
 			id: "tree",
 			label: "Tree",
 			tooltip: "Open tree options.",

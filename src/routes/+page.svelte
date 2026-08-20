@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Create_tree from '$components/app/toolbarActions/Create_tree.svelte';
+    import CreateTree from '$components/app/toolbarActions/CreateTree.svelte';
     import { onMount } from 'svelte';
     import { invoke } from '@tauri-apps/api/core';
     import { goto } from '$app/navigation';
@@ -28,4 +28,4 @@
     });
 </script>
 
-<Create_tree firstTime={true} open_popup={open_popup} />
+<CreateTree firstTime={true} open_popup={open_popup} />

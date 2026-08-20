@@ -13,7 +13,7 @@
 	import Button from "$components/ui/Button.svelte";
 	import { zoomIn, zoomOut } from "$stores";
 	import { fade } from "svelte/transition";
-	import Create_tree from "$components/app/toolbarActions/Create_tree.svelte";
+	import CreateTree from "$components/app/toolbarActions/CreateTree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
 	import Popup from "$components/app/Popup.svelte";
@@ -23,8 +23,8 @@
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 
-	let create_tree_first_time: boolean = false;
-	let create_tree_open: boolean = false;
+	let CreateTree_first_time: boolean = false;
+	let CreateTree_open: boolean = false;
 
 	let person_modal_open: boolean = false;
 	let rename_tree_open: boolean = false;
@@ -60,7 +60,7 @@
 					label: "New Family Tree",
 					tooltip: "Create a new family tree",
 					icon: IconTree,
-					action: () => (create_tree_open = true),
+					action: () => (CreateTree_open = true),
 				},
 			],
 		},
@@ -153,9 +153,9 @@
 	}
 </script>
 
-<Create_tree
-	bind:open_popup={create_tree_open}
-	firstTime={create_tree_first_time}
+<CreateTree
+	bind:open_popup={CreateTree_open}
+	firstTime={CreateTree_first_time}
 />
 
 <Person bind:isOpen={person_modal_open} />

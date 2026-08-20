@@ -13,15 +13,15 @@
 	import Button from "$components/ui/Button.svelte";
 	import { zoomIn, zoomOut } from "$stores";
 	import { fade } from "svelte/transition";
-	import Create_tree from "$components/app/Create_tree.svelte";
+	import Create_tree from "$components/app/toolbarActions/Create_tree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
 	import Popup from "$components/app/Popup.svelte";
 	import Card from "$components/ui/Card.svelte";
 	import { getActiveTree } from "$stores";
 	import { invoke } from "@tauri-apps/api/core";
-	import RenameTreeTitle from "$components/app/RenameTreeTitle.svelte";
-	import SwitchTreeModal from "$components/app/SwitchTreeModal.svelte";
+	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
+	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 
 	let create_tree_first_time: boolean = false;
 	let create_tree_open: boolean = false;

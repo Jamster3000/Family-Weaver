@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Create_tree from '$components/app/Create_tree.svelte';
+    import Create_tree from '$components/app/toolbarActions/Create_tree.svelte';
     import { onMount } from 'svelte';
     import { invoke } from '@tauri-apps/api/core';
     import { goto } from '$app/navigation';

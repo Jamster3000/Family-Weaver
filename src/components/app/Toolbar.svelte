@@ -23,15 +23,9 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
+	import { modals } from "$modalStore";
 
 	let CreateTree_first_time: boolean = false;
-	let CreateTree_open: boolean = false;
-
-	let person_modal_open: boolean = false;
-	let rename_tree_open: boolean = false;
-	let switch_tree_modal_open: boolean = false;
-
-	let open_confirm_deletion: boolean = false;
 
 	interface ToolbarItem {
 		id: string;
@@ -54,14 +48,14 @@
 					label: "Add Person",
 					tooltip: "Add a new person to the active family tree.",
 					icon: IconUserPlus,
-					action: () => (person_modal_open = true),
+					action: () => modals.open("addPerson"),
 				},
 				{
 					id: "create-tree",
 					label: "New Family Tree",
 					tooltip: "Create a new family tree",
 					icon: IconTree,
-					action: () => (CreateTree_open = true),
+					action: () => modals.open("createTree"),
 				},
 			],
 		},
@@ -76,21 +70,21 @@
 					label: "Switch Tree",
 					tooltip: "Switch to a different family tree.",
 					icon: IconTree,
-					action: () => (switch_tree_modal_open = true),
+					action: () => modals.open("switchTree"),
 				},
 				{
 					id: "delete-tree",
 					label: "Delete Tree",
 					tooltip: "Delete the current family tree.",
 					icon: IconTrash,
-					action: () => (open_confirm_deletion = true),
+					action: () => modals.open("deleteTreeConfirm"),
 				},
 				{
 					id: "rename-tree",
 					label: "Rename Tree",
 					tooltip: "Rename the current family tree.",
 					icon: IconEdit,
-					action: () => (rename_tree_open = true),
+					action: () => modals.open("renameTree"),
 				},
 			],
 		},
@@ -155,15 +149,15 @@
 </script>
 
 <CreateTree
-	bind:open_popup={CreateTree_open}
+	bind:open_popup={$modals.createTree}
 	firstTime={CreateTree_first_time}
 />
 
-<Person bind:isOpen={person_modal_open} />
+<Person bind:isOpen={$modals.addPerson} />
 
-<RenameTreeTitle bind:isOpen={rename_tree_open} />
+<RenameTreeTitle bind:isOpen={$modals.renameTree} />
 
-<SwitchTreeModal bind:isOpen={switch_tree_modal_open} />
+<SwitchTreeModal bind:isOpen={$modals.switchTree} />
 
 <div class="toolbar">
 	<div class="toolbar-left">
@@ -228,7 +222,7 @@
 	</div>
 </div>
 
-<Popup bind:isOpen={open_confirm_deletion}>
+<Popup bind:isOpen={$modals.deleteTreeConfirm}>
 	<Card width="40%">
 		<p>
 			Are you sure you want to delete this tree? This will also delete all
@@ -237,14 +231,14 @@
 		<div class="popup-actions">
 			<Button
 				variant="secondary"
-				on:click={() => (open_confirm_deletion = false)}
+				on:click={() => modals.close("deleteTreeConfirm")}
 			>
 				Cancel
 			</Button>
 			<Button
 				on:click={() => {
 					handleTreeDeletion();
-					open_confirm_deletion = false;
+					modals.close("deleteTreeConfirm");
 				}}
 			>
 				Delete

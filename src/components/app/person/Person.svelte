@@ -15,13 +15,22 @@
 		resetPersonData,
 	} from "$personStore";
 	import { activeTree } from "$treeStore";
+	import { modals, timelineEntryModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 
-	export let isOpen: boolean = false;
-
 	let activeTab: string = "overview";
-	let confirmDiscard: boolean = false;
-	let isAddingTimelineEvent: boolean = false;
+
+	let isAddingTimelineEvent = false;
+
+	$: isAddingTimelineEvent, updateTimelineModal();
+
+	function updateTimelineModal() {
+		if (isAddingTimelineEvent) {
+			modals.open("timelineEntry");
+		} else {
+			modals.close("timelineEntry");
+		}
+	}
 
 	$: hasChanges = $personData ? hasPersonChanged() : false;
 
@@ -44,31 +53,31 @@
 			person: cleanedPerson
 		});
 
-		isOpen = false;
+		modals.close("addPerson");
 	}
 
 	function handlePersonDiscard() {
 		const hasPersonDataChanged = hasPersonChanged();
 
 		if (hasPersonDataChanged) {
-			confirmDiscard = true;
+			modals.open("discardPersonChanges");
 		} else {
-			isOpen = false;
+			modals.close("addPerson");
 		}
 	}
 
 	function handleDiscard() {
 		resetPersonData();
-		confirmDiscard = false;
+		modals.close("discardPersonChanges");
 		setTimeout(() => {
-			isOpen = false;
+			modals.close("addPerson");
 		}, 300);
 	}
 </script>
 
-<Popup bind:isOpen>
+<Popup bind:isOpen={$modals.addPerson}>
 	<Card width="100%" padding="medium">
-		<Close onClick={() => (isOpen = false)} />
+		<Close onClick={() => modals.close("addPerson")} />
 
 		<div class="modal-header">
 			<h1>Add new family member</h1>
@@ -165,9 +174,9 @@
 	</Card>
 </Popup>
 
-<Popup bind:isOpen={confirmDiscard} closeOnBackdrop={true}>
+<Popup bind:isOpen={$modals.discardPersonChanges} closeOnBackdrop={true}>
 	<Card width="50%" padding="small">
-		<Close onClick={() => (confirmDiscard = false)} />
+		<Close onClick={() => modals.close("discardPersonChanges")} />
 
 		<div class="confirm-header">
 			<h2>Discard Changes?</h2>
@@ -181,7 +190,7 @@
 		<div class="confirm-footer">
 			<Button
 				variant="secondary"
-				on:click={() => (confirmDiscard = false)}
+				on:click={() => modals.close("discardPersonChanges")}
 				>No, continue editing</Button
 			>
 			<Button on:click={handleDiscard}>Yes, discard</Button>

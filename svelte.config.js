@@ -15,6 +15,7 @@ const config = {
             $networkStore: path.resolve('./src/networkStore.ts'),
             $personStore: path.resolve('./src/personStore.ts'),
             $treeStore: path.resolve('./src/treeStore.ts'),
+            $modalStore: path.resolve('./src/modalStore.ts'),
         },
     },
 };

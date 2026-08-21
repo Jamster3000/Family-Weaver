@@ -89,8 +89,8 @@
 			],
 		},
 		{
-			id: "test",
-			label: "Test",
+			id: "test2",
+			label: "Test 2",
 			tooltip: "Open settings to change application preferences.",
 			icon: IconSettings,
 			action: () => console.log("open settings"),

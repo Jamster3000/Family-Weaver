@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { invoke } from '@tauri-apps/api/core';
   import { goto } from '$app/navigation';
-  import { checkForAppUpdates, installUpdate } from '$components/CheckForUpdates';
+  import { checkForAppUpdates, installUpdate } from '$lib/CheckForUpdates';
 
   let open_popup: boolean = false;
   let updateModalOpen: boolean = false;

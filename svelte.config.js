@@ -10,12 +10,12 @@ const config = {
             fallback: "index.html",
         }),
         alias: {
-            $components: "src/components",
-            $stores: path.resolve('./src/stores.ts'),
-            $networkStore: path.resolve('./src/networkStore.ts'),
-            $personStore: path.resolve('./src/personStore.ts'),
-            $treeStore: path.resolve('./src/treeStore.ts'),
-            $modalStore: path.resolve('./src/modalStore.ts'),
+            $lib: path.resolve('./src/lib'),
+            $components: path.resolve('./src/components'),
+            $networkStore: path.resolve('./src/lib/networkStore.ts'),
+            $personStore: path.resolve('./src/lib/personStore.ts'),
+            $treeStore: path.resolve('./src/lib/treeStore.ts'),
+            $modalStore: path.resolve('./src/lib/modalStore.ts'),
         },
     },
 };

@@ -7,6 +7,7 @@
 
 <Titlebar />
 
+<!-- Any page navigation will have a fade transition -->
 {#key $navigating?.to?.url.pathname}
   <div in:fade={{ duration: 550 }}>
     <slot />

@@ -6,12 +6,15 @@
   import { invoke } from '@tauri-apps/api/core';
   import { goto } from '$app/navigation';
   import { checkForAppUpdates, installUpdate } from '$lib/CheckForUpdates';
+  import type { Update } from '@tauri-apps/plugin-updater';
 
   let open_popup: boolean = false;
   let updateModalOpen: boolean = false;
   let updateVersion: string = '';
+  let updateObject: Update | null = null;
   let showSpinner = true;
   let hangAtEnd = false;
+  let spinnerText = 'Checking for updates...';
 
   async function checkTreeExists() {
     try {
@@ -31,10 +34,11 @@
 
   onMount(async () => {
     try {
-      const updateInfo = await checkForAppUpdates();
+      const update = await checkForAppUpdates();
 
-      if (updateInfo) {
-        updateVersion = updateInfo.version;
+      if (update) {
+        updateVersion = update.version;
+        updateObject = update;
         showSpinner = false;
         updateModalOpen = true;
         return;
@@ -47,11 +51,15 @@
   });
 
   async function handleUpdateNow() {
+    if (!updateObject) return;
+
     updateModalOpen = false;
     showSpinner = true;
+    spinnerText = "Installing update...";
     hangAtEnd = true;
+
     try {
-      await installUpdate();
+      await installUpdate(updateObject);
     } catch (error) {
       console.error('Error installing update:', error);
       showSpinner = false;
@@ -62,13 +70,14 @@
   function handleDismissUpdate() {
     updateModalOpen = false;
     showSpinner = true;
+    spinnerText = 'Loading family tree...';
     checkTreeExists();
   }
 </script>
 
 <TreeSpinner
   bind:isVisible={showSpinner}
-  loadingText="Checking for updates..."
+  loadingText={spinnerText}
   {hangAtEnd}/>
 
 <UpdateModal

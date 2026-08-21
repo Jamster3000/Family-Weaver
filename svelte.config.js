@@ -12,10 +12,10 @@ const config = {
         alias: {
             $lib: path.resolve('./src/lib'),
             $components: path.resolve('./src/components'),
-            $networkStore: path.resolve('./src/lib/networkStore.ts'),
-            $personStore: path.resolve('./src/lib/personStore.ts'),
-            $treeStore: path.resolve('./src/lib/treeStore.ts'),
-            $modalStore: path.resolve('./src/lib/modalStore.ts'),
+            $networkStore: path.resolve('./src/lib/stores/networkStore.ts'),
+            $personStore: path.resolve('./src/lib/stores/personStore.ts'),
+            $treeStore: path.resolve('./src/lib/stores/treeStore.ts'),
+            $modalStore: path.resolve('./src/lib/stores/modalStore.ts'),
         },
     },
 };

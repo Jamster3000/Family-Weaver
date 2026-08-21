@@ -4,16 +4,16 @@
 	import Input from "$components/ui/Input.svelte";
 	import Button from "$components/ui/Button.svelte";
 	import Close from "$components/ui/Close.svelte";
-	import { getActiveTree } from "$treeStore";
+	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 
 	export let isOpen: boolean = false;
 
-	let treeName = getActiveTree()?.name || "";
-	let error = "";
+	let treeName: string = "";
+	let error: string = "";
 
 	$: if (isOpen) {
-		treeName = getActiveTree()?.name || "";
+		treeName = $activeTree?.name || "";
 		error = "";
 	}
 

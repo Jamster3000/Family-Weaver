@@ -13,9 +13,8 @@
 		personData,
 		hasPersonChanged,
 		resetPersonData,
-		getPersonData,
 	} from "$personStore";
-	import { getActiveTree } from "$treeStore";
+	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 
 	export let isOpen: boolean = false;
@@ -27,8 +26,7 @@
 	$: hasChanges = $personData ? hasPersonChanged() : false;
 
 	async function handlePersonSave() {
-		const rawData = getPersonData();
-		const activeTree = getActiveTree();
+		const rawData = $personData;
 
 		const cleanedPerson = {
 			...rawData,
@@ -39,7 +37,7 @@
 			deathLocation: rawData.deathLocation.trim(),
 			importantNotes: rawData.importantNotes.trim(),
 			id: crypto.randomUUID(),
-			tree_id: activeTree?.id,
+			tree_id: $activeTree?.id,
 		};
 
 		let createdPerson = await invoke("create_person", {

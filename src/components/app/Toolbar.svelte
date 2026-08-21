@@ -19,7 +19,7 @@
 	import Person from "$components/app/person/Person.svelte";
 	import Popup from "$components/app/Popup.svelte";
 	import Card from "$components/ui/Card.svelte";
-	import { getActiveTree } from "$treeStore";
+	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
@@ -139,7 +139,7 @@
 	}
 
 	async function handleTreeDeletion() {
-		const tree_id = getActiveTree()?.id;
+		const tree_id = $activeTree?.id;
 
 		try {
 			await invoke("delete_tree", { treeId: tree_id });

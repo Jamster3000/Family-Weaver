@@ -69,8 +69,7 @@
 
   function handleDismissUpdate() {
     updateModalOpen = false;
-    showSpinner = true;
-    spinnerText = 'Loading family tree...';
+    showSpinner = false;
     checkTreeExists();
   }
 </script>

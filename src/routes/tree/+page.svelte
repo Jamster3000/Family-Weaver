@@ -11,6 +11,7 @@
 	let releaseNotes = "";
 	let initTask: Promise<void> | null = null;
 
+	// CORRECTED
 	onMount(() => {
 		initTask = (async () => {
 			try {
@@ -22,9 +23,8 @@
 					"cached_release_notes",
 				);
 
-				if (cachedVersion === currentVersion && cachedNotes) {
-					releaseNotes = cachedNotes;
-				} else {
+				// fetch release notes if the app version is different from the cached verion in localstorage
+				if (cachedVersion !== currentVersion) {
 					const response: any = await invoke(
 						"fetch_version_release",
 						{ version: currentVersion },
@@ -40,6 +40,8 @@
 							response.notes,
 						);
 					}
+				} else if (cachedNotes) {
+					releaseNotes = cachedNotes;
 				}
 			} catch (error) {
 				console.error("Failed to load release notes:", error);
@@ -49,9 +51,9 @@
 </script>
 
 <TreeSpinner
-  loadingText="Checking for updates..."
-  waitFor={initTask}
-  hangAtEnd={false}
+	loadingText="Checking for updates..."
+	waitFor={initTask}
+	hangAtEnd={false}
 />
 
 <TreeContainer />

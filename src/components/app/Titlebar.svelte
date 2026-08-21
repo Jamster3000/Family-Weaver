@@ -5,7 +5,7 @@
   import { listen } from '@tauri-apps/api/event';
   import { IconMinus, IconSquares, IconX, IconCircleArrowLeft, IconCircleArrowRight  } from '@tabler/icons-svelte-runes';
   import Button from '$components/ui/Button.svelte';
-  import { activeTree, setActiveTree, type Tree } from "$stores";
+  import { activeTree, setActiveTree, type Tree } from "$treeStore";
 
   let appWindow: any;
 

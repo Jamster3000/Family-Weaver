@@ -2,7 +2,7 @@
 	import Button from "$components/ui/Button.svelte";
 	import Input from "$components/ui/Input.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
-	import { personData, updatePersonData, type TimelineEntry } from "$stores";
+	import { personData, updatePersonData, type TimelineEntry } from "$personStore";
 	import { IconArrowLeft, IconPlus } from "@tabler/icons-svelte-runes";
 
 	type CategoryKey = "lifeEvents" | "workEducation" | "placesLived";

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card from "$components/ui/Card.svelte";
   import TimelineCategoryView from "./TimelineCategoryView.svelte";
-  import { personData } from "$stores";
+  import { personData } from "$personStore";
   import { IconHeart, IconBriefcase, IconHome } from "@tabler/icons-svelte-runes";
 
   type CategoryKey = 'lifeEvents' | 'workEducation' | 'placesLived';

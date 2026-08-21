@@ -14,8 +14,8 @@
 		hasPersonChanged,
 		resetPersonData,
 		getPersonData,
-		getActiveTree,
-	} from "$stores";
+	} from "$personStore";
+	import { getActiveTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 
 	export let isOpen: boolean = false;

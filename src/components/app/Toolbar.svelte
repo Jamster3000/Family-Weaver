@@ -12,14 +12,14 @@
 		IconTrash,
 	} from "@tabler/icons-svelte-runes";
 	import Button from "$components/ui/Button.svelte";
-	import { zoomIn, zoomOut } from "$stores";
+	import { zoomIn, zoomOut } from "$networkStore";
 	import { fade } from "svelte/transition";
 	import CreateTree from "$components/app/toolbarActions/CreateTree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
 	import Popup from "$components/app/Popup.svelte";
 	import Card from "$components/ui/Card.svelte";
-	import { getActiveTree } from "$stores";
+	import { getActiveTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";

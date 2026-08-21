@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Network, type Node, type Edge, type Options } from 'vis-network/standalone';
-  import { networkStore } from '$stores';
+  import { networkStore } from '$networkStore';
 
   let container: HTMLDivElement;
   let network: Network;

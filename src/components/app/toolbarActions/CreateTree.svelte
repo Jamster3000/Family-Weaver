@@ -7,7 +7,7 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { goto } from "$app/navigation";
 	import Close from "$components/ui/Close.svelte";
-	import { setActiveTree } from "$stores";
+	import { setActiveTree } from "$treeStore";
 
 	let tree_name: string = "";
 	export let firstTime: boolean = true;

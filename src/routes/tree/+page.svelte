@@ -5,7 +5,7 @@
 	import TreeContainer from "$components/app/TreeContainer.svelte";
 	import Toolbar from "$components/app/Toolbar.svelte";
 	import WhatsNewButton from "$components/app/whatsNew/WhatsNewButton.svelte";
-	import { zoomIn, zoomOut } from "$stores";
+	import { zoomIn, zoomOut } from "$networkStore";
 	import TreeSpinner from "$components/ui/TreeSpinner.svelte";
 
 	let releaseNotes = "";

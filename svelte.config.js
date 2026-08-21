@@ -12,6 +12,9 @@ const config = {
         alias: {
             $components: "src/components",
             $stores: path.resolve('./src/stores.ts'),
+            $networkStore: path.resolve('./src/networkStore.ts'),
+            $personStore: path.resolve('./src/personStore.ts'),
+            $treeStore: path.resolve('./src/treeStore.ts'),
         },
     },
 };

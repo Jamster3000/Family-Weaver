@@ -1,6 +1,6 @@
 <script lang="ts">
   import Input from "$components/ui/Input.svelte";
-  import { personData, updatePersonData } from "$stores";
+  import { personData, updatePersonData } from "$personStore";
 
   // Type-safe helper for standard text/date inputs
   function handleInput(field: keyof typeof $personData, e: Event) {

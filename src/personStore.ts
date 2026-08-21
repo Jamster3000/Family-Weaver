@@ -1,35 +1,5 @@
 import { writable, get } from 'svelte/store';
 
-// ====================
-// Network Store
-// ====================
-export const networkStore = writable(null);
-
-// ====================
-// Tree Store
-// ====================
-export interface Tree {
-    id: number;
-    name: string;
-    active_tree: boolean;
-    created_at: string;
-    updated_at: string;
-}
-
-export const activeTree = writable<Tree | null>(null);
-
-export function setActiveTree(tree: Tree) {
-    activeTree.set(tree);
-}
-
-export function getActiveTree(): Tree | null {
-    return get(activeTree);
-}
-
-// ====================
-// Person Store
-// ====================
-
 export interface TimelineEntry {
     id: string;
     title: string;
@@ -137,33 +107,4 @@ export function hasPersonChanged(): boolean {
     if (data.marriages && Object.keys(data.marriages).length > 0) return true;
 
     return false;
-}
-
-// ============================================================================
-// Zoom Store
-// ============================================================================
-export function zoomIn() {
-    const network = get(networkStore);
-    if (network) {
-        const currentScale = network.getScale();
-        const currentPos = network.getViewPosition();
-        network.moveTo({
-            position: currentPos,
-            scale: currentScale * 1.5,
-            animation: { duration: 400 }
-        });
-    }
-}
-
-export function zoomOut() {
-    const network = get(networkStore);
-    if (network) {
-        const currentScale = network.getScale();
-        const currentPos = network.getViewPosition();
-        network.moveTo({
-            position: currentPos,
-            scale: currentScale / 1.5,
-            animation: { duration: 400 }
-        });
-    }
 }

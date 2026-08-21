@@ -4,7 +4,7 @@
 	import Input from "$components/ui/Input.svelte";
 	import Button from "$components/ui/Button.svelte";
 	import Close from "$components/ui/Close.svelte";
-	import { getActiveTree } from "$stores";
+	import { getActiveTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 
 	export let isOpen: boolean = false;

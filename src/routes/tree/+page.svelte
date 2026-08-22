@@ -11,7 +11,6 @@
 	let releaseNotes = "";
 	let initTask: Promise<void> | null = null;
 
-	// CORRECTED
 	onMount(() => {
 		initTask = (async () => {
 			try {
@@ -50,11 +49,7 @@
 	});
 </script>
 
-<TreeSpinner
-	loadingText="Checking for updates..."
-	waitFor={initTask}
-	hangAtEnd={false}
-/>
+
 
 <TreeContainer />
 

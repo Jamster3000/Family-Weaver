@@ -21,7 +21,7 @@
     isOpen = false;
   }
 
-  $: renderedNotes = releaseNotes ? marked(releaseNotes) : '';
+  $: renderedNotes = releaseNotes ? marked.parse(releaseNotes) : '';
 </script>
 
 <Popup {isOpen}>
@@ -123,5 +123,74 @@
     min-width: 180px;
     padding: 12px 24px;
     font-size: var(--font-medium);
+  }
+
+  :global(.content-body ul) {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: disc;
+  }
+
+  :global(.content-body ul li) {
+    margin: 6px 0;
+    color: var(--text-colour);
+  }
+
+  :global(.content-body ol) {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: decimal;
+  }
+
+  :global(.content-body ol li) {
+    margin: 6px 0;
+    color: var(--text-colour);
+  }
+
+  :global(.content-body h1),
+  :global(.content-body h2),
+  :global(.content-body h3) {
+    color: var(--text-colour);
+    margin: 12px 0 6px 0;
+  }
+
+  :global(.content-body h1) {
+    font-size: var(--font-large);
+    font-weight: 700;
+  }
+
+  :global(.content-body h2) {
+    font-size: var(--font-medium);
+    font-weight: 700;
+  }
+
+  :global(.content-body h3) {
+    font-size: var(--font-small);
+    font-weight: 600;
+  }
+
+  :global(.content-body a) {
+    color: var(--primary-colour);
+    text-decoration: none;
+  }
+
+  :global(.content-body a:hover) {
+    text-decoration: underline;
+  }
+
+  :global(.content-body code) {
+    background: var(--code-background);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+
+  :global(.content-body pre) {
+    background: var(--code-background);
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 8px 0;
   }
 </style>

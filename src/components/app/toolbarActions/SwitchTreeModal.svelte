@@ -5,6 +5,7 @@
   import Card from '$components/ui/Card.svelte';
   import Button from '$components/ui/Button.svelte';
   import Close from '$components/ui/Close.svelte';
+  import { modals } from '$modalStore';
 
   export let isOpen: boolean = false;
   export let activeTreeId: string = '';
@@ -43,7 +44,7 @@
   }
 
   function handleClose() {
-    isOpen = false;
+    modals.close("switchTree");
   }
 
   function formatDate(dateString: string) {
@@ -57,7 +58,7 @@
   }
 </script>
 
-<Popup {isOpen}>
+<Popup {isOpen} onClose={handleClose}>
   <Card width="90%" padding="large" center={true}>
     <Close onClick={handleClose} />
 

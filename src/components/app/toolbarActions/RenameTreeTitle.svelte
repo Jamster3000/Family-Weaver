@@ -6,6 +6,7 @@
 	import Close from "$components/ui/Close.svelte";
 	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
+    import { modals } from "$modalStore";
 
 	export let isOpen: boolean = false;
 
@@ -36,11 +37,15 @@
 			error = "Failed to rename tree. Please try again.";
 		}
 	}
+
+	function handleClose() {
+		modals.close("renameTree");
+	}
 </script>
 
-<Popup {isOpen} onClose={() => (isOpen = false)} closeOnBackdrop={true}>
+<Popup {isOpen} onClose={handleClose}>
 	<Card width="420px" padding="medium" center={true}>
-		<Close onClick={() => (isOpen = false)} />
+		<Close onClick={handleClose} />
 
 		<form class="modal-form" on:submit|preventDefault={handleSubmit}>
 			<h2>Rename Active Tree</h2>
@@ -59,7 +64,7 @@
 				<Button
 					variant="secondary"
 					type="button"
-					on:click={() => (isOpen = false)}
+					on:click={handleClose}
 				>
 					Cancel
 				</Button>
@@ -67,7 +72,7 @@
 					variant="primary"
 					type="submit"
 					disabled={!treeName.trim() ||
-						treeName === getActiveTree()?.name}
+						treeName === $activeTree?.name}
 				>
 					Save
 				</Button>

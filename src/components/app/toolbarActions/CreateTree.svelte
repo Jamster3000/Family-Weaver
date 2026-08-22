@@ -8,6 +8,7 @@
 	import { goto } from "$app/navigation";
 	import Close from "$components/ui/Close.svelte";
 	import { setActiveTree } from "$treeStore";
+	import { modals } from "$modalStore";
 
 	let tree_name: string = "";
 	export let firstTime: boolean = true;
@@ -29,9 +30,13 @@
 			console.error("Error creating family tree:", error);
 		}
 	}
+
+	function handleClose() {
+		modals.close("createTree");
+	}
 </script>
 
-<Popup isOpen={open_popup} onClose={() => (open_popup = false)}>
+<Popup isOpen={open_popup} onClose={handleClose}>
 	<Card width="70%" center={true}>
 		{#if firstTime}
 			<h1><IconTree size={42} /> Welcome to Family Weaver</h1>

@@ -44,12 +44,14 @@ jobs:
           tagName: v__VERSION__
           releaseName: 'Family Weaver v__VERSION__'
           releaseBody: |
-            ## Family Weaver v__VERSION__
+            # Family Weaver v__VERSION__
 
-            ### Changes
-              - Changed the app so it **has** to be installed.
-              - Auto checks for updates when the app opens at start and prompts the user to update or dismiss and avoid the update.
-              - Added a special tree loader when the app opens to check if there are updates.
-              - Added a "What's new" button on the bottom left of the app, which shows the user what verion their app is on and what their app's version release notes are."
+            ## At a Glance
+
+            ## What's new
+
+            ## Under the Hood
+                - Fixed the markdown in "What's new" modal where it wasn't rendering bullet points.
+                - Fixed `CreateTree`, `SwitchTreeModal` & `RenameTreeTitle` as they was managing local close states which wasn't allowing them to close at all.
           releaseDraft: false
           prerelease: false

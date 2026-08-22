@@ -46,7 +46,10 @@ jobs:
           releaseBody: |
             ## Family Weaver v__VERSION__
 
-            - Official installer release.
-            - Bug fixes and updates.
+            ### Changes
+              - Changed the app so it **has** to be installed.
+              - Auto checks for updates when the app opens at start and prompts the user to update or dismiss and avoid the update.
+              - Added a special tree loader when the app opens to check if there are updates.
+              - Added a "What's new" button on the bottom left of the app, which shows the user what verion their app is on and what their app's version release notes are."
           releaseDraft: false
           prerelease: false

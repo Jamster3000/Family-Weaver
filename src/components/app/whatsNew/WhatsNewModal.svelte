@@ -4,17 +4,18 @@
   import Button from '$components/ui/Button.svelte';
   import Close from '$components/ui/Close.svelte';
   import { marked } from 'marked';
-  import { onMount } from 'svelte';
 
   export let isOpen: boolean = false;
 
   let version: string = '';
   let releaseNotes: string = '';
 
-  onMount(() => {
+  //When the modal opens, reread the localstorage as the version number cached is
+  //updated after the modal reads the data originally.
+  $: if (isOpen) {
     version = localStorage.getItem('cached_release_version') || '';
     releaseNotes = localStorage.getItem('cached_release_notes') || '';
-  });
+  }
 
   function handleClose() {
     isOpen = false;

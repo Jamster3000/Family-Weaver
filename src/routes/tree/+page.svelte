@@ -22,6 +22,12 @@
 					"cached_release_notes",
 				);
 
+				console.log("Current version:",
+					currentVersion,
+					"Cached version:",
+					cachedVersion,
+				);
+
 				// fetch release notes if the app version is different from the cached verion in localstorage
 				if (cachedVersion !== currentVersion) {
 					const response: any = await invoke(

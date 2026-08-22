@@ -1,4 +1,3 @@
-<!-- Toolbar.svelte -->
 <script lang="ts">
 	import {
 		IconPlus,
@@ -149,15 +148,14 @@
 </script>
 
 <CreateTree
-	bind:open_popup={$modals.createTree}
 	firstTime={CreateTree_first_time}
 />
 
-<Person bind:isOpen={$modals.addPerson} />
+<Person />
 
-<RenameTreeTitle bind:isOpen={$modals.renameTree} />
+<RenameTreeTitle />
 
-<SwitchTreeModal bind:isOpen={$modals.switchTree} />
+<SwitchTreeModal />
 
 <div class="toolbar">
 	<div class="toolbar-left">

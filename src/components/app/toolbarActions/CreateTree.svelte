@@ -8,11 +8,10 @@
 	import { goto } from "$app/navigation";
 	import Close from "$components/ui/Close.svelte";
 	import { setActiveTree } from "$treeStore";
-	import { modals } from "$modalStore";
+	import { modals, createTreeModal } from "$modalStore";
 
 	let tree_name: string = "";
 	export let firstTime: boolean = true;
-	export let open_popup: boolean = false;
 
 	async function handleSubmit() {
 		try {
@@ -36,7 +35,7 @@
 	}
 </script>
 
-<Popup isOpen={open_popup} onClose={handleClose}>
+<Popup isOpen={$createTreeModal} onClose={handleClose}>
 	<Card width="70%" center={true}>
 		{#if firstTime}
 			<h1><IconTree size={42} /> Welcome to Family Weaver</h1>
@@ -49,7 +48,7 @@
 
 			<p>Let's create your first family tree to get started.</p>
 		{:else}
-			<Close onClick={() => (open_popup = false)} />
+			<Close onClick={() => modals.close("createTree")} />
 			<h1><IconTree size={42} /> Create New Family Tree</h1>
 
 			<p>

@@ -5,9 +5,8 @@
   import Card from '$components/ui/Card.svelte';
   import Button from '$components/ui/Button.svelte';
   import Close from '$components/ui/Close.svelte';
-  import { modals } from '$modalStore';
+  import { modals, switchTreeModal } from '$modalStore';
 
-  export let isOpen: boolean = false;
   export let activeTreeId: string = '';
 
   let trees: Array<{
@@ -17,7 +16,7 @@
     updated_at: string;
   }> = [];
 
-  $: if (isOpen) {
+  $: if ($switchTreeModal) {
     fetchTrees();
   }
 
@@ -31,13 +30,13 @@
 
   async function handleSelectTree(treeId: string) {
     if (treeId === activeTreeId) {
-      isOpen = false;
+      modals.close("switchTree");
       return;
     }
 
     try {
       await invoke('switch_active_tree', { treeId });
-      isOpen = false;
+      modals.close("switchTree");
     } catch (error) {
       console.error('Failed to switch active tree:', error);
     }
@@ -58,7 +57,7 @@
   }
 </script>
 
-<Popup {isOpen} onClose={handleClose}>
+<Popup isOpen={$switchTreeModal} onClose={handleClose}>
   <Card width="90%" padding="large" center={true}>
     <Close onClick={handleClose} />
 

@@ -49,26 +49,29 @@
     'color',
   ];
 
-  //If the user selects 'date' render 'text' so users can type freely anything they want but have the option of date picker
   $: safeType = type === 'date' ? 'text' : validTypes.includes(type) ? type : 'text';
 
-  // Calculate width based on placeholder length
   $: charWidth = 8.5;
-  $: bufferPixels = 56; // padding (10px + 14px) + extra buffer
+  $: bufferPixels = 56;
   $: calculatedWidth = placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : 'auto';
 
   let inputNode: HTMLInputElement;
+  let fpNode: HTMLInputElement;
   let fp: flatpickr.Instance;
 
   onMount(() => {
-    if (type === 'date' && inputNode) {
-      fp = flatpickr(inputNode, {
+    if (type === 'date' && fpNode) {
+      fp = flatpickr(fpNode, {
         dateFormat: 'd-m-Y',
-        allowInput: true,
         clickOpens: false,
         onChange: (selectedDates, dateStr) => {
           value = dateStr;
-          inputNode.dispatchEvent(new Event('input', { bubbles: true }));
+          if (inputNode) {
+            // Force the DOM to update before dispatching the event
+            // so Svelte's bind:value doesn't overwrite it with the old value
+            inputNode.value = dateStr;
+            inputNode.dispatchEvent(new Event('input', { bubbles: true }));
+          }
         },
       });
     }
@@ -78,7 +81,7 @@
     if (fp) fp.destroy();
   });
 
-  $: if (fp && value !== fp.input.value) {
+  $: if (fp && typeof value === 'string') {
     fp.setDate(value || '', false);
   }
 
@@ -99,7 +102,14 @@
     </label>
   {/if}
 
-  <div class="input-wrap" class:error={!!error} class:disabled class:multiline class:centerPlaceholder style="width: {calculatedWidth}">
+  <div
+    class="input-wrap"
+    class:error={!!error}
+    class:disabled
+    class:multiline
+    class:centerPlaceholder
+    style="width: {calculatedWidth}"
+  >
     {#if multiline}
       <textarea
         {id}
@@ -129,6 +139,11 @@
         on:focus
       />
       {#if type === 'date'}
+        <input
+          bind:this={fpNode}
+          tabindex="-1"
+          style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0; opacity: 0; pointer-events: none; border: none; padding: 0; margin: 0;"
+        />
         <button type="button" class="calendar-btn" on:click={openCalendar} {disabled} title="Open Calendar">
           <IconCalendarWeek size={22} />
         </button>
@@ -184,7 +199,7 @@
     border: 2px solid color-mix(in srgb, var(--border-colour) 50%, transparent);
     border-radius: 8px;
     transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
-    padding-right: 6px; /* Space for the bordered button */
+    padding-right: 6px;
   }
 
   .input-wrap:focus-within {

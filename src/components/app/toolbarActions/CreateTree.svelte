@@ -7,6 +7,7 @@
 	import { goto } from "$app/navigation";
 	import { setActiveTree } from "$treeStore";
 	import { modals, createTreeModal } from "$modalStore";
+	import { toasts } from "$toastStore";
 
 	let tree_name: string = "";
 	export let firstTime: boolean = true;
@@ -27,9 +28,12 @@
 				setActiveTree(result);
 				handleClose();
 				goto("/tree");
+
+				toasts.success(`Family tree '${tree_name}' created successfully!`);
 			}
 		} catch (error) {
 			console.error("Error creating family tree:", error);
+			toasts.error("Failed to create family tree.");
 		}
 	}
 </script>

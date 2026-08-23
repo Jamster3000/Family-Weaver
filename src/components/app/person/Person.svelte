@@ -2,7 +2,7 @@
 	import Modal from "$components/ui/Modal.svelte";
 	import Button from "$components/ui/Button.svelte";
 	import PersonOverview from "$components/app/person/PersonOverview.svelte";
-	import PersonUpload from "$components/app/person/PersonUpload.svelte";
+	import PersonMedia from "$components/app/person/PersonMedia.svelte";
 	import PersonRelationships from "$components/app/person/PersonRelationships.svelte";
 	import PersonTimelines from "$components/app/person/PersonTimelines.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
@@ -15,6 +15,7 @@
 	import { activeTree } from "$treeStore";
 	import { modals, timelineEntryModal, addPersonModal, discardPersonChangesModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
+	import { toasts } from "$toastStore";
 
 	let activeTab: string = "overview";
 
@@ -47,9 +48,16 @@
 			tree_id: $activeTree?.id,
 		};
 
-		let createdPerson = await invoke("create_person", {
-			person: cleanedPerson
-		});
+		try {
+			let createdPerson = await invoke("create_person", {
+				person: cleanedPerson
+			});
+			resetPersonData();
+			toasts.success("Person created successfully!");
+		} catch(error) {
+			toasts.error("Failed to create person.");
+			return;
+		}
 
 		modals.close("addPerson");
 	}
@@ -101,8 +109,8 @@
 			position="top"
 		>
 			<button
-				class:active={activeTab === "upload"}
-				on:click={() => (activeTab = "upload")}>Upload</button
+				class:active={activeTab === "media"}
+				on:click={() => (activeTab = "media")}>Media</button
 			>
 		</Tooltip>
 		<Tooltip
@@ -131,8 +139,8 @@
 			<div in:fade={{ duration: 275 }} class="tab-panel">
 				{#if activeTab === "overview"}
 					<PersonOverview />
-				{:else if activeTab === "upload"}
-					<PersonUpload />
+				{:else if activeTab === "media"}
+					<PersonMedia />
 				{:else if activeTab === "relationships"}
 					<PersonRelationships />
 				{:else if activeTab === "timelines"}

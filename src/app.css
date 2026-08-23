@@ -7,6 +7,11 @@
     --secondary-colour: #6a9b9b;
     --red-error: #c74e4e;
     --border-colour: #6a9b9b;
+    /* Toast notifications */
+    --toast-success-colour: #6b8e7d;
+    --toast-error-colour: #c74e4e;
+    --toast-info-colour: #6286a6;
+    --toast-duration: 6000ms;
     /* Font */
     --font-primary: 'Lora', sans-serif;
     --font-scale: 1;

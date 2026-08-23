@@ -5,6 +5,7 @@
 	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { modals, renameTreeModal } from "$modalStore";
+	import { toasts } from "$toastStore";
 
 	let treeName: string = "";
 	let error: string = "";
@@ -27,14 +28,16 @@
 			})
 				.then(() => {
 					handleClose();
+					toasts.success("Tree renamed successfully!");
 				})
 				.catch((err) => {
 					console.error("Error renaming tree:", err);
-					error = "Failed to rename tree. Please try again.";
+					error = "Failed to rename tree.";
+					toasts.error("Failed to rename tree.");
 				});
 		} catch (err) {
 			console.error("Error renaming tree:", err);
-			error = "Failed to rename tree. Please try again.";
+			error = "Failed to rename tree.";
 		}
 	}
 </script>

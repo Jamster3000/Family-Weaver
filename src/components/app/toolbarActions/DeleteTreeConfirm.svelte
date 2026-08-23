@@ -4,6 +4,7 @@
 	import { modals, deleteTreeConfirmModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { activeTree } from "$treeStore";
+	import { toasts } from "$toastStore";
 
 	async function handleTreeDeletion() {
 		const tree_id = $activeTree?.id;
@@ -11,8 +12,16 @@
 		try {
 			await invoke("delete_tree", { treeId: tree_id });
 			await invoke("set_new_active_tree");
+
+			handleClose();
+
+			toasts.success("Tree deleted successfully!");
 		} catch (error) {
 			console.error("Error deleting tree:", error);
+
+			handleClose();
+
+			toasts.error("Failed to delete tree.");
 		}
 	}
 
@@ -22,7 +31,6 @@
 
 	function handleDelete() {
 		handleTreeDeletion();
-		handleClose();
 	}
 </script>
 

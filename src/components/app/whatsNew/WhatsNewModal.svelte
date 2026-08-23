@@ -41,7 +41,7 @@
 
   <svelte:fragment slot="footer">
     <Button variant="primary" type="button" on:click={handleClose}>
-      Got it
+      Close
     </Button>
   </svelte:fragment>
 </Modal>

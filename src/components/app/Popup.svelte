@@ -62,16 +62,39 @@
     background: transparent;
     padding: var(--page-padding);
     margin: 0;
-    overflow: visible;
+    overflow: auto;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .content-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  @media (max-height: 800px) {
+    .dialog-container {
+      padding: var(--titlebar-height) 20px 100px 20px;
+      align-items: flex-start;
+    }
+
+    .content-wrapper {
+      max-height: 85vh;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .dialog-container {
+      padding: var(--titlebar-height) 20px 80px 20px;
+    }
+
+    .content-wrapper {
+      max-height: 80vh;
+    }
+  }
 </style>

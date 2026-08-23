@@ -24,6 +24,7 @@
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 	import { modals } from "$modalStore";
 	import { type ToolbarItem, leftItems, rightItems } from "$lib/Toolbar";
+	import DeleteTreeConfirm from "$components/app/toolbarActions/DeleteTreeConfirm.svelte";
 
 	let CreateTree_first_time: boolean = false;
 
@@ -70,6 +71,8 @@
 <RenameTreeTitle />
 
 <SwitchTreeModal />
+
+<DeleteTreeConfirm />
 
 <div class="toolbar">
 	<div class="toolbar-left">
@@ -133,31 +136,6 @@
 		{/each}
 	</div>
 </div>
-
-<Popup bind:isOpen={$modals.deleteTreeConfirm}>
-	<Card width="40%">
-		<p>
-			Are you sure you want to delete this tree? This will also delete all
-			people associated with this tree. This action cannot be undone.
-		</p>
-		<div class="popup-actions">
-			<Button
-				variant="secondary"
-				on:click={() => modals.close("deleteTreeConfirm")}
-			>
-				Cancel
-			</Button>
-			<Button
-				on:click={() => {
-					handleTreeDeletion();
-					modals.close("deleteTreeConfirm");
-				}}
-			>
-				Delete
-			</Button>
-		</div>
-	</Card>
-</Popup>
 
 {#if openDropup}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->

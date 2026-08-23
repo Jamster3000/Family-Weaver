@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Modal from "$components/ui/Modal.svelte";
 	import Button from "$components/ui/Button.svelte";
+	import { updateStore } from "$updateStore";
 
 	export let isOpen: boolean = false;
 	export let version: string = "";
@@ -8,9 +9,9 @@
 	export let onDismiss: () => void = () => {};
 
 	function handleClose() {
+		// Set flag that update is pending for toolbar to show
+		updateStore.setUpdateAvailable(version);
 		isOpen = false;
-		//save this in localstorage for the toolbar to read and check if there's an update
-		localStorage.setItem("pendingUpdate", "true");
 		onDismiss();
 	}
 </script>

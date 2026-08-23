@@ -1,4 +1,3 @@
-<!-- Toolbar.svelte -->
 <script lang="ts">
 	import { IconChevronUp } from "@tabler/icons-svelte-runes";
 	import Button from "$components/ui/Button.svelte";
@@ -15,6 +14,7 @@
 	import { type ToolbarItem, getLeftItems, rightItems } from "$lib/Toolbar";
 	import { check, type Update } from "@tauri-apps/plugin-updater";
 	import { onMount } from "svelte";
+	import { updateStore } from "$lib/stores/updateStore";
 
 	let CreateTree_first_time: boolean = false;
 	let hasUpdate: boolean = false;
@@ -40,14 +40,11 @@
 	}
 
 	onMount(() => {
-		// Check localStorage for pending update (much faster than checking for updates)
-		const pendingUpdate = localStorage.getItem("pendingUpdate");
-		if (pendingUpdate === "true") {
-			hasUpdate = true;
-			leftItems = getLeftItems(true);
-		} else {
-			leftItems = getLeftItems(false);
-		}
+		// Subscribe to updateStore for reactive updates
+		updateStore.subscribe(state => {
+			hasUpdate = state.hasUpdate;
+			leftItems = getLeftItems(state.hasUpdate);
+		})();
 	});
 
 	let openDropup: string | null = null;

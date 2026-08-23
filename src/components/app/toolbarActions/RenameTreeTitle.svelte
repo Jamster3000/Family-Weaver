@@ -1,12 +1,10 @@
 <script lang="ts">
-	import Popup from "$components/app/Popup.svelte";
-	import Card from "$components/ui/Card.svelte";
+	import Modal from "$components/ui/Modal.svelte";
 	import Input from "$components/ui/Input.svelte";
 	import Button from "$components/ui/Button.svelte";
-	import Close from "$components/ui/Close.svelte";
 	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
-    import { modals, renameTreeModal } from "$modalStore";
+	import { modals, renameTreeModal } from "$modalStore";
 
 	let treeName: string = "";
 	let error: string = "";
@@ -14,6 +12,10 @@
 	$: if ($renameTreeModal) {
 		treeName = $activeTree?.name || "";
 		error = "";
+	}
+
+	function handleClose() {
+		modals.close("renameTree");
 	}
 
 	function handleSubmit() {
@@ -35,49 +37,44 @@
 			error = "Failed to rename tree. Please try again.";
 		}
 	}
-
-	function handleClose() {
-		modals.close("renameTree");
-	}
 </script>
 
-<Popup isOpen={$renameTreeModal} onClose={handleClose}>
-	<Card width="420px" padding="medium" center={true}>
-		<Close onClick={handleClose} />
+<Modal isOpen={$renameTreeModal} width="420px" padding="medium" onClose={handleClose}>
+	<svelte:fragment slot="header">
+		<h2>Rename Active Tree</h2>
+	</svelte:fragment>
 
-		<form class="modal-form" on:submit|preventDefault={handleSubmit}>
-			<h2>Rename Active Tree</h2>
+	<form class="modal-form" on:submit|preventDefault={handleSubmit}>
+		<div class="input-container">
+			<Input
+				label="Tree Name"
+				placeholder="Enter new tree name..."
+				bind:value={treeName}
+				{error}
+				centerPlaceholder={true}
+			/>
+		</div>
+	</form>
 
-			<div class="input-container">
-				<Input
-					label="Tree Name"
-					placeholder="Enter new tree name..."
-					bind:value={treeName}
-					{error}
-					centerPlaceholder={true}
-				/>
-			</div>
-
-			<div class="actions">
-				<Button
-					variant="secondary"
-					type="button"
-					on:click={handleClose}
-				>
-					Cancel
-				</Button>
-				<Button
-					variant="primary"
-					type="submit"
-					disabled={!treeName.trim() ||
-						treeName === $activeTree?.name}
-				>
-					Save
-				</Button>
-			</div>
-		</form>
-	</Card>
-</Popup>
+	<svelte:fragment slot="footer">
+		<Button
+			variant="secondary"
+			type="button"
+			on:click={handleClose}
+		>
+			Cancel
+		</Button>
+		<Button
+			variant="primary"
+			type="submit"
+			disabled={!treeName.trim() ||
+				treeName === $activeTree?.name}
+			on:click={handleSubmit}
+		>
+			Save
+		</Button>
+	</svelte:fragment>
+</Modal>
 
 <style>
 	.modal-form {
@@ -110,16 +107,5 @@
 
 	.input-container :global(.input-wrap) {
 		width: 100% !important;
-	}
-
-	.actions {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.75rem;
-		width: 100%;
-	}
-
-	.actions :global(.btn) {
-		width: 100%;
 	}
 </style>

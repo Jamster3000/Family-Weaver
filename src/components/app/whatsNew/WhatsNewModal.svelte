@@ -1,85 +1,52 @@
 <script lang="ts">
-  import Popup from '$components/app/Popup.svelte';
-  import Card from '$components/ui/Card.svelte';
+  import Modal from '$components/ui/Modal.svelte';
   import Button from '$components/ui/Button.svelte';
-  import Close from '$components/ui/Close.svelte';
+  import { whatsNewModal, modals } from '$modalStore';
   import { marked } from 'marked';
-
-  export let isOpen: boolean = false;
 
   let version: string = '';
   let releaseNotes: string = '';
 
   //When the modal opens, reread the localstorage as the version number cached is
   //updated after the modal reads the data originally.
-  $: if (isOpen) {
+  $: if ($whatsNewModal) {
     version = localStorage.getItem('cached_release_version') || '';
     releaseNotes = localStorage.getItem('cached_release_notes') || '';
   }
 
   function handleClose() {
-    isOpen = false;
+    modals.close('whatsNew');
   }
 
   $: renderedNotes = releaseNotes ? marked.parse(releaseNotes) : '';
 </script>
 
-<Popup {isOpen}>
-  <Card width="720px" padding="large" center={true}>
-    <Close onClick={handleClose} />
+<Modal isOpen={$whatsNewModal} width="720px" onClose={handleClose}>
+  <svelte:fragment slot="header">
+    <h2>What's New</h2>
+    {#if version}
+      <span class="version-badge">Version {version}</span>
+    {/if}
+  </svelte:fragment>
 
-    <div class="modal-content">
-      <div class="header-area">
-        <h2>What's New</h2>
-        {#if version}
-          <span class="version-badge">Version {version}</span>
-        {/if}
-      </div>
-
-      <div class="content-box">
-        <div class="content-body">
-          {#if renderedNotes}
-            {@html renderedNotes}
-          {:else}
-            <slot />
-          {/if}
-        </div>
-      </div>
-
-      <div class="actions">
-        <Button variant="primary" type="button" on:click={handleClose}>
-          Got it
-        </Button>
-      </div>
+  <div class="content-box">
+    <div class="content-body">
+      {#if renderedNotes}
+        {@html renderedNotes}
+      {:else}
+        <slot />
+      {/if}
     </div>
-  </Card>
-</Popup>
+  </div>
+
+  <svelte:fragment slot="footer">
+    <Button variant="primary" type="button" on:click={handleClose}>
+      Got it
+    </Button>
+  </svelte:fragment>
+</Modal>
 
 <style>
-  .modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .header-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    text-align: center;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: var(--font-xlarge, 2rem);
-    font-weight: 700;
-    color: var(--text-colour);
-  }
-
   .version-badge {
     background: color-mix(in srgb, var(--primary-colour) 10%, var(--secondary-background));
     border: 1px solid var(--border-colour);
@@ -111,18 +78,6 @@
     color: var(--text-colour);
     font-size: var(--font-medium);
     line-height: 1.6;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .actions :global(.btn) {
-    min-width: 180px;
-    padding: 12px 24px;
-    font-size: var(--font-medium);
   }
 
   :global(.content-body ul) {

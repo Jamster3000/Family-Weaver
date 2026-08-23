@@ -1,10 +1,8 @@
 <script lang="ts">
   import { invoke } from '@tauri-apps/api/core';
   import { IconSitemap, IconCheck } from '@tabler/icons-svelte-runes';
-  import Popup from '$components/app/Popup.svelte';
-  import Card from '$components/ui/Card.svelte';
+  import Modal from '$components/ui/Modal.svelte';
   import Button from '$components/ui/Button.svelte';
-  import Close from '$components/ui/Close.svelte';
   import { modals, switchTreeModal } from '$modalStore';
 
   export let activeTreeId: string = '';
@@ -30,13 +28,13 @@
 
   async function handleSelectTree(treeId: string) {
     if (treeId === activeTreeId) {
-      modals.close("switchTree");
+      handleClose();
       return;
     }
 
     try {
       await invoke('switch_active_tree', { treeId });
-      modals.close("switchTree");
+      handleClose();
     } catch (error) {
       console.error('Failed to switch active tree:', error);
     }
@@ -57,71 +55,51 @@
   }
 </script>
 
-<Popup isOpen={$switchTreeModal} onClose={handleClose}>
-  <Card width="90%" padding="large" center={true}>
-    <Close onClick={handleClose} />
+<Modal isOpen={$switchTreeModal} width="90%" onClose={handleClose}>
+  <svelte:fragment slot="header">
+    <h2>Switch Family Tree</h2>
+    <p class="subtitle">Select the family tree you would like to view or edit:</p>
+  </svelte:fragment>
 
-    <div class="modal-content">
-      <div class="header-text">
-        <h2>Switch Family Tree</h2>
-        <p class="subtitle">Select the family tree you would like to view or edit:</p>
-      </div>
-
-      <div class="tree-grid">
-        {#each trees as tree}
-          <button
-            type="button"
-            class="tree-card"
-            class:active={tree.id === activeTreeId || tree.active_tree === 1}
-            on:click={() => handleSelectTree(tree.id)}
-          >
-            <div class="tree-card-header">
-              <div class="icon-wrapper">
-                <IconSitemap size={28} />
-              </div>
-              {#if tree.id === activeTreeId || tree.active_tree === 1}
-                <span class="badge">
-                  <IconCheck size={16} /> Active
-                </span>
-              {/if}
-            </div>
-
-            <div class="tree-card-body">
-              <span class="tree-name">{tree.name}</span>
-              <span class="tree-date">Last updated: {formatDate(tree.updated_at)}</span>
-            </div>
-          </button>
-        {:else}
-          <div class="empty-state">
-            <p class="empty-text">Loading trees...</p>
+  <div class="tree-grid">
+    {#each trees as tree}
+      <button
+        type="button"
+        class="tree-card"
+        class:active={tree.id === activeTreeId || tree.active_tree === 1}
+        on:click={() => handleSelectTree(tree.id)}
+      >
+        <div class="tree-card-header">
+          <div class="icon-wrapper">
+            <IconSitemap size={28} />
           </div>
-        {/each}
-      </div>
+          {#if tree.id === activeTreeId || tree.active_tree === 1}
+            <span class="badge">
+              <IconCheck size={16} /> Active
+            </span>
+          {/if}
+        </div>
 
-      <div class="actions">
-        <Button variant="secondary" type="button" on:click={handleClose}>
-          Cancel
-        </Button>
+        <div class="tree-card-body">
+          <span class="tree-name">{tree.name}</span>
+          <span class="tree-date">Last updated: {formatDate(tree.updated_at)}</span>
+        </div>
+      </button>
+    {:else}
+      <div class="empty-state">
+        <p class="empty-text">Loading trees...</p>
       </div>
-    </div>
-  </Card>
-</Popup>
+    {/each}
+  </div>
+
+  <svelte:fragment slot="footer">
+    <Button variant="secondary" type="button" on:click={handleClose}>
+      Cancel
+    </Button>
+  </svelte:fragment>
+</Modal>
 
 <style>
-  .modal-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-  }
-
-  .header-text {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
   h2 {
     margin: 0;
     font-size: var(--font-xlarge, 1.75rem);
@@ -237,16 +215,5 @@
     font-size: var(--font-medium);
     opacity: 0.6;
     margin: 0;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .actions :global(.btn) {
-    min-width: 200px;
   }
 </style>

@@ -5,7 +5,7 @@
 	import Button from "$components/ui/Button.svelte";
 	import { invoke } from "@tauri-apps/api/core";
 	import { goto } from "$app/navigation";
-	import { setActiveTree } from "$treeStore";
+	import { setActiveTree, type Tree } from "$treeStore";
 	import { modals, createTreeModal } from "$modalStore";
 	import { toasts } from "$toastStore";
 
@@ -18,12 +18,13 @@
 
 	async function handleSubmit() {
 		try {
-			const result = await invoke("create_tree", {
+			const result = await invoke<Tree>("create_tree", {
 				tree: {
 					name: tree_name,
 					active_tree: true,
 				},
 			});
+			console.log(result);
 			if (result) {
 				setActiveTree(result);
 				handleClose();

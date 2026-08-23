@@ -50,10 +50,11 @@ jobs:
 
             ## What's new
                 - Added confirmation notifications. When you create a person, save changes, or perform other actions, you'll now see a quick message in the bottom right corner confirming it worked (or letting you know if there was an issue).
-
+                - When choosing "later" for an update, there will be an option to update the app without needing to restart it to get the update. This update option can be seen in the "app" menu in the toolbar **only** when there is an update available.
             ## Under the Hood
                 - Fixed the markdown in "What's new" modal where it wasn't rendering bullet points.
                 - Fixed `CreateTree`, `SwitchTreeModal` & `RenameTreeTitle` as they was managing local close states which wasn't allowing them to close at all.
                 - Changed the "upload" tab in create person modal to "media".
+                - Changed "Settings" in the toolbar to "app" to better fit the content it can include.
           releaseDraft: false
           prerelease: false

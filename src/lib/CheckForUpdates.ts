@@ -6,6 +6,8 @@ export async function checkForAppUpdates(): Promise<Update | null> {
         const update = await check();
         if (update) {
             return update;
+        } else {
+            localstorage.removeItem("pendingUpdate");
         }
     } catch (error) {
         console.error('Failed to check for updates:', error);

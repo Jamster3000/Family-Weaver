@@ -1,32 +1,54 @@
+<!-- Toolbar.svelte -->
 <script lang="ts">
-	import {
-		IconPlus,
-		IconZoomIn,
-		IconZoomOut,
-		IconChevronUp,
-		IconUserPlus,
-		IconTree,
-		IconSettings,
-		IconEdit,
-		IconTrash,
-	} from "@tabler/icons-svelte-runes";
+	import { IconChevronUp } from "@tabler/icons-svelte-runes";
 	import Button from "$components/ui/Button.svelte";
 	import { zoomIn, zoomOut } from "$networkStore";
 	import { fade } from "svelte/transition";
 	import CreateTree from "$components/app/toolbarActions/CreateTree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
-	import Popup from "$components/app/Popup.svelte";
-	import Card from "$components/ui/Card.svelte";
 	import { activeTree } from "$treeStore";
-	import { invoke } from "@tauri-apps/api/core";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 	import { modals } from "$modalStore";
-	import { type ToolbarItem, leftItems, rightItems } from "$lib/Toolbar";
 	import DeleteTreeConfirm from "$components/app/toolbarActions/DeleteTreeConfirm.svelte";
+	import { type ToolbarItem, getLeftItems, rightItems } from "$lib/Toolbar";
+	import { check, type Update } from "@tauri-apps/plugin-updater";
+	import { onMount } from "svelte";
 
 	let CreateTree_first_time: boolean = false;
+	let hasUpdate: boolean = false;
+	let updateAvailable: Update | null = null;
+	let leftItems: ToolbarItem[] = [];
+
+	async function checkForUpdate() {
+		try {
+			const update = await check();
+			if (update) {
+				hasUpdate = true;
+				updateAvailable = update;
+				leftItems = getLeftItems(true);
+			} else {
+				// Clear the pendingUpdate flag if no update is found
+				localStorage.removeItem("pendingUpdate");
+				leftItems = getLeftItems(false);
+			}
+		} catch (error) {
+			console.error("Error checking for updates:", error);
+			leftItems = getLeftItems(false);
+		}
+	}
+
+	onMount(() => {
+		// Check localStorage for pending update (much faster than checking for updates)
+		const pendingUpdate = localStorage.getItem("pendingUpdate");
+		if (pendingUpdate === "true") {
+			hasUpdate = true;
+			leftItems = getLeftItems(true);
+		} else {
+			leftItems = getLeftItems(false);
+		}
+	});
 
 	let openDropup: string | null = null;
 
@@ -46,27 +68,17 @@
 		openDropup = null;
 	}
 
-	async function handleTreeDeletion() {
-		const tree_id = $activeTree?.id;
-
-		try {
-			await invoke("delete_tree", { treeId: tree_id });
-			await invoke("set_new_active_tree");
-		} catch (error) {
-			console.error("Error deleting tree:", error);
-		}
-	}
-
 	function closeDropup() {
 		openDropup = null;
 	}
 </script>
 
 <CreateTree
+	bind:open_popup={$modals.createTree}
 	firstTime={CreateTree_first_time}
 />
 
-<Person />
+<Person bind:isOpen={$modals.addPerson} />
 
 <RenameTreeTitle />
 

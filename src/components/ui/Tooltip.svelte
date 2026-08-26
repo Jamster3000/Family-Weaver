@@ -101,14 +101,16 @@
     position: fixed;
     background: var(--text-colour);
     color: var(--secondary-background);
-    padding: 6px 10px;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border-radius: 6px;
     font-size: var(--font-small);
     font-family: var(--font-primary);
-    white-space: nowrap;
+    white-space: normal;
+    max-width: 320px;
+    line-height: 1.4;
     pointer-events: none;
     z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   .tooltip.top {

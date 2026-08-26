@@ -5,7 +5,7 @@
 
   export let isOpen: boolean = false;
   export let width: string = '540px';
-  export let padding: 'small' | 'medium' | 'large' = 'large';
+  export let padding: 'none'| 'small' | 'medium' | 'large' = 'large';
   export let center: boolean = true;
   export let title: string = '';
   export let showClose: boolean = true;

@@ -6,6 +6,8 @@ pub mod commands;
 pub mod models;
 pub mod state;
 
+pub mod settings;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let exe_dir = std::env::current_exe()
@@ -26,9 +28,10 @@ pub fn run() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
-            let conn = Arc::new(Mutex::new(
-                database::initial::open(db_path.to_str().unwrap()).unwrap(),
-            ));
+            let mut conn = database::initial::open(db_path.to_str().unwrap()).unwrap();
+            database::settings::sync_settings(&mut conn).expect("Failed to sync settings");
+
+            let conn = Arc::new(Mutex::new(conn));
 
             app.manage(state::AppState {
                 conn,
@@ -43,11 +46,12 @@ pub fn run() {
             database::check::check_tree_exists,
             database::get::get_active_tree,
             database::get::get_all_trees,
+            database::get::get_all_settings,
             database::delete::delete_tree,
             database::set::set_new_active_tree,
             database::set::set_tree_name,
             database::set::switch_active_tree,
-            commands::release::fetch_version_release
+            commands::release::fetch_version_release,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -82,6 +82,20 @@ pub fn open(path: &str) -> Result<Connection> {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
+        CREATE TABLE IF NOT EXISTS settings (
+            key TEXT PRIMARY KEY,
+            category TEXT NOT NULL,
+            name TEXT NOT NULL,
+            short_description TEXT NOT NULL,
+            long_description TEXT NOT NULL,
+            search_terms TEXT NOT NULL,
+            value_type TEXT NOT NULL,
+            default_val TEXT,
+            min_val TEXT,
+            max_val TEXT,
+            value TEXT
+        );
+
         CREATE INDEX IF NOT EXISTS idx_persons_tree_id ON person(tree_id);
         CREATE INDEX IF NOT EXISTS idx_timeline_entries_person_id ON timeline_entries(person_id);
         CREATE INDEX IF NOT EXISTS idx_marriages_person_id ON marriages(person_id);

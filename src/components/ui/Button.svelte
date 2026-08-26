@@ -32,10 +32,10 @@
     border: none;
     cursor: pointer;
     transition:
-      background-color 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.15s ease;
+      background-color var(--short-transition-duration) ease,
+      border-color var(--short-transition-duration) ease,
+      box-shadow var(--short-transition-duration) ease,
+      transform var(--xshort-transition-duration) ease;
     will-change: background-color, box-shadow, transform;
   }
 

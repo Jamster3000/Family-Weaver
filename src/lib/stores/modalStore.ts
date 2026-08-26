@@ -1,54 +1,56 @@
 import { writable, derived } from 'svelte/store';
 
-export type ModalType = 
-  | 'addPerson' 
-  | 'createTree' 
-  | 'renameTree' 
-  | 'switchTree' 
-  | 'deleteTreeConfirm' 
-  | 'discardPersonChanges'
-  | 'whatsNew'
-  | 'appUpdate'
-  | 'timelineEntry';
+export type ModalType =
+    | 'addPerson'
+    | 'createTree'
+    | 'renameTree'
+    | 'switchTree'
+    | 'deleteTreeConfirm'
+    | 'discardPersonChanges'
+    | 'whatsNew'
+    | 'appUpdate'
+    | 'timelineEntry'
+    | 'settings';
 
 interface ModalState {
-  [key: string]: boolean;
+    [key: string]: boolean;
 }
 
 const initialState: ModalState = {
-  addPerson: false,
-  createTree: false,
-  renameTree: false,
-  switchTree: false,
-  deleteTreeConfirm: false,
-  discardPersonChanges: false,
-  whatsNew: false,
-  appUpdate: false,
-  timelineEntry: false,
+    addPerson: false,
+    createTree: false,
+    renameTree: false,
+    switchTree: false,
+    deleteTreeConfirm: false,
+    discardPersonChanges: false,
+    whatsNew: false,
+    appUpdate: false,
+    timelineEntry: false,
+    settings: false,
 };
 
 function createModalStore() {
-  const { subscribe, update, set } = writable<ModalState>(initialState);
+    const { subscribe, update, set } = writable<ModalState>(initialState);
 
-  return {
-    subscribe,
-    open: (modal: ModalType) =>
-      update((state) => ({
-        ...state,
-        [modal]: true,
-      })),
-    close: (modal: ModalType) =>
-      update((state) => ({
-        ...state,
-        [modal]: false,
-      })),
-    toggle: (modal: ModalType) =>
-      update((state) => ({
-        ...state,
-        [modal]: !state[modal],
-      })),
-    closeAll: () => set(initialState),
-  };
+    return {
+        subscribe,
+        open: (modal: ModalType) =>
+            update((state) => ({
+                ...state,
+                [modal]: true,
+            })),
+        close: (modal: ModalType) =>
+            update((state) => ({
+                ...state,
+                [modal]: false,
+            })),
+        toggle: (modal: ModalType) =>
+            update((state) => ({
+                ...state,
+                [modal]: !state[modal],
+            })),
+        closeAll: () => set(initialState),
+    };
 }
 
 export const modals = createModalStore();
@@ -62,3 +64,4 @@ export const discardPersonChangesModal = derived(modals, ($modals) => $modals.di
 export const whatsNewModal = derived(modals, ($modals) => $modals.whatsNew);
 export const appUpdateModal = derived(modals, ($modals) => $modals.appUpdate);
 export const timelineEntryModal = derived(modals, ($modals) => $modals.timelineEntry);
+export const settingsModal = derived(modals, ($modals) => $modals.settings);

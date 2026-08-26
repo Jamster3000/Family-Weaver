@@ -9,8 +9,9 @@
 	import { activeTree } from "$treeStore";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
-	import { modals } from "$modalStore";
 	import DeleteTreeConfirm from "$components/app/toolbarActions/DeleteTreeConfirm.svelte";
+	import Settings from "$components/app/toolbarActions/settings/SettingsModal.svelte";
+	import { modals } from "$modalStore";
 	import { type ToolbarItem, getLeftItems, rightItems } from "$lib/Toolbar";
 	import { check, type Update } from "@tauri-apps/plugin-updater";
 	import { onMount } from "svelte";
@@ -82,6 +83,8 @@
 <SwitchTreeModal />
 
 <DeleteTreeConfirm />
+
+<Settings />
 
 <div class="toolbar">
 	<div class="toolbar-left">

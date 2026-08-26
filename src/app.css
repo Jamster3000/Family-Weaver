@@ -15,20 +15,159 @@
     /* Font */
     --font-primary: 'Lora', sans-serif;
     --font-scale: 1;
+    font-size-adjust: ex-height 0.5;
     --font-xsmall: calc(0.875rem * var(--font-scale));
     --font-small: calc(1rem * var(--font-scale));
     --font-medium: calc(1.125rem * var(--font-scale));
     --font-large: calc(1.375rem * var(--font-scale));
     --font-xlarge: calc(1.75rem * var(--font-scale));
+    /* animation */
+    --xshort-transition-duration: 0.2s;
+    --short-transition-duration: 0.35s;
+    --medium-transition-duration: 0.5s;
+    --long-transition-duration: 1.0s;
+    --xlong-transition-duration: 2.0s;
     /* misc */
     --titlebar-height: 35px;
     --page-padding: 20px 50px;
 }
 
+:root[data-theme="light"] {
+    --primary-background: #ffffff;
+    --secondary-background: #f5f5f7;
+    --code-background: #6b8e7d20;
+    --text-colour: #1b1f24;
+    --primary-colour: #4a6b5a;
+    --secondary-colour: #4a7a7a;
+    --red-error: #b03a3a;
+    --border-colour: #cfd8dc;
+    --toast-success-colour: #4a6b5a;
+    --toast-error-colour: #b03a3a;
+    --toast-info-colour: #3a6a8a;
+}
+
+[data-theme="dark"] {
+    --primary-background: #1a1d24;
+    --secondary-background: #2a2d35;
+    --code-background: #6b8e7d40;
+    --text-colour: #e2e4e8;
+    --primary-colour: #6b8e7d;
+    --secondary-colour: #6a9b9b;
+    --red-error: #c74e4e;
+    --border-colour: #6a9b9b;
+}
+
+:root[data-font-family="HyperLegible"] {
+    font-size-adjust: ex-height 0.52;
+}
+
+:root[data-font-family="Lexend"] {
+    font-size-adjust: ex-height 0.51;
+}
+
+:root[data-font-family="OpenDyslexic"] {
+    font-size-adjust: ex-height 0.53;
+}
+
+:root[data-font-family="Merriweather"] {
+    font-size-adjust: ex-height 0.50;
+}
+
+:root[data-reduce-motion="true"] {
+    --animation-duration: 0s;
+    --transition-duration: 0s;
+}
+
+@media (prefers-color-scheme: light) {
+    [data-theme="system"] {
+        --primary-background: #f4f5f7;
+        --secondary-background: #ffffff;
+        --code-background: #6b8e7d20;
+        --text-colour: #1c1e22;
+        --primary-colour: #4d7060;
+        --secondary-colour: #4a7b7b;
+        --red-error: #b33e3e;
+        --border-colour: #a0c2c2;
+    }
+}
+
+/* Lora Font face */
 @font-face {
     font-family: 'Lora';
-    src: url('/fonts/Lora.woff2') format('woff2');
+    src: url('/fonts/Lora/Lora.woff2') format('woff2');
     font-display: swap;
+}
+
+/* HyperLegible Font face */
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperlegible-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperlegible-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperLegible-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperLegible-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Lexend font face */
+@font-face {
+    font-family: 'Lexend';
+    src: url('/fonts/Lexend/Lexend.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* Merriweather font face */
+@font-face {
+    font-family: 'Merriweather';
+    src: url('/fonts/Merriweather/Merriweather.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* Open Dyslexic font face */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
 }
 
 * {
@@ -41,6 +180,13 @@
 html, body {
     overflow: hidden;
     height: 100vh;
+}
+
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+    transition: background-color 0.65s ease-in-out, color 0.65s ease-in-out, border-color 0.45s ease-in-out, box-shadow 0.65s ease-in-out, stroke 0.65s ease-in-out, fill 0.65s ease-in-out !important;
 }
 
 body {

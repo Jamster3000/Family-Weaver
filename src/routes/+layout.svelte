@@ -5,8 +5,16 @@
     import ToastContainer from '$components/app/ToastContainer.svelte';
     import { onMount } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
+    import { settingsData } from '$settingsStore';
+    import { applyTheme, type AppearanceMode } from "$themeStore";
 
     onMount(() => {
+        const appearanceSetting = $settingsData.find(s => s.key === 'appearance_mode');
+
+        if (appearanceSetting?.value && "Text" in appearanceSetting.value) {
+			applyTheme(appearanceSetting.value.Text as AppearanceMode);
+		}
+
         checkForAppUpdatesBackground();
 
         const updateCheckInterval = setInterval(() => {

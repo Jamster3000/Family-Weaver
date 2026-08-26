@@ -8,7 +8,7 @@
 	import { checkForAppUpdates, installUpdate } from "$lib/CheckForUpdates";
 	import type { Update } from "@tauri-apps/plugin-updater";
 	import { modals, createTreeModal } from "$modalStore";
-	import { type Settings, setSettings } from "$settingsStore";
+	import { type Settings, setSettings, settingsData } from "$settingsStore";
 
 	let updateModalOpen: boolean = false;
 	let updateVersion: string = "";
@@ -16,6 +16,7 @@
 	let showSpinner = true;
 	let hangAtEnd = false;
 	let spinnerText = "Checking for updates...";
+	let enableUpdateModal = true;
 
 	async function checkTreeExists() {
 		try {
@@ -45,14 +46,19 @@
 	onMount(async () => {
 		try {
 			await getSettings();
-			const update = await checkForAppUpdates();
 
-			if (update) {
-				updateVersion = update.version;
-				updateObject = update;
-				showSpinner = false;
-				updateModalOpen = true;
-				return;
+			const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
+
+			if (checkForSettings?.value && "Bool" in checkForSettings.value && checkForSettings.value.Bool) {
+				const update = await checkForAppUpdates();
+
+				if (update) {
+					updateVersion = update.version;
+					updateObject = update;
+					showSpinner = false;
+					updateModalOpen = true;
+					return;
+				}
 			}
 		} catch (error) {
 			console.error("Error checking for updates:", error);
@@ -91,11 +97,13 @@
 	{hangAtEnd}
 />
 
-<UpdateModal
-	bind:isOpen={updateModalOpen}
-	version={updateVersion}
-	onUpdate={handleUpdateNow}
-	onDismiss={handleDismissUpdate}
-/>
+{#if updateModalOpen && updateObject}
+	<UpdateModal
+		bind:isOpen={updateModalOpen}
+		version={updateVersion}
+		onUpdate={handleUpdateNow}
+		onDismiss={handleDismissUpdate}
+	/>
+{/if}
 
 <CreateTree firstTime={true} />

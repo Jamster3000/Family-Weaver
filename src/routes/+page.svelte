@@ -7,7 +7,7 @@
 	import { goto } from "$app/navigation";
 	import { checkForAppUpdates, installUpdate } from "$lib/CheckForUpdates";
 	import type { Update } from "@tauri-apps/plugin-updater";
-	import { modals, createTreeModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { type Settings, setSettings, settingsData } from "$settingsStore";
 
 	let updateModalOpen: boolean = false;
@@ -48,16 +48,28 @@
 			await getSettings();
 
 			const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
+			const startupIntervalSetting = $settingsData.find(s => s.key === 'only_check_updates_every_x_startups');
 
-			if (checkForSettings?.value && "Bool" in checkForSettings.value && checkForSettings.value.Bool) {
-				const update = await checkForAppUpdates();
+			const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value && checkForSettings.value.Bool;
+			const xStartups = startupIntervalSetting?.value && "Int" in startupIntervalSetting.value ? startupIntervalSetting.value.Int : 1;
 
-				if (update) {
-					updateVersion = update.version;
-					updateObject = update;
-					showSpinner = false;
-					updateModalOpen = true;
-					return;
+			if (isUpdateEnabled) {
+				//use localstorage rather than database for tracking startup count
+				const currentLaunches = parseInt(localStorage.getItem("app_launch_count") || "0", 10) + 1;
+				localStorage.setItem("app_launch_count", currentLaunches.toString());
+
+				const shouldCheckThisStartup = xStartups <= 1 || (currentLaunches - 1) % xStartups === 0;
+
+				if (shouldCheckThisStartup) {
+					const update = await checkForAppUpdates();
+
+					if (update) {
+						updateVersion = update.version;
+						updateObject = update;
+						showSpinner = false;
+						updateModalOpen = true;
+						return;
+					}
 				}
 			}
 		} catch (error) {

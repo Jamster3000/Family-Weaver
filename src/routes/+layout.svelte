@@ -5,10 +5,38 @@
     import { navigating } from '$app/stores';
     import Titlebar from '$components/app/Titlebar.svelte';
     import ToastContainer from '$components/app/ToastContainer.svelte';
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
     import { settingsData } from '$settingsStore';
     import { applyTheme, type AppearanceMode } from "$themeStore";
+
+    let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
+
+    $: if ($settingsData.length > 0) {
+        setupUpdateInterval();
+    }
+
+    function setupUpdateInterval() {
+        if (updateIntervalTimer) {
+            clearInterval(updateIntervalTimer);
+            updateIntervalTimer = null;
+        }
+
+        const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
+        const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value ? checkForSettings.value.Bool : true;
+
+        if (!isUpdateEnabled) return;
+
+        const intervalSetting = $settingsData.find(s => s.key === 'check_for_updates_interval_hours');
+        const intervalHours = intervalSetting?.value && "Int" in intervalSetting.value ? intervalSetting.value.Int : 2;
+
+        // Setting interval to 0 disables runtime checks
+        if (intervalHours > 0) {
+            updateIntervalTimer = setInterval(() => {
+                checkForAppUpdatesBackground();
+            }, intervalHours * 60 * 60 * 1000);
+        }
+    }
 
     onMount(() => {
         const appearanceSetting = $settingsData.find(s => s.key === 'appearance_mode');
@@ -19,9 +47,11 @@
 
         checkForAppUpdatesBackground();
 
-        const updateCheckInterval = setInterval(() => {
-            checkForAppUpdatesBackground();
-        }, 2 * 60 * 60 * 1000); // Check for updates every hour
+        onDestroy(() => {
+            if (updateIntervalTimer) {
+                clearInterval(updateIntervalTimer);
+            }
+        });
     });
 </script>
 

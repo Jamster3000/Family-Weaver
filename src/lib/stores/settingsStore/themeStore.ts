@@ -35,6 +35,23 @@ export function applyTheme(mode?: AppearanceMode) {
     }, 1250);
 }
 
-export function getTheme(): string {
-    return document.documentElement.getAttribute("data-theme") || "System";
+export function applyColorblindMode(selectedOption: string) {
+    let mode = "off";
+
+    const lower = selectedOption.toLowerCase();
+    if (lower.includes("protanopia")) {
+        mode = "protanopia";
+    } else if (lower.includes("deuteranopia")) {
+        mode = "deuteranopia";
+    } else if (lower.includes("tritanopia")) {
+        mode = "tritanopia";
+    } else if (lower.includes("achromatopsia")) {
+        mode = "achromatopsia";
+    }
+
+    if (mode === "off") {
+        document.documentElement.removeAttribute("data-colorblind");
+    } else {
+        document.documentElement.setAttribute("data-colorblind", mode);
+    }
 }

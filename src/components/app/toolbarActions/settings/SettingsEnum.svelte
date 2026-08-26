@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Settings, updateSettings, applyFontFamily } from "$settingsStore";
-	import { applyTheme, type AppearanceMode } from "$themeStore";
+	import { applyTheme, type AppearanceMode, applyColorblindMode } from "$themeStore";
 
 	export let setting: Settings;
 
@@ -23,6 +23,10 @@
 		}
 		if (setting.key === "font_family") {
 			applyFontFamily(newValue);
+		}
+
+		if (setting.key === "colour_blind_mode") {
+			applyColorblindMode(newValue);
 		}
 
 		updateSettings([{ key: setting.key, value: { Text: newValue } }]);

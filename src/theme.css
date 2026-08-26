@@ -51,6 +51,57 @@
     --toast-info-colour: #0000ee;
 }
 
+/* Colour blind mode themes */
+/* Protanopia (Red-Blind / Weakness) */
+:root[data-colorblind="protanopia"] {
+    --primary-colour: #0072b2;
+    --secondary-colour: #e69f00;
+    --red-error: #d55e00;
+    --toast-success-colour: #0072b2;
+    --toast-error-colour: #d55e00;
+    --toast-info-colour: #56b4e9;
+}
+
+/* Deuteranopia (Green-Blind / Weakness) */
+:root[data-colorblind="deuteranopia"] {
+    --primary-colour: #0072b2;
+    --secondary-colour: #f0e442;
+    --red-error: #d55e00;
+    --toast-success-colour: #0072b2;
+    --toast-error-colour: #d55e00;
+    --toast-info-colour: #cc79a7;
+}
+
+/* Tritanopia (Blue-Yellow Blind) */
+:root[data-colorblind="tritanopia"] {
+    --primary-colour: #d55e00;
+    --secondary-colour: #009e73;
+    --red-error: #cc79a7;
+    --toast-success-colour: #009e73;
+    --toast-error-colour: #cc79a7;
+    --toast-info-colour: #d55e00;
+}
+
+/* Achromatopsia (Monochromacy / Total Color Blindness) */
+:root[data-colorblind="achromatopsia"] {
+    --primary-colour: #ffffff;
+    --secondary-colour: #cccccc;
+    --red-error: #ffffff;
+    --toast-success-colour: #ffffff;
+    --toast-error-colour: #888888;
+    --toast-info-colour: #cccccc;
+}
+
+:root[data-theme="light"][data-colorblind="achromatopsia"],
+:root[data-theme="high-contrast-light"][data-colorblind="achromatopsia"] {
+    --primary-colour: #000000;
+    --secondary-colour: #444444;
+    --red-error: #000000;
+    --toast-success-colour: #000000;
+    --toast-error-colour: #666666;
+    --toast-info-colour: #333333;
+}
+
 @media (prefers-color-scheme: light) {
     [data-theme="system"] {
         --primary-background: #f4f5f7;

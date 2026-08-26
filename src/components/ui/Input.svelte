@@ -5,6 +5,7 @@
 	import "flatpickr/dist/flatpickr.min.css";
 	import "flatpickr/dist/themes/dark.css";
 	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
+    import { settingsData } from "$lib/stores/settingsStore/settingsStore";
 
 	export let label: string = "";
 	export let type:
@@ -62,10 +63,34 @@
 	let fpNode: HTMLInputElement;
 	let fp: flatpickr.Instance;
 
+	$: dateSetting = $settingsData.find(s => s.key === "date_format");
+	$: rawFormatString = dateSetting?.value && "Text" in dateSetting.value ? dateSetting.value.Text : "";
+
+	//map our Enum date format settings to flatpickr
+	function getFlatpickrFormat(enumString: string): string {
+		if (enumString.includes("14 December 2025")) return "d F Y";
+		if (enumString.includes("12/14/2025")) return "m/d/Y";
+		if (enumString.includes("YYYY-MM-DD")) return "Y-m-d";
+		if (enumString.includes("Month DD, YYYY")) return "F j, Y";
+		return "d-m-Y";
+	}
+
+    $: activeDateFormat = getFlatpickrFormat(rawFormatString);
+
+	// If the settings change, update flatpickr date picker
+	$: if (fp && activeDateFormat) {
+		fp.set("dateFormat", activeDateFormat);
+
+		if (value) {
+			const parsedDate = fp.parseDate(value, activeDateFormat); // Try parsing with new format
+			if (parsedDate) fp.setDate(parsedDate, false, activeDateFormat);
+		}
+	}
+
 	onMount(() => {
 		if (type === "date" && fpNode) {
 			fp = flatpickr(fpNode, {
-				dateFormat: "d-m-Y",
+				dateFormat: activeDateFormat,
 				clickOpens: false,
 				onChange: (selectedDates, dateStr) => {
 					value = dateStr;

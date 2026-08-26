@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Toggle from "$components/ui/Toggle.svelte";
 	import { type Settings, updateSettings } from "$settingsStore";
+	import { applyTheme } from "$themeStore";
 
 	export let setting: Settings;
 
@@ -9,6 +10,8 @@
 	function handleChange(e: CustomEvent<boolean>) {
 		const newValue = e.detail;
 
+		updateSettings([{ key: setting.key, value: { Bool: newValue } }]);
+
 		if (setting.key === "reduce_motion") {
 			document.documentElement.setAttribute(
 				"data-reduce-motion",
@@ -16,7 +19,9 @@
 			);
 		}
 
-		updateSettings([{ key: setting.key, value: { Bool: newValue } }]);
+		if (setting.key === "high_contrast_mode") {
+			applyTheme();
+		}
 	}
 </script>
 

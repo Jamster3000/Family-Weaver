@@ -1,0 +1,95 @@
+/* Font sizes used to attempt to keep all font families consistent */
+:root[data-font-family="HyperLegible"] {
+    font-size-adjust: ex-height 0.52;
+}
+
+:root[data-font-family="Lexend"] {
+    font-size-adjust: ex-height 0.51;
+}
+
+:root[data-font-family="OpenDyslexic"] {
+    font-size-adjust: ex-height 0.53;
+}
+
+:root[data-font-family="Merriweather"] {
+    font-size-adjust: ex-height 0.50;
+}
+
+/* Lora Font face */
+@font-face {
+    font-family: 'Lora';
+    src: url('/fonts/Lora/Lora.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* HyperLegible Font face */
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperlegible-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperlegible-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperLegible-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HyperLegible';
+    src: url('/fonts/HyperLegible/AtkinsonHyperLegible-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Lexend font face */
+@font-face {
+    font-family: 'Lexend';
+    src: url('/fonts/Lexend/Lexend.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* Merriweather font face */
+@font-face {
+    font-family: 'Merriweather';
+    src: url('/fonts/Merriweather/Merriweather.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* Open Dyslexic font face */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/Open_dyslexic/OpenDyslexic-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}

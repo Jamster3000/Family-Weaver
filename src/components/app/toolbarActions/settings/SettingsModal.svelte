@@ -10,6 +10,7 @@
 	import SettingsInt from "./SettingsInt.svelte";
 	import SettingsFloat from "./SettingsFloat.svelte";
 	import SettingsAction from "./SettingsAction.svelte";
+	import { getAnimationDuration } from "$lib/animationUtils";
 
 	let selectedCategory: string | null = null;
 
@@ -90,7 +91,7 @@
 
 			<div class="settings-content">
 				{#if categorySettings.length > 0}
-					<div class="settings-list" in:fade={{ duration: 150 }}>
+					<div class="settings-list" in:fade={{ duration: getAnimationDuration() }}>
 						{#each categorySettings as setting (setting.key)}
 							<div class="setting-item">
 								<div class="setting-info">
@@ -195,7 +196,7 @@
 		font-weight: 500;
 		cursor: pointer;
 		text-align: left;
-		transition: all 0.15s ease;
+		transition: all var(--xshort-transition-duration) ease;
 		opacity: 0.7;
 	}
 
@@ -289,7 +290,7 @@
 		border-radius: 50%;
 		padding: 8px;
 		margin: -8px;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 	}
 
 	.info-icon-btn:hover, .info-icon-btn:focus-visible {

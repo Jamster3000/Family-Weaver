@@ -377,7 +377,7 @@
 
   .loading-text {
     color: var(--text-colour, #e2e4e8);
-    font-family: var(--font-primary, 'Lora', serif);
+    font-family: var(--font-primary);
     font-size: var(--font-large, 1.375rem);
     font-weight: 600;
     letter-spacing: 0.02em;

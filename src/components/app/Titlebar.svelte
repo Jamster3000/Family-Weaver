@@ -113,7 +113,7 @@
 		background: transparent;
 		color: inherit;
 		cursor: pointer;
-		transition: background 0.15s;
+		transition: background var(--xsmall-transition-duration);
 	}
 
 	.titlebar-controls button:hover {

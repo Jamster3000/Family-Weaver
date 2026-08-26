@@ -144,9 +144,9 @@
 		cursor: pointer;
 		text-align: left;
 		transition:
-			transform 0.15s ease,
-			border-color 0.2s ease,
-			box-shadow 0.2s ease;
+			transform var(--xshort-transition-duration) ease,
+			border-color var(--xshort-transition-duration) ease,
+			box-shadow var(--xshort-transition-duration) ease;
 	}
 
 	.tree-card:hover {

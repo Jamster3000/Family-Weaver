@@ -16,6 +16,7 @@
 	import { check, type Update } from "@tauri-apps/plugin-updater";
 	import { onMount } from "svelte";
 	import { updateStore } from "$lib/stores/updateStore";
+	import { getAnimationDuration } from "$lib/animationUtils";
 
 	let CreateTree_first_time: boolean = false;
 	let hasUpdate: boolean = false;
@@ -110,7 +111,7 @@
 				</Tooltip>
 
 				{#if item.submenu && openDropup === item.id}
-					<div class="dropup" transition:fade={{ duration: 150 }}>
+					<div class="dropup" transition:fade={{ duration: getAnimationDuration() }}>
 						{#each item.submenu as subitem (subitem.id)}
 							<Tooltip text={subitem.tooltip} position="right">
 								<button
@@ -187,7 +188,7 @@
 	}
 
 	:global(.toolbar-item .chevron) {
-		transition: transform 0.5s ease;
+		transition: transform var(--small-transition-duration) ease;
 		margin-left: 4px;
 	}
 
@@ -209,8 +210,8 @@
 		opacity: 0;
 		transform: translateY(8px);
 		transition:
-			opacity 0.2s ease,
-			transform 0.2s ease;
+			opacity var(--xshort-transition-duration) ease,
+			transform var(--xshort-transition-duration) ease;
 		pointer-events: none;
 	}
 
@@ -233,7 +234,7 @@
 		font-family: var(--font-primary);
 		font-weight: 500;
 		cursor: pointer;
-		transition: background 0.15s;
+		transition: background var(--xsmall-transition-duration);
 	}
 
 	.dropup-item:hover {

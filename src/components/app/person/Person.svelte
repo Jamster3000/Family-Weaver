@@ -16,6 +16,7 @@
 	import { modals, timelineEntryModal, addPersonModal, discardPersonChangesModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
+	import { getAnimationDuration } from "$lib/animationUtils";
 
 	let activeTab: string = "overview";
 
@@ -136,7 +137,7 @@
 
 	<div class="tab-content">
 		{#key activeTab}
-			<div in:fade={{ duration: 275 }} class="tab-panel">
+			<div in:fade={{ duration: getAnimationDuration() }} class="tab-panel">
 				{#if activeTab === "overview"}
 					<PersonOverview />
 				{:else if activeTab === "media"}
@@ -236,7 +237,7 @@
 		font-size: var(--font-medium);
 		font-family: var(--font-primary);
 		cursor: pointer;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 		opacity: 0.7;
 		text-align: center;
 	}

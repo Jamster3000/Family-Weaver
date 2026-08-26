@@ -128,7 +128,7 @@
 		font-family: var(--font-primary);
 		color: var(--text-colour);
 		text-align: center;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 	}
 
 	.number-input:hover {

@@ -1,308 +1,334 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import Tooltip from '$components/ui/Tooltip.svelte';
-  import flatpickr from 'flatpickr';
-  import 'flatpickr/dist/flatpickr.min.css';
-  import 'flatpickr/dist/themes/dark.css';
-  import { IconCalendarWeek } from '@tabler/icons-svelte-runes';
+	import { onMount, onDestroy } from "svelte";
+	import Tooltip from "$components/ui/Tooltip.svelte";
+	import flatpickr from "flatpickr";
+	import "flatpickr/dist/flatpickr.min.css";
+	import "flatpickr/dist/themes/dark.css";
+	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
 
-  export let label: string = '';
-  export let type:
-    | 'text'
-    | 'email'
-    | 'hidden'
-    | 'number'
-    | 'search'
-    | 'tel'
-    | 'url'
-    | 'date'
-    | 'datetime-local'
-    | 'month'
-    | 'time'
-    | 'week'
-    | 'color' = 'text';
-  export let placeholder: string = '';
-  export let value: string = '';
-  export let error: string = '';
-  export let helper: string = '';
-  export let disabled: boolean = false;
-  export let required: boolean = false;
-  export let counter: boolean = false;
-  export let maxLength: number | undefined = undefined;
-  export let multiline: boolean = false;
-  export let id: string = crypto.randomUUID();
-  export let centerPlaceholder: boolean = true;
+	export let label: string = "";
+	export let type:
+		| "text"
+		| "email"
+		| "hidden"
+		| "number"
+		| "search"
+		| "tel"
+		| "url"
+		| "date"
+		| "datetime-local"
+		| "month"
+		| "time"
+		| "week"
+		| "color" = "text";
+	export let placeholder: string = "";
+	export let value: string = "";
+	export let error: string = "";
+	export let helper: string = "";
+	export let disabled: boolean = false;
+	export let required: boolean = false;
+	export let counter: boolean = false;
+	export let maxLength: number | undefined = undefined;
+	export let multiline: boolean = false;
+	export let id: string = crypto.randomUUID();
+	export let centerPlaceholder: boolean = true;
 
-  const validTypes = [
-    'text',
-    'email',
-    'hidden',
-    'number',
-    'search',
-    'tel',
-    'url',
-    'date',
-    'datetime-local',
-    'month',
-    'time',
-    'week',
-    'color',
-  ];
+	const validTypes = [
+		"text",
+		"email",
+		"hidden",
+		"number",
+		"search",
+		"tel",
+		"url",
+		"date",
+		"datetime-local",
+		"month",
+		"time",
+		"week",
+		"color",
+	];
 
-  $: safeType = type === 'date' ? 'text' : validTypes.includes(type) ? type : 'text';
+	$: safeType =
+		type === "date" ? "text" : validTypes.includes(type) ? type : "text";
 
-  $: charWidth = 8.5;
-  $: bufferPixels = 56;
-  $: calculatedWidth = placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : 'auto';
+	$: charWidth = 8.5;
+	$: bufferPixels = 56;
+	$: calculatedWidth = placeholder
+		? `${placeholder.length * charWidth + bufferPixels}px`
+		: "auto";
 
-  let inputNode: HTMLInputElement;
-  let fpNode: HTMLInputElement;
-  let fp: flatpickr.Instance;
+	let inputNode: HTMLInputElement;
+	let fpNode: HTMLInputElement;
+	let fp: flatpickr.Instance;
 
-  onMount(() => {
-    if (type === 'date' && fpNode) {
-      fp = flatpickr(fpNode, {
-        dateFormat: 'd-m-Y',
-        clickOpens: false,
-        onChange: (selectedDates, dateStr) => {
-          value = dateStr;
-          if (inputNode) {
-            // Force the DOM to update before dispatching the event
-            // so Svelte's bind:value doesn't overwrite it with the old value
-            inputNode.value = dateStr;
-            inputNode.dispatchEvent(new Event('input', { bubbles: true }));
-          }
-        },
-      });
-    }
-  });
+	onMount(() => {
+		if (type === "date" && fpNode) {
+			fp = flatpickr(fpNode, {
+				dateFormat: "d-m-Y",
+				clickOpens: false,
+				onChange: (selectedDates, dateStr) => {
+					value = dateStr;
+					if (inputNode) {
+						// Force the DOM to update before dispatching the event
+						// so Svelte's bind:value doesn't overwrite it with the old value
+						inputNode.value = dateStr;
+						inputNode.dispatchEvent(
+							new Event("input", { bubbles: true }),
+						);
+					}
+				},
+			});
+		}
+	});
 
-  onDestroy(() => {
-    if (fp) fp.destroy();
-  });
+	onDestroy(() => {
+		if (fp) fp.destroy();
+	});
 
-  $: if (fp && typeof value === 'string') {
-    fp.setDate(value || '', false);
-  }
+	$: if (fp && typeof value === "string") {
+		fp.setDate(value || "", false);
+	}
 
-  function openCalendar(e: Event) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (fp && !disabled) {
-      fp.open();
-    }
-  }
+	function openCalendar(e: Event) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (fp && !disabled) {
+			fp.open();
+		}
+	}
 </script>
 
 <div class="field">
-  {#if label}
-    <label for={id}>
-      {label}
-      {#if required}<span class="required">*</span>{/if}
-    </label>
-  {/if}
+	{#if label}
+		<label for={id}>
+			{label}
+			{#if required}<span class="required">*</span>{/if}
+		</label>
+	{/if}
 
-  <div
-    class="input-wrap"
-    class:error={!!error}
-    class:disabled
-    class:multiline
-    class:centerPlaceholder
-    style="width: {calculatedWidth}"
-  >
-    {#if multiline}
-      <textarea
-        {id}
-        {placeholder}
-        {disabled}
-        {required}
-        maxlength={maxLength}
-        data-testid="textarea-field"
-        bind:value
-        on:input
-        on:blur
-        on:focus
-      ></textarea>
-    {:else}
-      <input
-        bind:this={inputNode}
-        {id}
-        type={safeType}
-        {placeholder}
-        {disabled}
-        {required}
-        maxlength={maxLength}
-        data-testid="input-field"
-        bind:value
-        on:input
-        on:blur
-        on:focus
-      />
-      {#if type === 'date'}
-        <input
-          bind:this={fpNode}
-          tabindex="-1"
-          style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0; opacity: 0; pointer-events: none; border: none; padding: 0; margin: 0;"
-        />
-        <button type="button" class="calendar-btn" on:click={openCalendar} {disabled} title="Open Calendar">
-          <IconCalendarWeek size={22} />
-        </button>
-      {/if}
-    {/if}
-  </div>
+	<div
+		class="input-wrap"
+		class:error={!!error}
+		class:disabled
+		class:multiline
+		class:centerPlaceholder
+		style="width: {calculatedWidth}"
+	>
+		{#if multiline}
+			<textarea
+				{id}
+				{placeholder}
+				{disabled}
+				{required}
+				maxlength={maxLength}
+				data-testid="textarea-field"
+				bind:value
+				on:input
+				on:blur
+				on:focus
+			></textarea>
+		{:else}
+			<input
+				bind:this={inputNode}
+				{id}
+				type={safeType}
+				{placeholder}
+				{disabled}
+				{required}
+				maxlength={maxLength}
+				data-testid="input-field"
+				bind:value
+				on:input
+				on:blur
+				on:focus
+			/>
+			{#if type === "date"}
+				<input
+					bind:this={fpNode}
+					tabindex="-1"
+					style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0; opacity: 0; pointer-events: none; border: none; padding: 0; margin: 0;"
+				/>
+				<button
+					type="button"
+					class="calendar-btn"
+					on:click={openCalendar}
+					{disabled}
+					title="Open Calendar"
+				>
+					<IconCalendarWeek size={22} />
+				</button>
+			{/if}
+		{/if}
+	</div>
 
-  <div class="counter">
-    {#if counter}
-      <span class="counter">
-        {value.length}{maxLength !== undefined ? ` / ${maxLength}` : ''}
-      </span>
-    {/if}
-  </div>
+	<div class="counter">
+		{#if counter}
+			<span class="counter">
+				{value.length}{maxLength !== undefined ? ` / ${maxLength}` : ""}
+			</span>
+		{/if}
+	</div>
 
-  {#if error}
-    <span class="helper error-text">{error}</span>
-  {:else if helper}
-    <span class="helper">{helper}</span>
-  {/if}
+	{#if error}
+		<span class="helper error-text">{error}</span>
+	{:else if helper}
+		<span class="helper">{helper}</span>
+	{/if}
 </div>
 
 <style>
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-align: left;
-    width: 100%;
-  }
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		text-align: left;
+		width: 100%;
+	}
 
-  label {
-    font-size: var(--font-medium);
-    font-weight: 400;
-    color: var(--text-colour);
-  }
+	label {
+		font-size: var(--font-medium);
+		font-weight: 400;
+		color: var(--text-colour);
+	}
 
-  .field:focus-within label {
-    color: var(--secondary-colour);
-    font-weight: 600;
-  }
+	.field:focus-within label {
+		color: var(--secondary-colour);
+		font-weight: 600;
+	}
 
-  .required {
-    color: var(--red-error);
-    margin-left: 2px;
-  }
+	.required {
+		color: var(--red-error);
+		margin-left: 2px;
+	}
 
-  .input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: color-mix(in srgb, var(--secondary-background) 75%, black);
-    border: 2px solid color-mix(in srgb, var(--border-colour) 50%, transparent);
-    border-radius: 8px;
-    transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
-    padding-right: 6px;
-  }
+	.input-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+		background: color-mix(in srgb, var(--secondary-background) 75%, black);
+		border: 2px solid
+			color-mix(in srgb, var(--border-colour) 50%, transparent);
+		border-radius: 8px;
+		transition:
+			border-color var(--short-transition-duration),
+			box-shadow var(--short-transition-duration),
+			background var(--short-transition-duration);
+		padding-right: 6px;
+	}
 
-  .input-wrap:focus-within {
-    border: 2px solid var(--primary-colour);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-colour) 40%, transparent);
-    background: color-mix(in srgb, var(--secondary-background) 80%, white 10%);
-  }
+	.input-wrap:focus-within {
+		border: 2px solid var(--primary-colour);
+		box-shadow: 0 0 0 4px
+			color-mix(in srgb, var(--primary-colour) 40%, transparent);
+		background: color-mix(
+			in srgb,
+			var(--secondary-background) 80%,
+			white 10%
+		);
+	}
 
-  .input-wrap.multiline {
-    align-items: flex-start;
-    padding: 0;
-  }
+	.input-wrap.multiline {
+		align-items: flex-start;
+		padding: 0;
+	}
 
-  .input-wrap.error {
-    border-color: var(--red-error);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--red-error) 15%, transparent);
-  }
+	.input-wrap.error {
+		border-color: var(--red-error);
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--red-error) 15%, transparent);
+	}
 
-  .input-wrap.disabled {
-    background: color-mix(in srgb, var(--secondary-background) 70%, black);
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+	.input-wrap.disabled {
+		background: color-mix(in srgb, var(--secondary-background) 70%, black);
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
 
-  input,
-  textarea {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 10px 14px;
-    font-size: var(--font-small);
-    font-family: var(--font-primary);
-    color: var(--text-colour);
-    width: 100%;
-    caret-color: var(--primary-colour);
-  }
+	input,
+	textarea {
+		flex: 1;
+		background: transparent;
+		border: none;
+		outline: none;
+		padding: 10px 14px;
+		font-size: var(--font-small);
+		font-family: var(--font-primary);
+		color: var(--text-colour);
+		width: 100%;
+		caret-color: var(--primary-colour);
+	}
 
-  textarea {
-    resize: vertical;
-    min-height: 160px;
-  }
+	textarea {
+		resize: vertical;
+		min-height: 160px;
+	}
 
-  input::placeholder,
-  textarea::placeholder {
-    color: var(--text-colour);
-    opacity: 0.6;
-  }
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--text-colour);
+		opacity: 0.6;
+	}
 
-  .input-wrap.centerPlaceholder input::placeholder,
-  .input-wrap.centerPlaceholder textarea::placeholder {
-    text-align: center;
-  }
+	.input-wrap.centerPlaceholder input::placeholder,
+	.input-wrap.centerPlaceholder textarea::placeholder {
+		text-align: center;
+	}
 
-  .input-wrap.centerPlaceholder input,
-  .input-wrap.centerPlaceholder textarea {
-    text-align: center;
-  }
+	.input-wrap.centerPlaceholder input,
+	.input-wrap.centerPlaceholder textarea {
+		text-align: center;
+	}
 
-  input:disabled,
-  textarea:disabled {
-    cursor: not-allowed;
-  }
+	input:disabled,
+	textarea:disabled {
+		cursor: not-allowed;
+	}
 
-  .calendar-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: color-mix(in srgb, var(--secondary-background) 90%, white 5%);
-    border: 1px solid color-mix(in srgb, var(--border-colour) 70%, transparent);
-    border-radius: 6px;
-    padding: 4px 6px;
-    color: var(--text-colour);
-    opacity: 0.8;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+	.calendar-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: color-mix(
+			in srgb,
+			var(--secondary-background) 90%,
+			white 5%
+		);
+		border: 1px solid
+			color-mix(in srgb, var(--border-colour) 70%, transparent);
+		border-radius: 6px;
+		padding: 4px 6px;
+		color: var(--text-colour);
+		opacity: 0.8;
+		cursor: pointer;
+		transition: all var(--xshort-transition-duration) ease;
+	}
 
-  .calendar-btn:hover:not(:disabled) {
-    opacity: 1;
-    color: var(--primary-colour);
-    border-color: var(--primary-colour);
-    background: color-mix(in srgb, var(--primary-colour) 10%, transparent);
-  }
+	.calendar-btn:hover:not(:disabled) {
+		opacity: 1;
+		color: var(--primary-colour);
+		border-color: var(--primary-colour);
+		background: color-mix(in srgb, var(--primary-colour) 10%, transparent);
+	}
 
-  .calendar-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
+	.calendar-btn:disabled {
+		cursor: not-allowed;
+		opacity: 0.4;
+	}
 
-  .helper {
-    font-size: var(--font-small);
-    font-weight: 400;
-    color: var(--text-colour);
-  }
+	.helper {
+		font-size: var(--font-small);
+		font-weight: 400;
+		color: var(--text-colour);
+	}
 
-  .error-text {
-    color: var(--red-error);
-  }
+	.error-text {
+		color: var(--red-error);
+	}
 
-  .counter {
-    color: var(--text-colour);
-    font-size: var(--font-small);
-    opacity: 0.8;
-  }
+	.counter {
+		color: var(--text-colour);
+		font-size: var(--font-small);
+		opacity: 0.8;
+	}
 </style>

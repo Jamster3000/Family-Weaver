@@ -25,7 +25,6 @@
 			applyFontFamily(newValue);
 		}
 
-		// Update the store once, with the actual changed value
 		updateSettings([{ key: setting.key, value: { Text: newValue } }]);
 	}
 </script>
@@ -68,7 +67,7 @@
 		color: var(--text-colour);
 		cursor: pointer;
 		appearance: none;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 	}
 
 	.enum-select:hover {

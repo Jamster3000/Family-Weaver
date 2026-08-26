@@ -180,7 +180,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0.7;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--xshort-transition-duration) ease;
   }
 
   .delete-btn:hover {

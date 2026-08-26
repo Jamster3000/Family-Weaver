@@ -27,6 +27,7 @@
     --medium-transition-duration: 0.5s;
     --long-transition-duration: 1.0s;
     --xlong-transition-duration: 2.0s;
+    --svelte-transition-duration: 200ms;
     /* misc */
     --titlebar-height: 35px;
     --page-padding: 20px 50px;

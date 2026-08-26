@@ -1,5 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
+  import { getAnimationDuration } from "$lib/animationUtils";
 
   export let text: string = '';
   export let delay: number = 350;
@@ -86,7 +87,7 @@
     use:portal
     class="tooltip {position}"
     style="top: {tooltipTop}px; left: {tooltipLeft}px;"
-    transition:fade={{ duration: 150 }}
+    transition:fade={{ duration: getAnimationDuration()/2.75 }}
   >
     {text}
   </div>

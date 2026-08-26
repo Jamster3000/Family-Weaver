@@ -3,6 +3,7 @@
   import { IconCheck, IconAlertCircle, IconInfoCircle } from '@tabler/icons-svelte-runes';
   import Close from '$components/ui/Close.svelte';
   import { onMount } from 'svelte';
+  import { getAnimationDuration } from "$lib/animationUtils";
 
   export let message: string = '';
   export let type: 'success' | 'error' | 'info' = 'info';
@@ -35,7 +36,7 @@
 {#if isVisible}
   <div
     class="toast toast-{type}"
-    transition:fly={{ x: 400, duration: 1000 }}
+    transition:fly={{ x: 400, duration: getAnimationDuration()*2 }}
     role="alert"
     aria-live="polite"
   >

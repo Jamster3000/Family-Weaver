@@ -94,7 +94,7 @@
     box-sizing: border-box;
     cursor: pointer;
     border-radius: 8px;
-    transition: transform 0.25s ease;
+    transition: transform var(--xshort-transition-duration) ease;
   }
 
   .card-action-wrapper:hover {

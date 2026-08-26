@@ -74,7 +74,7 @@
 		border-radius: 50%;
 		background: var(--primary-colour);
 		cursor: pointer;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 		border: 2px solid var(--primary-colour);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
@@ -94,7 +94,7 @@
 		border-radius: 50%;
 		background: var(--primary-colour);
 		cursor: pointer;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 		border: 2px solid var(--primary-colour);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
@@ -123,7 +123,7 @@
 		font-family: var(--font-primary);
 		color: var(--text-colour);
 		text-align: center;
-		transition: all 0.2s ease;
+		transition: all var(--xshort-transition-duration) ease;
 	}
 
 	.number-input:hover {

@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	export let checked: boolean = false;
 	export let disabled: boolean = false;
+
+	const dispatch = createEventDispatcher<{ change: boolean }>();
 
 	function handleToggle() {
 		if (!disabled) {
 			checked = !checked;
+			dispatch('change', checked);
 		}
 	}
 </script>
@@ -35,7 +40,7 @@
 		cursor: pointer;
 		padding: 4px;
 		border-radius: 8px;
-		transition: background-color 0.2s ease;
+		transition: background-color var(--xsmall-transition-duration) ease;
 	}
 
 	.toggle-container:focus-visible {
@@ -55,7 +60,7 @@
 		background-color: var(--secondary-background);
 		border: 2px solid var(--border-colour);
 		border-radius: 999px;
-		transition: all 0.3s ease;
+		transition: all var(--short-transition-duration) ease;
 	}
 
 	.toggle-container.is-checked .toggle-track {

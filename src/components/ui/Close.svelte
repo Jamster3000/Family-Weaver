@@ -38,7 +38,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    transition: background 0.15s, border-color 0.15s;
+    transition: background var(--xshort-transition-duration) ease, border-color var(--xshort-transition-duration) ease;
   }
 
   .close-button:hover {

@@ -28,6 +28,9 @@
     --long-transition-duration: 1.0s;
     --xlong-transition-duration: 2.0s;
     --svelte-transition-duration: 200ms;
+    /* spacing */
+    --base-line-height: 1.4;
+    --base-letter-spacing: normal;
     /* misc */
     --titlebar-height: 35px;
     --page-padding: 20px 50px;
@@ -37,6 +40,14 @@
     --animation-duration: 0s;
     --transition-duration: 0s;
 }
+
+    :root[data-increase-line-spacing="true"] {
+        --base-line-height: 1.8;
+    }
+
+    :root[data-increase-letter-spacing="true"] {
+        --base-letter-spacing: 0.12em;
+    }
 
 * {
     margin: 0;
@@ -60,6 +71,8 @@ html.theme-transitioning *::after {
 body {
     padding-top: var(--titlebar-height);
     background-color: var(--primary-background);
+    line-height: var(--base-line-height);
+    letter-spacing: var(--base-letter-spacing);
 }
 
 .page {

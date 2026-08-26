@@ -22,6 +22,18 @@
 		if (setting.key === "high_contrast_mode") {
 			applyTheme();
 		}
+
+		if (setting.key === "increase_line_spacing") {
+			document.documentElement.setAttribute("data-increase-line-spacing",
+				newValue ? "true" : "false"
+			);
+		}
+
+		if (setting.key === "increase_letter_spacing") {
+			document.documentElement.setAttribute("data-increase-letter-spacing",
+				newValue ? "true" : "false"
+			);
+		}
 	}
 </script>
 

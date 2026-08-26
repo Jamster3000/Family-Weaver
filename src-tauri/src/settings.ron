@@ -82,7 +82,7 @@
             short_description: "Adjust screen colours for colour vision differences.",
             long_description: "Changes the shades used for family links and status icons so they stay easy to tell apart if you have difficulty seeing red, green, or blue.",
             search_terms: ["color blind", "daltonism", "protanopia", "deuteranopia", "tritanopia"],
-            value_type: Enum(["Off", "Protanopia", "Deuteranopia", "Tritanopia"]),
+            value_type: Enum(["Off", "Protanopia", "Deuteranopia", "Tritanopia", "Achromatopsia"]),
             default: Some(Text("Off")),
             min: None,
             max: None,

@@ -7,13 +7,15 @@
     import ToastContainer from '$components/app/ToastContainer.svelte';
     import { onMount, onDestroy } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
-    import { settingsData } from '$settingsStore';
+    import { settingsData, type Settings } from '$settingsStore';
     import { applyTheme, type AppearanceMode } from "$themeStore";
+    import { applyVisualSettings } from '$lib/visualSettings';
 
     let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
 
     $: if ($settingsData.length > 0) {
         setupUpdateInterval();
+        applyVisualSettings($settingsData);
     }
 
     function setupUpdateInterval() {

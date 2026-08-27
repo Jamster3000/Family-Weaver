@@ -3,7 +3,7 @@
 	import Button from "$components/ui/Button.svelte";
 	import { modals, deleteTreeConfirmModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
-	import { activeTree } from "$treeStore";
+	import { activeTree, setActiveTree, type Tree } from "$treeStore";
 	import { toasts } from "$toastStore";
 
 	async function handleTreeDeletion() {
@@ -11,11 +11,13 @@
 
 		try {
 			await invoke("delete_tree", { treeId: tree_id });
-			await invoke("set_new_active_tree");
+			const tree: Tree = await invoke("set_new_active_tree");
 
+			setActiveTree(tree);
 			handleClose();
 
 			toasts.success("Tree deleted successfully!");
+			toasts.success(`Switching to ${tree.name}`);
 		} catch (error) {
 			console.error("Error deleting tree:", error);
 

@@ -159,7 +159,7 @@
             long_description: "Controls how many seconds confirmation messages (like 'Saved successfully') stay visible in the corner before disappearing.",
             search_terms: ["toast", "notification", "duration", "auto dismiss"],
             value_type: Float,
-            default: Some(Float(1.0)),
+            default: Some(Float(6.0)),
             min: Some(Float(1.0)),
             max: Some(Float(15.0)),
         ),

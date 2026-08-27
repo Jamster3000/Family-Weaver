@@ -6,6 +6,7 @@
   export let loadingText = '';
   export let hangAtEnd = false;
   export let waitFor: Promise<any> | null = null;
+  export let disableTree = false;
 
   let svgContainer: SVGSVGElement;
   let overlayContainer: HTMLDivElement;
@@ -85,7 +86,6 @@
     return { leafPatternId, barkTextureId, isSakura };
   }
 
-  // Pre-calculate tree geometry in pure JS memory without touching the DOM
   function generateTreeData(startX: number, startY: number, config: TreeConfig) {
     const branchList: BranchData[] = [];
     const leafList: LeafData[] = [];
@@ -169,59 +169,58 @@
   }
 
   async function startAnimation(): Promise<void> {
-    if (!svgContainer || isAnimating) return;
+    if (isAnimating) return;
     isAnimating = true;
 
     try {
-      const width = svgContainer.clientWidth || 800;
-      const height = svgContainer.clientHeight || 600;
-      const startX = width / 2;
-      const startY = height - 50;
+      if (!disableTree && svgContainer) {
+        const width = svgContainer.clientWidth || 800;
+        const height = svgContainer.clientHeight || 600;
+        const startX = width / 2;
+        const startY = height - 50;
 
-      svgContainer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svgContainer.setAttribute('viewBox', `0 0 ${width} ${height}`);
 
-      const config = getTreeConfig();
-      const data = generateTreeData(startX, startY, config);
+        const config = getTreeConfig();
+        const data = generateTreeData(startX, startY, config);
 
-      branches = data.branchList;
-      leaves = data.leafList;
+        branches = data.branchList;
+        leaves = data.leafList;
 
-      // Wait for Svelte to declaratively render elements to the DOM
-      await tick();
+        await tick();
 
-      const branchElements = svgContainer.querySelectorAll<SVGPathElement>('.branch');
-      const leafElements = svgContainer.querySelectorAll<SVGCircleElement>('.leaf');
+        const branchElements = svgContainer.querySelectorAll<SVGPathElement>('.branch');
+        const leafElements = svgContainer.querySelectorAll<SVGCircleElement>('.leaf');
 
-      // Unified GSAP timeline replacing microtask loops & synchronous layout thrashing
-      const tl = gsap.timeline();
+        const tl = gsap.timeline();
+        tl.to(svgContainer, { opacity: 1, duration: 0.3 });
 
-      tl.to(svgContainer, { opacity: 1, duration: 0.3 });
+        branches.forEach((branchData, index) => {
+          const el = branchElements[index];
+          if (el) {
+            tl.to(
+              el,
+              { strokeDashoffset: 0, duration: 0.15, ease: 'none' },
+              branchData.startTime + 0.3
+            );
+          }
+        });
 
-      branches.forEach((branchData, index) => {
-        const el = branchElements[index];
-        if (el) {
+        if (leafElements.length > 0) {
+          const leavesStartTime = tl.duration();
           tl.to(
-            el,
-            { strokeDashoffset: 0, duration: 0.15, ease: 'none' },
-            branchData.startTime + 0.3
+            leafElements,
+            {
+              opacity: config.isSakura ? 0.9 : 0.8,
+              duration: 0.4,
+              stagger: 0.001,
+            },
+            leavesStartTime
           );
         }
-      });
 
-      if (leafElements.length > 0) {
-        const leavesStartTime = tl.duration();
-        tl.to(
-          leafElements,
-          {
-            opacity: config.isSakura ? 0.9 : 0.8,
-            duration: 0.4,
-            stagger: 0.001,
-          },
-          leavesStartTime
-        );
+        await tl;
       }
-
-      await tl;
 
       if (waitFor) {
         try {
@@ -233,7 +232,9 @@
 
       if (!hangAtEnd) {
         await new Promise((resolve) => setTimeout(resolve, 500));
-        await gsap.to(overlayContainer, { opacity: 0, duration: 0.5 });
+        if (overlayContainer) {
+          await gsap.to(overlayContainer, { opacity: 0, duration: 0.5 });
+        }
         isVisible = false;
       }
     } catch (error) {
@@ -253,53 +254,59 @@
 
 {#if isVisible}
   <div bind:this={overlayContainer} class="tree-spinner-overlay">
-    <div class="tree-canvas-wrapper">
-      <svg bind:this={svgContainer} class="tree-spinner-svg" viewBox="0 0 800 600">
-        <defs>
-          <pattern id="leafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
-            <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern}" width="100" height="100" />
-          </pattern>
-          <pattern id="leafPattern2" patternUnits="userSpaceOnUse" width="100" height="100">
-            <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern2}" width="100" height="100" />
-          </pattern>
-          <pattern id="sakuraLeafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
-            <image href="/images/tree/{LEAF_PATTERN_FILES.sakuraLeafPattern}" width="100" height="100" />
-          </pattern>
-
-          {#each BARK_TEXTURE_IDS as barkId (barkId)}
-            <pattern id={barkId} patternUnits="userSpaceOnUse" width="100" height="100">
-              <image href="/images/tree/{BARK_TEXTURE_FILES[barkId]}" width="100" height="100" />
+    {#if !disableTree}
+      <div class="tree-canvas-wrapper">
+        <svg bind:this={svgContainer} class="tree-spinner-svg" viewBox="0 0 800 600">
+          <defs>
+            <pattern id="leafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
+              <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern}" width="100" height="100" />
             </pattern>
-          {/each}
-        </defs>
+            <pattern id="leafPattern2" patternUnits="userSpaceOnUse" width="100" height="100">
+              <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern2}" width="100" height="100" />
+            </pattern>
+            <pattern id="sakuraLeafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
+              <image href="/images/tree/{LEAF_PATTERN_FILES.sakuraLeafPattern}" width="100" height="100" />
+            </pattern>
 
-        <g id="branches-group">
-          {#each branches as branch (branch.id)}
-            <path
-              d={branch.d}
-              stroke="url(#{branch.barkTextureId})"
-              stroke-width={branch.strokeWidth}
-              fill="none"
-              stroke-linecap="round"
-              class="branch"
-              style="stroke-dasharray: {branch.length}; stroke-dashoffset: {branch.length};"
-            />
-          {/each}
-        </g>
+            {#each BARK_TEXTURE_IDS as barkId (barkId)}
+              <pattern id={barkId} patternUnits="userSpaceOnUse" width="100" height="100">
+                <image href="/images/tree/{BARK_TEXTURE_FILES[barkId]}" width="100" height="100" />
+              </pattern>
+            {/each}
+          </defs>
 
-        <g id="leaves-group">
-          {#each leaves as leaf (leaf.id)}
-            <circle
-              cx={leaf.cx}
-              cy={leaf.cy}
-              r={leaf.r}
-              fill="url(#{leaf.leafPatternId})"
-              class="leaf"
-            />
-          {/each}
-        </g>
-      </svg>
-    </div>
+          <g id="branches-group">
+            {#each branches as branch (branch.id)}
+              <path
+                d={branch.d}
+                stroke="url(#{branch.barkTextureId})"
+                stroke-width={branch.strokeWidth}
+                fill="none"
+                stroke-linecap="round"
+                class="branch"
+                style="stroke-dasharray: {branch.length}; stroke-dashoffset: {branch.length};"
+              />
+            {/each}
+          </g>
+
+          <g id="leaves-group">
+            {#each leaves as leaf (leaf.id)}
+              <circle
+                cx={leaf.cx}
+                cy={leaf.cy}
+                r={leaf.r}
+                fill="url(#{leaf.leafPatternId})"
+                class="leaf"
+              />
+            {/each}
+          </g>
+        </svg>
+      </div>
+    {:else}
+      <div class="simple-spinner-wrapper">
+        <div class="simple-spinner"></div>
+      </div>
+    {/if}
 
     {#if loadingText}
       <div class="loading-badge">
@@ -340,6 +347,28 @@
     width: 100%;
     height: 100%;
     opacity: 0;
+  }
+
+  .simple-spinner-wrapper {
+    height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .simple-spinner {
+    width: 64px;
+    height: 64px;
+    border: 5px solid var(--secondary-background, #2a2d35);
+    border-top-color: var(--border-colour, #6a9b9b);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .loading-badge {

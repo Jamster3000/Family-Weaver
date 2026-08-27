@@ -17,6 +17,12 @@
 	let hangAtEnd = false;
 	let spinnerText = "Checking for updates...";
 	let enableUpdateModal = true;
+	let settingsLoaded = false;
+
+	$: disableTree = (() => {
+		const setting = $settingsData.find(s => s.key === 'disable_tree_loading')?.value;
+		return setting && "Bool" in setting ? setting.Bool : false;
+	})();
 
 	async function checkTreeExists() {
 		try {
@@ -46,6 +52,7 @@
 	onMount(async () => {
 		try {
 			await getSettings();
+			settingsLoaded = true;
 
 			const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
 			const startupIntervalSetting = $settingsData.find(s => s.key === 'only_check_updates_every_x_startups');
@@ -103,11 +110,14 @@
 	}
 </script>
 
-<TreeSpinner
-	bind:isVisible={showSpinner}
-	loadingText={spinnerText}
-	{hangAtEnd}
-/>
+{#if settingsLoaded}
+	<TreeSpinner
+		bind:isVisible={showSpinner}
+		loadingText={spinnerText}
+		{hangAtEnd}
+		{disableTree}
+	/>
+{/if}
 
 {#if updateModalOpen && updateObject}
 	<UpdateModal

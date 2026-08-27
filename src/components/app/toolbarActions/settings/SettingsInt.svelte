@@ -58,7 +58,7 @@
 		border-radius: 3px;
 		background: color-mix(
 			in srgb,
-			var(--border-colour) 40%,
+			var(--secondary-colour) 40%,
 			transparent
 		);
 		outline: none;

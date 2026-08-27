@@ -58,7 +58,7 @@
 		width: 56px;
 		height: 32px;
 		background-color: var(--secondary-background);
-		border: 2px solid var(--border-colour);
+		border: 2px solid var(--primary-colour);
 		border-radius: 999px;
 		transition: all var(--short-transition-duration) ease;
 	}
@@ -76,7 +76,7 @@
 		height: 24px;
 		background-color: var(--text-colour);
 		border-radius: 50%;
-		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		transition: transform var(--short-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
 

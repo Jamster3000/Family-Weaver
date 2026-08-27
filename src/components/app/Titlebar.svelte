@@ -123,4 +123,8 @@
 	.titlebar-controls button.close:hover {
 		background: var(--red-error);
 	}
+
+	:root[data-theme="light"] .titlebar-controls button:not(.close):hover {
+		background: rgba(200, 200, 200);
+	}
 </style>

@@ -30,7 +30,7 @@
 
   .close-button {
     background: transparent;
-    border: 1px solid var(--border-colour, #3f4252);
+    border: 1px solid var(--primary-colour);
     color: var(--text-colour, #fff);
     cursor: pointer;
     padding: 8px;
@@ -48,5 +48,13 @@
 
   .close-button:active {
     background: color-mix(in srgb, var(--primary-colour, #4a7c59) 20%, transparent);
+  }
+
+  :root[data-theme="high-contrast-dark"] .close-button {
+    background: var(--primary-colour);
+  }
+
+  :root[data-theme="high-contrast-light"] .close-button {
+    background: var(--primary-colour);
   }
 </style>

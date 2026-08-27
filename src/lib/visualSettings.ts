@@ -1,5 +1,5 @@
 import type { Settings } from '$settingsStore';
-import { applyTheme,type AppearanceMode } from '$themeStore';
+import { applyTheme, type AppearanceMode, applyColorblindMode } from '$themeStore';
 
 export function applyVisualSettings(settings: Settings[]) {
     const getBool = (key: string) => {
@@ -20,10 +20,6 @@ export function applyVisualSettings(settings: Settings[]) {
     const highContrast = getBool("high_contrast");
     document.documentElement.classList.toggle("high-contrast", highContrast);
 
-    const colorblind = getText('colorblind_mode');
-    if (colorblind) {
-        document.documentElement.setAttribute('data-colorblind', colorblind.toLowerCase());
-    } else {
-        document.documentElement.removeAttribute('data-colorblind');
-    }
+    const colorblind = getText('colour_blind_mode');
+    applyColorblindMode(colorblind);
 }

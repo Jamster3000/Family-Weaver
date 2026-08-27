@@ -253,7 +253,7 @@
 		align-items: center;
 		background: color-mix(in srgb, var(--secondary-background) 75%, black);
 		border: 2px solid
-			color-mix(in srgb, var(--border-colour) 50%, transparent);
+			color-mix(in srgb, var(--primary-colour) 50%, transparent);
 		border-radius: 8px;
 		transition:
 			border-color var(--short-transition-duration),

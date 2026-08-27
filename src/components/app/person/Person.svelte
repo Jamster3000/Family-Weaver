@@ -264,6 +264,8 @@
 		width: 100%;
 		overflow-y: auto;
 		overflow-x: hidden;
+		padding-left: 5px;
+		padding-right: 5px;
 	}
 
 	.confirm-message {

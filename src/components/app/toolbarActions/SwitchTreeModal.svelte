@@ -139,7 +139,7 @@
 		gap: 1rem;
 		padding: 1.5rem;
 		background: color-mix(in srgb, var(--secondary-background) 80%, black);
-		border: 2px solid var(--border-colour);
+		border: 2px solid var(--primary-colour);
 		border-radius: 12px;
 		cursor: pointer;
 		text-align: left;
@@ -182,7 +182,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: color-mix(in srgb, var(--border-colour) 50%, transparent);
+		background: color-mix(in srgb, var(--secondary-colour) 50%, transparent);
 		color: var(--text-colour);
 		padding: 0.5rem;
 		border-radius: 8px;

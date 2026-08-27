@@ -46,7 +46,6 @@
 	width="70%"
 	onClose={handleClose}
 	showClose={!isFirstTime}
-	closeOnBackdrop={!isFirstTime}
 >
 	<svelte:fragment slot="header">
 		<IconTree size={42} /> {isFirstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}

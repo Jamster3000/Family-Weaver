@@ -7,14 +7,6 @@
 
 	export let isOpen = false;
 	export let onClose: (() => void) | undefined = undefined;
-	export let closeOnBackdrop = false;
-
-	function handleBackdropClick(e: MouseEvent) {
-		if (closeOnBackdrop && e.target === e.currentTarget) {
-			isOpen = false;
-			onClose?.();
-		}
-	}
 
 	function handleCloseClick() {
 		isOpen = false;
@@ -25,7 +17,6 @@
 {#if isOpen}
 	<div
 		class="dialog-backdrop"
-		on:click={handleBackdropClick}
 		data-testid="popup-backdrop"
 		role="presentation"
 		tabindex="-1"
@@ -35,7 +26,6 @@
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<div
 			class="dialog-container"
-			on:click={handleBackdropClick}
 			transition:fly={{ y: 20, duration: getAnimationDuration(), easing: quintOut }}
 		>
 			<div class="content-wrapper">

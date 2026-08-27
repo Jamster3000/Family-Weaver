@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import gsap from 'gsap';
 
   export let isVisible = true;
@@ -10,7 +10,32 @@
   let svgContainer: SVGSVGElement;
   let overlayContainer: HTMLDivElement;
   let isAnimating = false;
-  let leafBatchQueue: SVGCircleElement[] = [];
+
+  interface BranchData {
+    id: number;
+    d: string;
+    strokeWidth: number;
+    barkTextureId: string;
+    length: number;
+    startTime: number;
+  }
+
+  interface LeafData {
+    id: number;
+    cx: number;
+    cy: number;
+    r: number;
+    leafPatternId: string;
+  }
+
+  interface TreeConfig {
+    leafPatternId: string;
+    barkTextureId: string;
+    isSakura: boolean;
+  }
+
+  let branches: BranchData[] = [];
+  let leaves: LeafData[] = [];
 
   const BARK_TEXTURE_IDS = [
     'barkTexture1', 'barkTexture2', 'barkTexture3', 'barkTexture4',
@@ -38,12 +63,6 @@
     sakuraLeafPattern: 'pink-leaves.png',
   };
 
-  interface TreeConfig {
-    leafPatternId: string;
-    barkTextureId: string;
-    isSakura: boolean;
-  }
-
   function isSakuraSeason(): boolean {
     const currentDate = new Date();
     const month = currentDate.getMonth() + 1;
@@ -66,205 +85,143 @@
     return { leafPatternId, barkTextureId, isSakura };
   }
 
-  function createBranch(
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
-    width: number,
-    barkTextureId: string,
-    isTrunk = false
-  ): SVGPathElement {
-    const branch = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const path = isTrunk
-      ? `M ${x1},${y1} L ${x2},${y2}`
-      : `M ${x1},${y1} Q ${(x1 + x2) / 2 + Math.random() * 10 - 5},${(y1 + y2) / 2 + Math.random() * 10 - 5} ${x2},${y2}`;
+  // Pre-calculate tree geometry in pure JS memory without touching the DOM
+  function generateTreeData(startX: number, startY: number, config: TreeConfig) {
+    const branchList: BranchData[] = [];
+    const leafList: LeafData[] = [];
+    let branchId = 0;
+    let leafId = 0;
 
-    branch.setAttribute('d', path);
-    branch.setAttribute('stroke', `url(#${barkTextureId})`);
-    branch.setAttribute('stroke-width', width.toString());
-    branch.setAttribute('fill', 'none');
-    branch.setAttribute('stroke-linecap', 'round');
-    branch.classList.add('branch');
+    function traverse(
+      x: number,
+      y: number,
+      angle: number,
+      depth: number,
+      width: number,
+      startTime: number
+    ) {
+      if (depth === 0) return;
 
-    const pathLength = branch.getTotalLength();
-    branch.style.strokeDasharray = pathLength.toString();
-    branch.style.strokeDashoffset = pathLength.toString();
+      let finalAngle = angle;
+      if (depth < 10) {
+        finalAngle += Math.random() * 0.18 - 0.09;
+      }
 
-    return branch;
-  }
+      const length = depth * 6;
+      const endX = x + Math.sin(finalAngle) * length;
+      const endY = y - Math.cos(finalAngle) * length;
 
-  function addLeaves(
-    x: number,
-    y: number,
-    leafPatternId: string,
-    isSakura: boolean,
-    depth: number
-  ): SVGCircleElement[] {
-    const leafChance = Math.max(0.55, (4 - depth) / 5.5);
-    if (Math.random() > leafChance) return [];
+      let pathD = '';
+      let calcLength = 0;
 
-    const leafCount = Math.floor(Math.random() * 3) + 1;
-    const leaves: SVGCircleElement[] = [];
+      if (depth === 10) {
+        pathD = `M ${x},${y} L ${endX},${endY}`;
+        calcLength = Math.hypot(endX - x, endY - y);
+      } else {
+        const midX = (x + endX) / 2 + (Math.random() * 10 - 5);
+        const midY = (y + endY) / 2 + (Math.random() * 10 - 5);
+        pathD = `M ${x},${y} Q ${midX},${midY} ${endX},${endY}`;
+        calcLength = Math.hypot(midX - x, midY - y) + Math.hypot(endX - midX, endY - midY);
+      }
 
-    for (let i = 0; i < leafCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.floor(Math.random() * 9);
-      const leafX = x + Math.cos(angle) * distance;
-      const leafY = y + Math.sin(angle) * distance;
-      const depthFactor = Math.random() * 0.6 + 0.4;
+      branchList.push({
+        id: branchId++,
+        d: pathD,
+        strokeWidth: width,
+        barkTextureId: config.barkTextureId,
+        length: Math.ceil(calcLength),
+        startTime,
+      });
 
-      const leaf = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      leaf.setAttribute('cx', leafX.toString());
-      leaf.setAttribute('cy', leafY.toString());
-      leaf.setAttribute('r', (isSakura ? 4 + depthFactor * 2 : 6 + depthFactor * 3).toString());
-      leaf.setAttribute('fill', `url(#${leafPatternId})`);
-      leaf.classList.add('leaf');
-      leaf.style.opacity = '0';
+      if (depth < 4) {
+        const leafChance = Math.max(0.55, (4 - depth) / 5.5);
+        if (Math.random() <= leafChance) {
+          const leafCount = Math.floor(Math.random() * 3) + 1;
+          for (let i = 0; i < leafCount; i++) {
+            const lAngle = Math.random() * Math.PI * 2;
+            const distance = Math.floor(Math.random() * 9);
+            const leafX = endX + Math.cos(lAngle) * distance;
+            const leafY = endY + Math.sin(lAngle) * distance;
+            const depthFactor = Math.random() * 0.6 + 0.4;
+            const r = config.isSakura ? 4 + depthFactor * 2 : 6 + depthFactor * 3;
 
-      leaves.push(leaf);
-      leafBatchQueue.push(leaf);
+            leafList.push({
+              id: leafId++,
+              cx: leafX,
+              cy: leafY,
+              r,
+              leafPatternId: config.leafPatternId,
+            });
+          }
+        }
+      }
+
+      if (depth > 1) {
+        const nextWidth = width * 0.7;
+        const stepDuration = 0.15;
+        traverse(endX, endY, finalAngle - 0.3, depth - 1, nextWidth, startTime + stepDuration);
+        traverse(endX, endY, finalAngle + 0.3, depth - 1, nextWidth, startTime + stepDuration + 0.01);
+      }
     }
 
-    return leaves;
-  }
-
-  function flushLeafBatch(leavesGroup: SVGGElement): SVGCircleElement[] {
-    const fragment = document.createDocumentFragment();
-    leafBatchQueue.forEach((leaf) => fragment.appendChild(leaf));
-    leavesGroup.appendChild(fragment);
-
-    const leavesToAnimate = [...leafBatchQueue];
-    leafBatchQueue = [];
-
-    return leavesToAnimate;
-  }
-
-  async function drawBranch(
-    x: number,
-    y: number,
-    angle: number,
-    depth: number,
-    width: number,
-    config: TreeConfig,
-    branchesGroup: SVGGElement,
-    leavesGroup: SVGGElement,
-    delay = 0
-  ): Promise<void> {
-    if (depth === 0) return;
-
-    if (delay > 0) {
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    let finalAngle = angle;
-    if (depth < 10) {
-      finalAngle += Math.random() * 0.18 - 0.09;
-    }
-
-    const length = depth * 6;
-    const endX = x + Math.sin(finalAngle) * length;
-    const endY = y - Math.cos(finalAngle) * length;
-
-    const branch = createBranch(x, y, endX, endY, width, config.barkTextureId, depth === 10);
-    branchesGroup.appendChild(branch);
-
-    await gsap.to(branch, {
-      strokeDashoffset: 0,
-      duration: 0.15,
-      ease: 'none',
-    });
-
-    if (depth < 4) {
-      addLeaves(endX, endY, config.leafPatternId, config.isSakura, depth);
-    }
-
-    if (depth > 1) {
-      const nextWidth = width * 0.7;
-
-      const leftPromise = drawBranch(
-        endX, endY, finalAngle - 0.3, depth - 1, nextWidth,
-        config, branchesGroup, leavesGroup, 0
-      );
-
-      const rightPromise = (async () => {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        return drawBranch(
-          endX, endY, finalAngle + 0.3, depth - 1, nextWidth,
-          config, branchesGroup, leavesGroup, 0
-        );
-      })();
-
-      await Promise.all([leftPromise, rightPromise]);
-    }
+    traverse(startX, startY, -Math.PI * 2, 10, 30, 0);
+    return { branchList, leafList };
   }
 
   async function startAnimation(): Promise<void> {
     if (!svgContainer || isAnimating) return;
-
     isAnimating = true;
-    leafBatchQueue = [];
 
     try {
-      await new Promise<void>((resolve) => {
-        if (svgContainer.clientWidth > 0 && svgContainer.clientHeight > 0) {
-          resolve();
-        } else {
-          const checkInterval = setInterval(() => {
-            if (svgContainer.clientWidth > 0 && svgContainer.clientHeight > 0) {
-              clearInterval(checkInterval);
-              resolve();
-            }
-          }, 50);
-        }
-      });
-
-      const width = svgContainer.clientWidth;
-      const height = svgContainer.clientHeight;
+      const width = svgContainer.clientWidth || 800;
+      const height = svgContainer.clientHeight || 600;
       const startX = width / 2;
       const startY = height - 50;
 
       svgContainer.setAttribute('viewBox', `0 0 ${width} ${height}`);
 
-      let branchesGroup = svgContainer.querySelector('#branches-group') as SVGGElement;
-      let leavesGroup = svgContainer.querySelector('#leaves-group') as SVGGElement;
-
-      if (!branchesGroup) {
-        branchesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        branchesGroup.id = 'branches-group';
-        svgContainer.appendChild(branchesGroup);
-      }
-
-      if (!leavesGroup) {
-        leavesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        leavesGroup.id = 'leaves-group';
-        svgContainer.appendChild(leavesGroup);
-      }
-
-      branchesGroup.innerHTML = '';
-      leavesGroup.innerHTML = '';
-
       const config = getTreeConfig();
+      const data = generateTreeData(startX, startY, config);
 
-      await gsap.to(svgContainer, { opacity: 1, duration: 0.3 });
+      branches = data.branchList;
+      leaves = data.leafList;
 
-      await drawBranch(startX, startY, -Math.PI * 2, 10, 30, config, branchesGroup, leavesGroup);
+      // Wait for Svelte to declaratively render elements to the DOM
+      await tick();
 
-      const allLeaves = flushLeafBatch(leavesGroup);
-      let leafAnimationPromise = Promise.resolve();
+      const branchElements = svgContainer.querySelectorAll<SVGPathElement>('.branch');
+      const leafElements = svgContainer.querySelectorAll<SVGCircleElement>('.leaf');
 
-      if (allLeaves.length > 0) {
-        leafAnimationPromise = new Promise((resolve) => {
-          gsap.to(allLeaves, {
+      // Unified GSAP timeline replacing microtask loops & synchronous layout thrashing
+      const tl = gsap.timeline();
+
+      tl.to(svgContainer, { opacity: 1, duration: 0.3 });
+
+      branches.forEach((branchData, index) => {
+        const el = branchElements[index];
+        if (el) {
+          tl.to(
+            el,
+            { strokeDashoffset: 0, duration: 0.15, ease: 'none' },
+            branchData.startTime + 0.3
+          );
+        }
+      });
+
+      if (leafElements.length > 0) {
+        const leavesStartTime = tl.duration();
+        tl.to(
+          leafElements,
+          {
             opacity: config.isSakura ? 0.9 : 0.8,
             duration: 0.4,
             stagger: 0.001,
-            onComplete: resolve,
-          });
-        });
+          },
+          leavesStartTime
+        );
       }
 
-      await leafAnimationPromise;
+      await tl;
 
       if (waitFor) {
         try {
@@ -316,8 +273,31 @@
           {/each}
         </defs>
 
-        <g id="branches-group"></g>
-        <g id="leaves-group"></g>
+        <g id="branches-group">
+          {#each branches as branch (branch.id)}
+            <path
+              d={branch.d}
+              stroke="url(#{branch.barkTextureId})"
+              stroke-width={branch.strokeWidth}
+              fill="none"
+              stroke-linecap="round"
+              class="branch"
+              style="stroke-dasharray: {branch.length}; stroke-dashoffset: {branch.length};"
+            />
+          {/each}
+        </g>
+
+        <g id="leaves-group">
+          {#each leaves as leaf (leaf.id)}
+            <circle
+              cx={leaf.cx}
+              cy={leaf.cy}
+              r={leaf.r}
+              fill="url(#{leaf.leafPatternId})"
+              class="leaf"
+            />
+          {/each}
+        </g>
       </svg>
     </div>
 
@@ -385,12 +365,7 @@
     line-height: 1.4;
   }
 
-  :global(.branch) {
-    stroke-dasharray: 0;
-    stroke-dashoffset: 0;
-  }
-
-  :global(.leaf) {
+  .leaf {
     opacity: 0;
   }
 </style>

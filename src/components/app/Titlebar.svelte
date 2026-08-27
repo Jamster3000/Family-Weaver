@@ -35,14 +35,13 @@
 </script>
 
 <div class="titlebar" data-tauri-drag-region>
-	<div class="titlebar-title" data-tauri-drag-region>
+	<div class="titlebar-title">
 		{#if $activeTree}
 			<p class="title-text">Family Weaver - {$activeTree.name}</p>
 		{:else}
 			<p class="title-text">Family Weaver</p>
 		{/if}
 	</div>
-
 	<div class="titlebar-controls">
 		<button
 			class="minimise"
@@ -52,7 +51,6 @@
 		>
 			<IconMinus size={16} />
 		</button>
-
 		<button
 			class="maximise"
 			type="button"
@@ -61,7 +59,6 @@
 		>
 			<IconSquares size={16} />
 		</button>
-
 		<button
 			class="close"
 			type="button"
@@ -87,6 +84,7 @@
 		background: var(--secondary-background);
 		color: var(--text-colour);
 		z-index: 100000;
+		-webkit-app-region: drag;
 	}
 
 	.titlebar-title {
@@ -94,6 +92,7 @@
 		align-items: center;
 		gap: 6px;
 		padding-left: 4px;
+		-webkit-app-region: no-drag;
 	}
 
 	.title-text {

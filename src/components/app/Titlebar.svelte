@@ -50,7 +50,7 @@
 			on:click={() => appWindow.minimize()}
 			aria-label="Minimise Button"
 		>
-			<IconMinus size={16} color="white" />
+			<IconMinus size={16} />
 		</button>
 
 		<button
@@ -59,7 +59,7 @@
 			on:click={() => appWindow.toggleMaximize()}
 			aria-label="Maximise Button"
 		>
-			<IconSquares size={16} color="white" />
+			<IconSquares size={16} />
 		</button>
 
 		<button
@@ -68,7 +68,7 @@
 			aria-label="Close Button"
 			on:click={() => appWindow.close()}
 		>
-			<IconX size={16} color="white" />
+			<IconX size={16} />
 		</button>
 	</div>
 </div>

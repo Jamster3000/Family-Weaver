@@ -3,9 +3,25 @@
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import flatpickr from "flatpickr";
 	import "flatpickr/dist/flatpickr.min.css";
-	import "flatpickr/dist/themes/dark.css";
 	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
     import { settingsData } from "$lib/stores/settingsStore/settingsStore";
+
+	import darkTheme from "flatpickr/dist/themes/dark.css?inline";
+	import lightTheme from "flatpickr/dist/themes/light.css?inline";
+
+	$: appearanceMode = $settingsData.find(s => s.key === 'appearance_mode');
+
+	$: isDark = (() => {
+		if (!appearanceMode?.value) return false;
+		const modeVal = "Enum" in appearanceMode.value
+			? appearanceMode.value.Enum
+			: "Text" in appearanceMode.value
+			? appearanceMode.value.Text
+			: "";
+		return modeVal.toLowerCase() === "dark";
+	})();
+
+	$: currentTheme = isDark ? darkTheme : lightTheme;
 
 	export let label: string = "";
 	export let type:
@@ -123,6 +139,10 @@
 		}
 	}
 </script>
+
+<svelte:head>
+	{@html `<style id="flatpickr-theme">${currentTheme}</style>`}
+</svelte:head>
 
 <div class="field">
 	{#if label}

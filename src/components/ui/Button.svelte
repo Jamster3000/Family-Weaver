@@ -9,11 +9,11 @@
 </script>
 
 {#if href}
-  <a {href} class="btn {variant} {fontSize}" class:disabled class:iconOnly aria-label={ariaLabel || 'Link'}>
+  <a {href} class="btn keep-white {variant} {fontSize}" class:disabled class:iconOnly aria-label={ariaLabel || 'Link'}>
     <span class="btn-text"><slot /></span>
   </a>
 {:else}
-  <button {type} {disabled} class="btn {variant} {fontSize}" class:iconOnly on:click aria-label={ariaLabel || 'Button'}>
+  <button {type} {disabled} class="btn keep-white {variant} {fontSize}" class:iconOnly on:click aria-label={ariaLabel || 'Button'}>
     <span class="btn-text"><slot /></span>
   </button>
 {/if}

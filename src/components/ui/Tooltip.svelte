@@ -115,18 +115,18 @@
   }
 
   .tooltip.top {
-    transform: translate(-50%, calc(-100% - 8px));
+    transform: translate(-50%, calc(-100% - 4px));
   }
 
   .tooltip.bottom {
-    transform: translate(-50%, 8px);
+    transform: translate(-50%, 4px);
   }
 
   .tooltip.left {
-    transform: translate(calc(-100% - 8px), -50%);
+    transform: translate(calc(-100% - 4px), -50%);
   }
 
   .tooltip.right {
-    transform: translate(8px, -50%);
+    transform: translate(4px, -50%);
   }
 </style>

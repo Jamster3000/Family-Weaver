@@ -6,11 +6,15 @@
     --primary-colour: #4a6b5a;
     --secondary-colour: #4a7a7a;
     --red-error: #b03a3a;
-    --border-colour: #cfd8dc;
     --toast-success-colour: #4a6b5a;
     --toast-error-colour: #b03a3a;
     --toast-info-colour: #3a6a8a;
 }
+
+    :root[data-theme="light"] .keep-white,
+    .keep-white {
+        --text-colour: #ffffff;
+    }
 
 [data-theme="dark"] {
     --primary-background: #1a1d24;

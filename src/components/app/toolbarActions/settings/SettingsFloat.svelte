@@ -117,7 +117,7 @@
 	.number-input {
 		width: 80px;
 		padding: 8px 12px;
-		background: color-mix(in srgb, var(--secondary-background) 75%, black);
+		background: color-mix(in srgb, var(--secondary-background) 75%, var(--black));
 		border: 2px solid color-mix(
 			in srgb,
 			var(--border-colour) 50%,

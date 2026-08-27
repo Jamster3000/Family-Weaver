@@ -111,7 +111,7 @@
 <style>
 	h2 {
 		margin: 0;
-		font-size: var(--font-xlarge, 1.75rem);
+		font-size: var(--font-xlarge);
 		font-weight: 700;
 		color: var(--text-colour);
 	}
@@ -138,7 +138,7 @@
 		flex-direction: column;
 		gap: 1rem;
 		padding: 1.5rem;
-		background: color-mix(in srgb, var(--secondary-background) 80%, black);
+		background: color-mix(in srgb, var(--secondary-background) 80%, var(--black));
 		border: 2px solid var(--primary-colour);
 		border-radius: 12px;
 		cursor: pointer;

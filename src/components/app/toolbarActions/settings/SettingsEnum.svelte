@@ -59,7 +59,7 @@
 		width: 100%;
 		padding: 10px 16px;
 		padding-right: 40px;
-		background: color-mix(in srgb, var(--secondary-background) 75%, black);
+		background: color-mix(in srgb, var(--secondary-background) 75%, var(--black));
 		border: 2px solid color-mix(
 			in srgb,
 			var(--border-colour) 50%,

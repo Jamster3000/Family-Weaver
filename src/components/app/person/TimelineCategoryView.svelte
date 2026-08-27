@@ -173,7 +173,7 @@
   .delete-btn {
     all: unset;
     cursor: pointer;
-    color: var(--red-error, #ff4d4f);
+    color: var(--red-error);
     padding: 6px;
     border-radius: 4px;
     display: flex;

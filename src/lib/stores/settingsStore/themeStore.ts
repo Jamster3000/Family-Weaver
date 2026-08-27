@@ -16,6 +16,11 @@ export function applyTheme(mode?: AppearanceMode) {
     const hcSetting = settings.find((s) => s.key === "high_contrast_mode");
     const isHighContrast = hcSetting?.value && "Bool" in hcSetting.value ? hcSetting.value.Bool : false;
 
+    const rmSetting = settings.find((s) => s.key === "reduce_motion");
+    const isReducedMotion = rmSetting?.value && "Bool" in rmSetting.value
+        ? rmSetting.value.Bool
+        : root.getAttribute("data-reduce-motion") === "true" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     // Determine if the active mode is dark or system
     const isDark = activeMode.toLowerCase().includes("dark") || activeMode.toLowerCase() === "system";
 
@@ -27,12 +32,16 @@ export function applyTheme(mode?: AppearanceMode) {
 
     if (transitionTimer) clearTimeout(transitionTimer);
 
-    root.classList.add("theme-transitioning");
-    root.setAttribute("data-theme", targetTheme);
-
-    transitionTimer = setTimeout(() => {
+    if (!isReducedMotion) {
+        root.classList.add("theme-transitioning");
+        transitionTimer = setTimeout(() => {
+            root.classList.remove("theme-transitioning");
+        }, 1550);
+    } else {
         root.classList.remove("theme-transitioning");
-    }, 1250);
+    }
+
+    root.setAttribute("data-theme", targetTheme);
 }
 
 export function applyColorblindMode(selectedOption: string) {

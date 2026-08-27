@@ -15,6 +15,7 @@
 	$: isFirstTime = !$activeTree;
 
 	function handleClose() {
+		tree_name = "";
 		modals.close("createTree");
 	}
 

@@ -118,7 +118,7 @@
   }
 
   .icon-well {
-    background: color-mix(in srgb, var(--primary-colour) 80%, black 20%);
+    background: color-mix(in srgb, var(--primary-colour) 80%, var(--black) 20%);
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -151,7 +151,7 @@
   }
 
   .badge {
-    background: color-mix(in srgb, var(--secondary-background) 60%, black 40%);
+    background: color-mix(in srgb, var(--secondary-background) 60%, var(--black) 40%);
     border: 1px solid color-mix(in srgb, var(--border-colour) 30%, transparent);
     color: var(--text-colour);
     padding: 4px 12px;

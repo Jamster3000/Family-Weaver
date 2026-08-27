@@ -5,12 +5,14 @@
 	import Button from "$components/ui/Button.svelte";
 	import { invoke } from "@tauri-apps/api/core";
 	import { goto } from "$app/navigation";
-	import { setActiveTree, type Tree } from "$treeStore";
+	import { setActiveTree, activeTree, type Tree } from "$treeStore";
 	import { modals, createTreeModal } from "$modalStore";
 	import { toasts } from "$toastStore";
 
 	let tree_name: string = "";
-	export let firstTime: boolean = true;
+
+	// Automatically true if no active tree exists in store
+	$: isFirstTime = !$activeTree;
 
 	function handleClose() {
 		modals.close("createTree");
@@ -24,7 +26,6 @@
 					active_tree: true,
 				},
 			});
-			console.log(result);
 			if (result) {
 				setActiveTree(result);
 				handleClose();
@@ -39,12 +40,18 @@
 	}
 </script>
 
-<Modal isOpen={$createTreeModal} width="70%" onClose={handleClose}>
+<Modal
+	isOpen={$createTreeModal}
+	width="70%"
+	onClose={handleClose}
+	showClose={!isFirstTime}
+	closeOnBackdrop={!isFirstTime}
+>
 	<svelte:fragment slot="header">
-		<IconTree size={42} /> {firstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}
+		<IconTree size={42} /> {isFirstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}
 	</svelte:fragment>
 
-	{#if firstTime}
+	{#if isFirstTime}
 		<p>
 			Family Weaver helps you build and visualize your family tree.
 			Add members, track relationships, and explore your genealogy—all
@@ -68,8 +75,7 @@
 	{/if}
 
 	<p>
-		Tip: Use a surname or your home person's name (e.g., "Smith Family
-		Tree")
+		Tip: Use a surname or your home person's name (e.g., "Smith Family Tree")
 	</p>
 
 	<form class="form" on:submit|preventDefault={handleSubmit}>

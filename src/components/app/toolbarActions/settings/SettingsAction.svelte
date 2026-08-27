@@ -2,12 +2,14 @@
 	import type { Settings } from "$settingsStore";
 	import Button from "$components/ui/Button.svelte";
 	import { IconTrash } from "@tabler/icons-svelte-runes";
+	import DeleteAllData from "$components/app/toolbarActions/settings/actions/DeleteAllData.svelte";
+	import { modals } from "$modalStore";
 
 	export let setting: Settings;
 
 	function handleAction() {
 		if (setting.key === "delete_all_data") {
-			console.log("Delete all data action triggered");
+			modals.open("deleteTreeConfirm");
 		}
 	}
 
@@ -28,6 +30,8 @@
 
 	$: actionConfig = getActionButton();
 </script>
+
+<DeleteAllData />
 
 <Button
 	variant={actionConfig.variant}

@@ -11,6 +11,8 @@
   export let showClose: boolean = true;
   export let closeOnBackdrop: boolean = true;
   export let onClose: (() => void) | undefined = undefined;
+
+  console.log('Modal props:', { isOpen, width, padding, center, title, showClose, closeOnBackdrop });
 </script>
 
 <Popup {isOpen} {onClose} {closeOnBackdrop}>

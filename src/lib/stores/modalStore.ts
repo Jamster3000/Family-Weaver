@@ -10,7 +10,8 @@ export type ModalType =
     | 'whatsNew'
     | 'appUpdate'
     | 'timelineEntry'
-    | 'settings';
+    | 'settings'
+    | 'deleteAllData';
 
 interface ModalState {
     [key: string]: boolean;
@@ -27,6 +28,7 @@ const initialState: ModalState = {
     appUpdate: false,
     timelineEntry: false,
     settings: false,
+    deleteAllData: false,
 };
 
 function createModalStore() {
@@ -65,3 +67,4 @@ export const whatsNewModal = derived(modals, ($modals) => $modals.whatsNew);
 export const appUpdateModal = derived(modals, ($modals) => $modals.appUpdate);
 export const timelineEntryModal = derived(modals, ($modals) => $modals.timelineEntry);
 export const settingsModal = derived(modals, ($modals) => $modals.settings);
+export const deleteAllDataModal = derived(modals, ($modals) => $modals.deleteAllData);

@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use rusqlite::{Connection, params};
-use crate::models::settings::{SettingsFile, Value};
+use crate::models::settings::{SettingsFile, Value, Settings};
+use crate::state::AppState;
 
 pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Error>> {
 	let ron_str = include_str!("../settings.ron");
@@ -148,6 +149,35 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 	tx.commit()?;
 
 	Ok(())
+}
+
+#[tauri::command]
+pub async fn save_settings(
+    settings: Vec<Settings>,
+    state: tauri::State<'_, AppState>,
+) -> Result<(), String> {
+    let mut conn = state.conn.lock().map_err(|e| e.to_string())?;
+    let tx = conn.transaction().map_err(|e| e.to_string())?;
+
+    {
+        let mut stmt = tx
+            .prepare("UPDATE settings SET value = ?1 WHERE key = ?2")
+            .map_err(|e| e.to_string())?;
+
+        for setting in settings {
+            let val_str: Option<String> = match &setting.value {
+                Some(v) => Some(serde_json::to_string(v).map_err(|e| e.to_string())?),
+                None => None,
+            };
+
+            stmt.execute(params![val_str, setting.key])
+                .map_err(|e| e.to_string())?;
+        }
+    }
+
+    tx.commit().map_err(|e| e.to_string())?;
+
+    Ok(())
 }
 
 fn extract_numeric(val: &Value) -> Option<f64> {

@@ -2,6 +2,7 @@ use crate::models::tree::Tree;
 use crate::models::settings::{Settings, Value, ValueType};
 use crate::state::AppState;
 use rusqlite::OptionalExtension;
+use serde::de::DeserializeOwned;
 
 #[tauri::command]
 pub async fn get_active_tree(state: tauri::State<'_, AppState>) -> Result<Option<Tree>, String> {
@@ -101,26 +102,16 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
             value_json,
         ) = row.map_err(|e| e.to_string())?;
 
-        let search_terms: Vec<String> =
-            serde_json::from_str(&search_terms_json).map_err(|e| e.to_string())?;
-        let value_type: ValueType =
-            serde_json::from_str(&value_type_json).map_err(|e| e.to_string())?;
-        let default: Option<Value> = default_json
-            .map(|s| serde_json::from_str(&s))
-            .transpose()
-            .map_err(|e| e.to_string())?;
-        let min: Option<Value> = min_json
-            .map(|s| serde_json::from_str(&s))
-            .transpose()
-            .map_err(|e| e.to_string())?;
-        let max: Option<Value> = max_json
-            .map(|s| serde_json::from_str(&s))
-            .transpose()
-            .map_err(|e| e.to_string())?;
-        let value: Option<Value> = value_json
-            .map(|s| serde_json::from_str(&s))
-            .transpose()
-            .map_err(|e| e.to_string())?;
+        let search_terms: Vec<String> = serde_json::from_str(&search_terms_json)
+            .map_err(|e| format!("Error parsing search_terms for key '{}': {}", key, e))?;
+
+        let value_type: ValueType = serde_json::from_str(&value_type_json)
+            .map_err(|e| format!("Error parsing value_type for key '{}': {}", key, e))?;
+
+        let default: Option<Value> = parse_optional_json(default_json, "default_val", &key)?;
+        let min: Option<Value> = parse_optional_json(min_json, "min_val", &key)?;
+        let max: Option<Value> = parse_optional_json(max_json, "max_val", &key)?;
+        let value: Option<Value> = parse_optional_json(value_json, "value", &key)?;
 
         settings.push(Settings {
             key,
@@ -138,4 +129,16 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
     }
 
     Ok(settings)
+}
+
+fn parse_optional_json<T: DeserializeOwned>(
+    json_str: Option<String>,
+    field_name: &str,
+    key: &str,
+) -> Result<Option<T>, String> {
+    match json_str {
+        Some(s) if !s.trim().is_empty() => serde_json::from_str(&s)
+            .map_err(|e| format!("Failed to parse JSON for key '{}' in column '{}' (raw value: '{}'): {}", key, field_name, s, e)),
+        _ => Ok(None),
+    }
 }

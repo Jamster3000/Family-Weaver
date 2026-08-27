@@ -53,6 +53,7 @@ pub fn run() {
             database::set::set_tree_name,
             database::set::switch_active_tree,
             commands::release::fetch_version_release,
+            database::settings::save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

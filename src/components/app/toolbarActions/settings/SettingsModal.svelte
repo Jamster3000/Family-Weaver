@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Modal from "$components/ui/Modal.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
+	import Button from "$components/ui/Button.svelte";
 	import { IconInfoCircle } from "@tabler/icons-svelte-runes";
 	import { modals, settingsModal } from "$modalStore";
 	import { settingsData } from "$settingsStore";
@@ -11,11 +12,22 @@
 	import SettingsFloat from "./SettingsFloat.svelte";
 	import SettingsAction from "./SettingsAction.svelte";
 	import { getAnimationDuration } from "$lib/animationUtils";
+	import { invoke } from "@tauri-apps/api/core";
+	import { toasts } from "$toastStore";
 
 	let selectedCategory: string | null = null;
 
 	function handleClose() {
 		modals.close("settings");
+	}
+
+	async function handleSave() {
+		try {
+			let saveSettings = invoke("save_settings", { settings: $settingsData });
+			toasts.success("Settings saved successfully.");
+		} catch (error) {
+			console.error("Error saving settings:", error);
+		}
 	}
 
 	$: categories = Array.from(
@@ -58,8 +70,7 @@
 	width="80%"
 	padding="none"
 	onClose={handleClose}
-	showClose={true}
->
+	showClose={true}>
 	<div class="settings-container">
 		<aside class="settings-sidebar">
 			<div class="sidebar-header">
@@ -134,6 +145,12 @@
 					</div>
 				{/if}
 			</div>
+
+			<footer class="settings-footer">
+				<Button variant="primary" on:click={handleSave}>
+					Save Settings
+				</Button>
+			</footer>
 		</main>
 	</div>
 </Modal>
@@ -234,7 +251,7 @@
 	.settings-content {
 		flex: 1;
 		overflow-y: auto;
-		padding: 24px 32px;
+		padding: 10px 32px;
 	}
 
 	.settings-list {
@@ -321,5 +338,14 @@
 		padding: 60px 20px;
 		color: var(--text-colour);
 		opacity: 0.5;
+	}
+
+	.settings-footer {
+		display: flex;
+		justify-content: flex-end;
+		padding: 16px 32px;
+		border-top: 1px solid var(--border-colour);
+		background: var(--primary-background);
+		flex-shrink: 0;
 	}
 </style>

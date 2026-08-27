@@ -3,7 +3,7 @@ import { applyTheme,type AppearanceMode } from '$themeStore';
 
 export function applyVisualSettings(settings: Settings[]) {
     const getBool = (key: string) => {
-        const s = settings.find(item => ite.key === key);
+        const s = settings.find(item => item.key === key);
         return s?.value && "Bool" in s.value ? s.value.Bool : false
     }
 

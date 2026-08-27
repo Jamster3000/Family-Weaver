@@ -4,7 +4,7 @@
 	import Button from "$components/ui/Button.svelte";
 	import { IconInfoCircle } from "@tabler/icons-svelte-runes";
 	import { modals, settingsModal } from "$modalStore";
-	import { settingsData } from "$settingsStore";
+	import { settingsData, type Settings, setSettings } from "$settingsStore";
 	import { fade } from "svelte/transition";
 	import SettingsBool from "./SettingsBool.svelte";
 	import SettingsEnum from "./SettingsEnum.svelte";
@@ -16,8 +16,20 @@
 	import { toasts } from "$toastStore";
 
 	let selectedCategory: string | null = null;
+	let settingsSnapshot: Settings[] = [];
+	let wasModalOpen = false;
+
+	$: if ($settingsModal && !wasModalOpen) {
+		settingsSnapshot = structuredClone($settingsData);
+		wasModalOpen = true;
+	} else if (!$settingsModal && wasModalOpen) {
+		wasModalOpen = false;
+	}
 
 	function handleClose() {
+		if (settingsSnapshot.length > 0) {
+			setSettings(structuredClone(settingsSnapshot));
+		}
 		modals.close("settings");
 	}
 
@@ -25,6 +37,8 @@
 		try {
 			let saveSettings = invoke("save_settings", { settings: $settingsData });
 			toasts.success("Settings saved successfully.");
+			settingsSnapshot = structuredClone($settingsData);
+			modals.close("settings");
 		} catch (error) {
 			console.error("Error saving settings:", error);
 		}

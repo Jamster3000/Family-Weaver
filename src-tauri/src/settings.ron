@@ -158,25 +158,13 @@
             short_description: "How long popup notices stay on screen.",
             long_description: "Controls how many seconds confirmation messages (like 'Saved successfully') stay visible in the corner before disappearing.",
             search_terms: ["toast", "notification", "duration", "auto dismiss"],
-            value_type: Int,
-            default: Some(Float(4.0)),
+            value_type: Float,
+            default: Some(Float(1.0)),
             min: Some(Float(1.0)),
             max: Some(Float(15.0)),
         ),
 
         // -------------------- General --------------------
-        (
-            key: "warn_before_closing",
-            category: "General",
-            name: "Warn Before Closing",
-            short_description: "Ask for confirmation before closing Family Weaver.",
-            long_description: "Shows a gentle prompt asking 'Are you sure?' when you click the exit button, preventing you from accidentally closing the app and losing work.",
-            search_terms: ["close", "exit", "quit", "confirmation"],
-            value_type: Bool,
-            default: Some(Bool(true)),
-            min: None,
-            max: None,
-        ),
         (
             key: "disable_tree_loading",
             category: "General",

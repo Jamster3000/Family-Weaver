@@ -48,7 +48,7 @@
 	showClose={!isFirstTime}
 >
 	<svelte:fragment slot="header">
-		<IconTree size={42} /> {isFirstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}
+		<IconTree size={42} /> <h1>{isFirstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}</h1>
 	</svelte:fragment>
 
 	{#if isFirstTime}
@@ -69,7 +69,7 @@
 			<p>
 				Your current tree is already saved and will not be lost. You
 				will be switched to the new tree you create but can switch
-				back at any time.
+				back at any time under the "tree" menu on the toolbar.
 			</p>
 		</div>
 	{/if}

@@ -52,6 +52,7 @@ jobs:
                 - The app automatically checks for updates every 2 hours (by default).
                 - Implemented Settings, focusing on accessability, which can be accessed from the "app" menu in the toolbar.
                 - The animated tree at app open (when check updates is enabled) is faster, smoother, more efficient and it completes it's whole animation - rather than before where it often wouldn't reach the end of the animation before the app was ready to use.'
+                - The `Create family tree" modal's title was the same size as all other text -> made this bigger as it was supposed to be.
             ## Under the Hood
                 - Fixed the markdown in "What's new" modal where it wasn't rendering bullet points.
                 - Fixed `CreateTree`, `SwitchTreeModal` & `RenameTreeTitle` as they was managing local close states which wasn't allowing them to close at all.

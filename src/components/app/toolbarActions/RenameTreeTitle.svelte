@@ -44,7 +44,7 @@
 
 <Modal isOpen={$renameTreeModal} width="420px" padding="medium" onClose={handleClose}>
 	<svelte:fragment slot="header">
-		<h2>Rename Active Tree</h2>
+		<h2>Rename "{treeName}"</h2>
 	</svelte:fragment>
 
 	<form class="modal-form" on:submit|preventDefault={handleSubmit}>

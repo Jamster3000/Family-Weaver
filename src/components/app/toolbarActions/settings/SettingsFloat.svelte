@@ -1,15 +1,22 @@
 <script lang="ts">
-	import { type Settings, updateSettings, settingsData } from "$settingsStore";
+	import { type Settings, updateSettings, settingsData, type Value } from "$settingsStore";
 	import { applyFontScale } from "$lib/applySettings";
 
 	export let setting: Settings;
 
 	let stepValue = 0.05;
 
-	$: minValue = setting.min && "Float" in setting.min ? setting.min.Float : 0;
-	$: maxValue = setting.max && "Float" in setting.max ? setting.max.Float : 100;
+	function extractNumber(val: Value | null | undefined, fallback: number): number {
+		if (!val) return fallback;
+		if ("Float" in val) return val.Float;
+		if ("Int" in val) return val.Int;
+		return fallback;
+	}
 
-	$: currentValue = setting.value && "Float" in setting.value ? setting.value.Float : 1.0;
+	$: minValue = extractNumber(setting.min, 0);
+	$: maxValue = extractNumber(setting.max, 100);
+	$: stepValue = extractNumber(setting.step, 0.05);
+	$: currentValue = extractNumber(setting.value, minValue);
 
 	function handleInput(e: Event) {
 		const target = e.currentTarget as HTMLInputElement;

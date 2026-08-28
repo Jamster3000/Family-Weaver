@@ -6,8 +6,6 @@ pub mod commands;
 pub mod models;
 pub mod state;
 
-pub mod settings;
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let exe_dir = std::env::current_exe()

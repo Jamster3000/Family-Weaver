@@ -92,6 +92,7 @@ pub fn open(path: &str) -> Result<Connection> {
             value_type TEXT NOT NULL,
             default_val TEXT,
             min_val TEXT,
+            step_val TEXT,
             max_val TEXT,
             value TEXT
         );

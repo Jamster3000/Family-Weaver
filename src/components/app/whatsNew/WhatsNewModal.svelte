@@ -21,7 +21,7 @@
   $: renderedNotes = releaseNotes ? marked.parse(releaseNotes) : '';
 </script>
 
-<Modal isOpen={$whatsNewModal} width="720px" onClose={handleClose}>
+<Modal isOpen={$whatsNewModal} width="70%" onClose={handleClose}>
   <svelte:fragment slot="header">
     <h2>What's New</h2>
     {#if version}

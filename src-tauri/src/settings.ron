@@ -11,6 +11,7 @@
             value_type: Enum(["System", "Light", "Dark"]),
             default: Some(Text("System")),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -23,6 +24,7 @@
             value_type: Float,
             default: Some(Float(1.0)),
             min: Some(Float(0.5)),
+            step: Some(Float(0.1)),
             max: Some(Float(2.0)),
         ),
         (
@@ -35,6 +37,7 @@
             value_type: Enum(["Lora (Default)", "Hyperlegible (For low Vision)", "OpenDyslexic (For Dyslexia)", "Lexend (For readability)", "Merriweather (For elegance)"]),
             default: Some(Text("Lora (Default)")),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -47,6 +50,7 @@
             value_type: Enum(["14 December 2025 (DD/MM/YYYY)", "12/14/2025 (MM/DD/YYYY)", "2025-12-14 (YYYY-MM-DD)", "December 14, 2025 (Month DD, YYYY)"]),
             default: Some(Text("14 December 2025 (DD/MM/YYYY)")),
             min: None,
+            step: None,
             max: None,
         ),
 
@@ -61,6 +65,7 @@
             value_type: Bool,
             default: Some(Bool(false)),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -73,6 +78,7 @@
             value_type: Bool,
             default: Some(Bool(false)),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -85,6 +91,7 @@
             value_type: Enum(["Off", "Protanopia", "Deuteranopia", "Tritanopia", "Achromatopsia"]),
             default: Some(Text("Off")),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -97,6 +104,7 @@
             value_type: Bool,
             default: Some(Bool(false)),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -109,6 +117,7 @@
             value_type: Bool,
             default: Some(Bool(false)),
             min: None,
+            step: None,
             max: None,
         ),
 
@@ -123,6 +132,7 @@
             value_type: Bool,
             default: Some(Bool(true)),
             min: None,
+            step: None,
             max: None,
         ),
         (
@@ -135,6 +145,7 @@
             value_type: Float,
             default: Some(Float(2.0)),
             min: Some(Float(0.0)),
+            step: Some(Float(0.5)),
             max: Some(Float(24.0)),
         ),
         (
@@ -147,6 +158,7 @@
             value_type: Int,
             default: Some(Int(1)),
             min: Some(Int(1)),
+            step: Some(Int(1)),
             max: Some(Int(50)),
         ),
 
@@ -161,6 +173,7 @@
             value_type: Float,
             default: Some(Float(6.0)),
             min: Some(Float(1.0)),
+            step: Some(Float(1.0)),
             max: Some(Float(15.0)),
         ),
 
@@ -175,6 +188,7 @@
             value_type: Bool,
             default: Some(Bool(false)),
             min: None,
+            step: None,
             max: None,
         ),
 
@@ -189,6 +203,7 @@
             value_type: Action,
             default: None,
             min: None,
+            step: None,
             max: None,
         ),
     ]

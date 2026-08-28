@@ -16,6 +16,7 @@ pub struct Settings {
 	pub value_type: ValueType, // Bool | Int | Float | Text | Enum([...]) | Action
 	pub default: Option<Value>, // some(Value) for anything persisted, None for action
 	pub min: Option<Value>, // optional bounds for Int/Float types
+	pub step: Option<Value>, // optional step for Int/Float types
 	pub max: Option<Value>, // optional bounds for Int/Float types
 	pub value: Option<Value>, // the current value, not present in ron file
 }

@@ -62,7 +62,7 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
         .prepare(
             "SELECT
                 key, category, name, short_description, long_description,
-                search_terms, value_type, default_val, min_val, max_val, value
+                search_terms, value_type, default_val, min_val, step_val, max_val, value
              FROM settings",
         )
         .map_err(|e| e.to_string())?;
@@ -81,6 +81,7 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
                 row.get::<_, Option<String>>(8)?,
                 row.get::<_, Option<String>>(9)?,
                 row.get::<_, Option<String>>(10)?,
+                row.get::<_, Option<String>>(11)?,
             ))
         })
         .map_err(|e| e.to_string())?;
@@ -98,6 +99,7 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
             value_type_json,
             default_json,
             min_json,
+            step_json,
             max_json,
             value_json,
         ) = row.map_err(|e| e.to_string())?;
@@ -110,6 +112,7 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
 
         let default: Option<Value> = parse_optional_json(default_json, "default_val", &key)?;
         let min: Option<Value> = parse_optional_json(min_json, "min_val", &key)?;
+        let step: Option<Value> = parse_optional_json(step_json, "step_val", &key)?;
         let max: Option<Value> = parse_optional_json(max_json, "max_val", &key)?;
         let value: Option<Value> = parse_optional_json(value_json, "value", &key)?;
 
@@ -123,6 +126,7 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
             value_type,
             default,
             min,
+            step,
             max,
             value,
         });

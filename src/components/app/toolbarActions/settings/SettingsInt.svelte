@@ -1,24 +1,27 @@
 <script lang="ts">
-	import type { Settings } from "$settingsStore";
+	import { type Settings, type Value, updateSettings } from "$settingsStore";
 
 	export let setting: Settings;
 
-	let minValue = 1;
-	let maxValue = 100;
-
-	$: if (setting.min && "Int" in setting.min) {
-		minValue = setting.min.Int;
-	}
-	$: if (setting.max && "Int" in setting.max) {
-		maxValue = setting.max.Int;
+	function extractNumber(val: Value | null | undefined, fallback: number): number {
+		if (!val) return fallback;
+		if ("Int" in val) return val.Int;
+		if ("Float" in val) return val.Float;
+		return fallback;
 	}
 
-	let currentValue = setting.value && "Int" in setting.value
-		? setting.value.Int
-		: minValue;
+	$: minValue = extractNumber(setting.min, 1);
+	$: maxValue = extractNumber(setting.max, 100);
+	$: stepValue = extractNumber(setting.step, 1);
+	$: currentValue = extractNumber(setting.value, minValue);
 
-	$: if (setting.value && "Int" in setting.value) {
-		setting.value.Int = currentValue;
+	function handleInput(e: Event) {
+		const target = e.currentTarget as HTMLInputElement;
+		const rawVal = parseInt(target.value, 10);
+		if (isNaN(rawVal)) return;
+
+		const clamped = Math.max(minValue, Math.min(maxValue, rawVal));
+		updateSettings([{ key: setting.key, value: { Int: clamped } }]);
 	}
 </script>
 
@@ -27,7 +30,9 @@
 		type="range"
 		min={minValue}
 		max={maxValue}
-		bind:value={currentValue}
+		step={stepValue}
+		value={currentValue}
+		on:input={handleInput}
 		class="slider"
 		aria-label={setting.name}
 	/>
@@ -36,7 +41,9 @@
 		type="number"
 		min={minValue}
 		max={maxValue}
-		bind:value={currentValue}
+		step={stepValue}
+		value={currentValue}
+		on:input={handleInput}
 		class="number-input"
 		aria-label={`${setting.name} value`}
 	/>

@@ -28,8 +28,8 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 	let mut insert_stmt = tx.prepare(
 		"INSERT INTO settings (
 			key, category, name, short_description, long_description,
-			search_terms, value_type, default_val, min_val, max_val, value
-		) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+			search_terms, value_type, default_val, min_val, step_val, max_val, value
+		) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
 	)?;
 
 	let mut update_stmt = tx.prepare(
@@ -42,8 +42,9 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 			value_type = ?6,
 			default_val = ?7,
 			min_val = ?8,
-			max_val = ?9
-		WHERE key = ?10",
+			step_val = ?9,
+			max_val = ?10
+		WHERE key = ?11",
 	)?;
 
 	let mut get_val_stmt = tx.prepare("SELECT value FROM settings WHERE key = ?1")?;
@@ -54,6 +55,7 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 		let value_type_json = serde_json::to_string(&setting.value_type)?;
 		let default_json = setting.default.as_ref().map(serde_json::to_string).transpose()?;
 		let min_json = setting.min.as_ref().map(serde_json::to_string).transpose()?;
+		let step_val = setting.step.as_ref().map(serde_json::to_string).transpose()?;
 		let max_json = setting.max.as_ref().map(serde_json::to_string).transpose()?;
 
 		if !db_keys.contains(&setting.key) {
@@ -68,6 +70,7 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 				value_type_json,
 				default_json,
 				min_json,
+				step_val,
 				max_json,
 				default_json,
 			])?;
@@ -82,6 +85,7 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 				value_type_json,
 				default_json,
 				min_json,
+				step_val,
 				max_json,
 				setting.key,
 			])?;

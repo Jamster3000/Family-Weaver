@@ -23,9 +23,12 @@ export interface Settings {
     value_type: ValueType;
     default: Value | null;
     min: Value | null;
+    step: Value | null;
     max: Value | null;
     value: Value | null;
 }
+
+export type ValueProp = 'value' | 'default' | 'min' | 'max' | 'step';
 
 export const settingsData = writable<Settings[]>([]);
 
@@ -51,21 +54,38 @@ export function setSettings(newSettings: Settings[]) {
 }
 
 export const getSetting = {
-    bool: (settings: Settings[], key: string, fallback = false): boolean => {
-        const item = settings.find(s => s.key === key);
-        return item?.value && "Bool" in item.value ? item.value.Bool : fallback;
+    /** Returns the whole Setting object matching the key */
+    item: (settings: Settings[], key: string): Settings | undefined => {
+        return settings.find(s => s.key === key);
     },
 
-    text: (settings: Settings[], key: string, fallback = ""): string => {
+    /** Returns ANY property on the Setting object (e.g. 'name', 'short_description', 'default') */
+    prop: <K extends keyof Settings>(settings: Settings[], key: string, prop: K): Settings[K] | undefined => {
         const item = settings.find(s => s.key === key);
-        return item?.value && "Text" in item.value ? item.value.Text : fallback;
+        return item ? item[prop] : undefined;
     },
 
-    number: (settings: Settings[], key: string, fallback = 0): number => {
+    /** Extracts boolean from 'value', 'default', etc. (defaults to 'value') */
+    bool: (settings: Settings[], key: string, prop: ValueProp = 'value', fallback = false): boolean => {
         const item = settings.find(s => s.key === key);
-        if (!item?.value) return fallback;
-        if ("Int" in item.value) return item.value.Int;
-        if ("Float" in item.value) return item.value.Float;
+        const val = item ? item[prop] : null;
+        return val && typeof val === 'object' && "Bool" in val ? val.Bool : fallback;
+    },
+
+    /** Extracts string from 'value', 'default', etc. (defaults to 'value') */
+    text: (settings: Settings[], key: string, prop: ValueProp = 'value', fallback = ""): string => {
+        const item = settings.find(s => s.key === key);
+        const val = item ? item[prop] : null;
+        return val && typeof val === 'object' && "Text" in val ? val.Text : fallback;
+    },
+
+    /** Extracts number from 'value', 'default', 'min', 'max', 'step' (defaults to 'value') */
+    number: (settings: Settings[], key: string, prop: ValueProp = 'value', fallback = 0): number => {
+        const item = settings.find(s => s.key === key);
+        const val = item ? item[prop] : null;
+        if (!val || typeof val !== 'object') return fallback;
+        if ("Int" in val) return val.Int;
+        if ("Float" in val) return val.Float;
         return fallback;
     }
 };

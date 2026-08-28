@@ -167,13 +167,3 @@ pub async fn create_person(
 
     Ok(person.id)
 }
-
-/*
-let validator = PersonValidator::default();
-let person = Person::new("John".to_string(), "Doe".to_string(), "tree-123".to_string());
-
-match validator.validate(&person) {
-    Ok(()) => println!("Valid person"),
-    Err(e) => eprintln!("Validation error: {}", e),
-}
-*/

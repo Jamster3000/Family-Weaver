@@ -21,6 +21,8 @@
 
 	async function handleSubmit() {
 		try {
+			if (tree_name.trim() === "") return;
+
 			const result = await invoke<Tree>("create_tree", {
 				tree: {
 					name: tree_name,

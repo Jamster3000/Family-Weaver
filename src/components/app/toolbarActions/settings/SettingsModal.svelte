@@ -30,6 +30,16 @@
 		if (settingsSnapshot.length > 0) {
 			setSettings(structuredClone(settingsSnapshot));
 		}
+
+		const setting = $settingsData.find(
+			(s) => s.key === "font_scale",
+		)?.value;
+		const fontScale = setting && "Float" in setting ? setting.Float : 1;
+		document.documentElement.style.setProperty(
+			"--font-scale",
+			`${fontScale}`,
+		);
+
 		modals.close("settings");
 		selectedCategory = null;
 		settingsSnapshot = [];
@@ -37,7 +47,9 @@
 
 	async function handleSave() {
 		try {
-			let saveSettings = invoke("save_settings", { settings: $settingsData });
+			let saveSettings = invoke("save_settings", {
+				settings: $settingsData,
+			});
 			toasts.success("Settings saved successfully.");
 			settingsSnapshot = structuredClone($settingsData);
 			modals.close("settings");
@@ -86,7 +98,8 @@
 	width="80%"
 	padding="none"
 	onClose={handleClose}
-	showClose={true}>
+	showClose={true}
+>
 	<div class="settings-container">
 		<aside class="settings-sidebar">
 			<div class="sidebar-header">
@@ -112,13 +125,18 @@
 		<main class="settings-main">
 			<div class="settings-header">
 				<h2>
-					{selectedCategory ? getCategoryDisplayName(selectedCategory) : "Settings"}
+					{selectedCategory
+						? getCategoryDisplayName(selectedCategory)
+						: "Settings"}
 				</h2>
 			</div>
 
 			<div class="settings-content">
 				{#if categorySettings.length > 0}
-					<div class="settings-list" in:fade={{ duration: getAnimationDuration() }}>
+					<div
+						class="settings-list"
+						in:fade={{ duration: getAnimationDuration() }}
+					>
 						{#each categorySettings as setting (setting.key)}
 							<div class="setting-item">
 								<div class="setting-info">
@@ -127,9 +145,19 @@
 											{setting.name}
 										</p>
 										{#if setting.long_description}
-											<Tooltip text={setting.long_description} position="top">
-												<button type="button" class="info-icon-btn" aria-label="More information about {setting.name}">
-													<IconInfoCircle size={22} stroke={1.5} />
+											<Tooltip
+												text={setting.long_description}
+												position="top"
+											>
+												<button
+													type="button"
+													class="info-icon-btn"
+													aria-label="More information about {setting.name}"
+												>
+													<IconInfoCircle
+														size={22}
+														stroke={1.5}
+													/>
 												</button>
 											</Tooltip>
 										{/if}
@@ -283,7 +311,8 @@
 		justify-content: space-between;
 		gap: 24px;
 		padding: 16px 0;
-		border-bottom: 1px solid color-mix(in srgb, var(--border-colour) 40%, transparent);
+		border-bottom: 1px solid
+			color-mix(in srgb, var(--border-colour) 40%, transparent);
 		padding: 0;
 	}
 
@@ -326,7 +355,8 @@
 		transition: all var(--xshort-transition-duration) ease;
 	}
 
-	.info-icon-btn:hover, .info-icon-btn:focus-visible {
+	.info-icon-btn:hover,
+	.info-icon-btn:focus-visible {
 		opacity: 1;
 		color: var(--primary-colour);
 		background: color-mix(in srgb, var(--text-colour) 8%, transparent);

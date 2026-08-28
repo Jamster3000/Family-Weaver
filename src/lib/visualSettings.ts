@@ -12,6 +12,11 @@ export function applyVisualSettings(settings: Settings[]) {
         return s?.value && "Text" in s.value ? s.value.Text : ""
     }
 
+    const getNumber = (key: string) => {
+        const s = settings.find(item => item.key === key);
+        return s?.value && "Number" in s.value ? s.value.Number : 0
+    }
+
     const appearance = getText("appearance_mode");
     if (appearance) {
         applyTheme(appearance as AppearanceMode);

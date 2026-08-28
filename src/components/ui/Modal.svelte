@@ -9,7 +9,6 @@
   export let center: boolean = true;
   export let title: string = '';
   export let showClose: boolean = true;
-  export let closeOnBackdrop: boolean = true;
   export let onClose: (() => void) | undefined = undefined;
 </script>
 

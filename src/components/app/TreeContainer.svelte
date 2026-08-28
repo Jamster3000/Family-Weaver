@@ -33,7 +33,6 @@
       physics: false,
       nodes: {
         shape: 'box',
-        margin: 10,
         widthConstraint: {
           maximum: 200,
         },
@@ -57,9 +56,7 @@
           highlight: '#aa8b56',
         },
         width: 2,
-        smooth: {
-          type: 'curvedCW',
-        },
+        smooth: true,
       },
     };
 

@@ -13,11 +13,8 @@
 
 	$: isDark = (() => {
 		if (!appearanceMode?.value) return false;
-		const modeVal = "Enum" in appearanceMode.value
-			? appearanceMode.value.Enum
-			: "Text" in appearanceMode.value
-			? appearanceMode.value.Text
-			: "";
+		const val = appearanceMode.value as Record<string, any>;
+		const modeVal = (val.Enum || val.Text || "") as string;
 		return modeVal.toLowerCase() === "dark";
 	})();
 

@@ -72,12 +72,9 @@
 	}
 </script>
 
-<CreateTree
-	bind:open_popup={$modals.createTree}
-	firstTime={CreateTree_first_time}
-/>
+<CreateTree />
 
-<Person bind:isOpen={$modals.addPerson} />
+<Person />
 
 <RenameTreeTitle />
 

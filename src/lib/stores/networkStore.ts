@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store';
+import type { Network } from 'vis-network/standalone';
 
-export const networkStore = writable(null);
+export const networkStore = writable<Network | null>(null);
 
 export function zoomIn() {
     const network = get(networkStore);
@@ -10,7 +11,10 @@ export function zoomIn() {
         network.moveTo({
             position: currentPos,
             scale: currentScale * 1.5,
-            animation: { duration: 400 }
+            animation: {
+                duration: 400,
+                easingFunction: 'easeInOutQuad'
+            }
         });
     }
 }
@@ -23,7 +27,10 @@ export function zoomOut() {
         network.moveTo({
             position: currentPos,
             scale: currentScale / 1.5,
-            animation: { duration: 400 }
+            animation: {
+                duration: 400,
+                easingFunction: 'easeInOutQuad'
+            }
         });
     }
 }

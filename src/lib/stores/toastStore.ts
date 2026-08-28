@@ -11,7 +11,7 @@ function createToastStore() {
     const { subscribe, update } = writable<ToastMessage[]>([]);
 
     const add = (message: string, type: 'success' | 'error' | 'info' = 'info', duration?: number) => {
-        const id = Math.random().toString(36).substr(2, 9);
+        const id = Math.random().toString(36).slice(2, 11);
         const toast: ToastMessage = { id, message, type, duration };
 
         update(toasts => [...toasts, toast]);

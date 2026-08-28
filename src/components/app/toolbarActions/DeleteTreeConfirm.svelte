@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ConfirmModal from "$components/app/ConfirmModal.svelte";
-	import { modals, deleteTreeConfirmModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { activeTree, setActiveTree, type Tree } from "$treeStore";
 	import { toasts } from "$toastStore";
@@ -28,7 +28,7 @@
 </script>
 
 <ConfirmModal
-	isOpen={$deleteTreeConfirmModal}
+	isOpen={$modals.deleteTreeConfirm}
 	title={`Delete "${$activeTree?.name}"?`}
 	message="Are you sure you want to delete this tree? This will also delete all people associated with this tree. This action cannot be undone."
 	confirmLabel="Delete"

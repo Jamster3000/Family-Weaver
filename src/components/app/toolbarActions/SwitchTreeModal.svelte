@@ -3,7 +3,7 @@
 	import { IconSitemap, IconCheck } from "@tabler/icons-svelte-runes";
 	import Modal from "$components/ui/Modal.svelte";
 	import Button from "$components/ui/Button.svelte";
-	import { modals, switchTreeModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 	import { getActiveTree } from "$treeStore";
 
@@ -16,7 +16,7 @@
 		updated_at: string;
 	}> = [];
 
-	$: if ($switchTreeModal) {
+	$: if ($modals.switchTree) {
 		fetchTrees();
 	}
 
@@ -59,7 +59,7 @@
 	}
 </script>
 
-<Modal isOpen={$switchTreeModal} width="90%" onClose={handleClose}>
+<Modal isOpen={$modals.switchTree} width="90%" onClose={handleClose}>
 	<svelte:fragment slot="header">
 		<h2>Switch Family Tree</h2>
 		<p class="subtitle">

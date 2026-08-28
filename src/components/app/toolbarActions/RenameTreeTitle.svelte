@@ -4,13 +4,13 @@
 	import Button from "$components/ui/Button.svelte";
 	import { activeTree } from "$treeStore";
 	import { invoke } from "@tauri-apps/api/core";
-	import { modals, renameTreeModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 
 	let treeName: string = "";
 	let error: string = "";
 
-	$: if ($renameTreeModal) {
+	$: if ($modals.renameTree) {
 		treeName = $activeTree?.name || "";
 		error = "";
 	}
@@ -42,7 +42,7 @@
 	}
 </script>
 
-<Modal isOpen={$renameTreeModal} width="420px" padding="medium" onClose={handleClose}>
+<Modal isOpen={$modals.renameTree} width="420px" padding="medium" onClose={handleClose}>
 	<svelte:fragment slot="header">
 		<h2>Rename "{treeName}"</h2>
 	</svelte:fragment>

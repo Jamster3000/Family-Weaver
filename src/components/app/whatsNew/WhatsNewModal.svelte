@@ -1,7 +1,7 @@
 <script lang="ts">
   import Modal from '$components/ui/Modal.svelte';
   import Button from '$components/ui/Button.svelte';
-  import { whatsNewModal, modals } from '$modalStore';
+  import { modals } from '$modalStore';
   import { marked } from 'marked';
 
   let version: string = '';
@@ -9,7 +9,7 @@
 
   //When the modal opens, reread the localstorage as the version number cached is
   //updated after the modal reads the data originally.
-  $: if ($whatsNewModal) {
+  $: if ($modals.whatsNew) {
     version = localStorage.getItem('cached_release_version') || '';
     releaseNotes = localStorage.getItem('cached_release_notes') || '';
   }
@@ -21,7 +21,7 @@
   $: renderedNotes = releaseNotes ? marked.parse(releaseNotes) : '';
 </script>
 
-<Modal isOpen={$whatsNewModal} width="70%" onClose={handleClose}>
+<Modal isOpen={$modals.whatsNew} width="70%" onClose={handleClose}>
   <svelte:fragment slot="header">
     <h2>What's New</h2>
     {#if version}

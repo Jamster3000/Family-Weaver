@@ -14,7 +14,7 @@
 		resetPersonData,
 	} from "$personStore";
 	import { activeTree } from "$treeStore";
-	import { modals, addPersonModal, discardPersonChangesModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
 	import { getAnimationDuration } from "$lib/animationUtils";
@@ -86,7 +86,7 @@
 	}
 </script>
 
-<Modal isOpen={$addPersonModal} width="100%" padding="medium" onClose={handleAddPersonClose} showClose={true}>
+<Modal isOpen={$modals.addPerson} width="100%" padding="medium" onClose={handleAddPersonClose} showClose={true}>
 	<div class="modal-header">
 		<h1>Add new family member</h1>
 	</div>
@@ -143,7 +143,7 @@
 </Modal>
 
 <ConfirmModal
-	isOpen={$discardPersonChangesModal}
+	isOpen={$modals.discardPersonChanges}
 	width="50%"
 	title="Discard Changes?"
 	message="You have unsaved changes. Are you sure you want to discard this person?"

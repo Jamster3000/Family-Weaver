@@ -3,7 +3,7 @@
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Button from "$components/ui/Button.svelte";
 	import { IconInfoCircle } from "@tabler/icons-svelte-runes";
-	import { modals, settingsModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { settingsData, type Settings, setSettings } from "$settingsStore";
 	import { fade } from "svelte/transition";
 	import SettingsBool from "./SettingsBool.svelte";
@@ -19,10 +19,10 @@
 	let settingsSnapshot: Settings[] = [];
 	let wasModalOpen = false;
 
-	$: if ($settingsModal && !wasModalOpen) {
+	$: if ($modals.settings && !wasModalOpen) {
 		settingsSnapshot = structuredClone($settingsData);
 		wasModalOpen = true;
-	} else if (!$settingsModal && wasModalOpen) {
+	} else if (!$modals.settings && wasModalOpen) {
 		wasModalOpen = false;
 	}
 
@@ -59,7 +59,7 @@
 		? $settingsData.filter((s) => s.category === selectedCategory)
 		: [];
 
-	$: if ($settingsModal && !selectedCategory && categories.length > 0) {
+	$: if ($modals.settings && !selectedCategory && categories.length > 0) {
 		selectedCategory = categories[0];
 	}
 
@@ -87,7 +87,7 @@
 </script>
 
 <Modal
-	isOpen={$settingsModal}
+	isOpen={$modals.settings}
 	width="80%"
 	padding="none"
 	onClose={handleClose}

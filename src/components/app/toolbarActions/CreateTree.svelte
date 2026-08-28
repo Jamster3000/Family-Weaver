@@ -6,7 +6,7 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { goto } from "$app/navigation";
 	import { setActiveTree, activeTree, type Tree } from "$treeStore";
-	import { modals, createTreeModal } from "$modalStore";
+	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 
 	let tree_name: string = "";
@@ -44,7 +44,7 @@
 </script>
 
 <Modal
-	isOpen={$createTreeModal}
+	isOpen={$modals.createTree}
 	width="70%"
 	onClose={handleClose}
 	showClose={!isFirstTime}

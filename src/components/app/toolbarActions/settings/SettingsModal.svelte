@@ -31,6 +31,8 @@
 			setSettings(structuredClone(settingsSnapshot));
 		}
 		modals.close("settings");
+		selectedCategory = null;
+		settingsSnapshot = [];
 	}
 
 	async function handleSave() {

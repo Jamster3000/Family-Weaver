@@ -8,7 +8,7 @@
 	import { checkForAppUpdates, installUpdate } from "$lib/CheckForUpdates";
 	import type { Update } from "@tauri-apps/plugin-updater";
 	import { modals } from "$modalStore";
-	import { type Settings, setSettings, settingsData } from "$settingsStore";
+	import { type Settings, setSettings, settingsData, getSetting } from "$settingsStore";
 
 	let updateModalOpen: boolean = false;
 	let updateVersion: string = "";
@@ -20,8 +20,7 @@
 	let settingsLoaded = false;
 
 	$: disableTree = (() => {
-		const setting = $settingsData.find(s => s.key === 'disable_tree_loading')?.value;
-		return setting && "Bool" in setting ? setting.Bool : false;
+		return getSetting.bool($settingsData, 'disable_tree_loading');
 	})();
 
 	async function loadSettings() {
@@ -56,11 +55,8 @@
 			}
 			settingsLoaded = true;
 
-			const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
-			const startupIntervalSetting = $settingsData.find(s => s.key === 'only_check_updates_every_x_startups');
-
-			const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value ? checkForSettings.value.Bool : false;
-			const xStartups = startupIntervalSetting?.value && "Int" in startupIntervalSetting.value ? startupIntervalSetting.value.Int : 1;
+			const isUpdateEnabled = getSetting.bool($settingsData, 'check_for_updates');
+			const xStartups = getSetting.number($settingsData, 'only_check_updates_every_x_startups');
 
 			if (isUpdateEnabled) {
 				//use localstorage rather than database for tracking startup count
@@ -80,7 +76,6 @@
 						updateModalOpen = true;
 						return;
 					}
-					// Return here so checkTreeExists() waits for the TreeSpinner on:complete event
 					return;
 				}
 			}

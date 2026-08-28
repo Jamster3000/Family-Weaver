@@ -1,30 +1,15 @@
-import type { Settings } from '$settingsStore';
+import { type Settings, getSetting } from '$settingsStore';
 import { applyTheme, type AppearanceMode, applyColorblindMode } from '$themeStore';
 
 export function applyVisualSettings(settings: Settings[]) {
-    const getBool = (key: string) => {
-        const s = settings.find(item => item.key === key);
-        return s?.value && "Bool" in s.value ? s.value.Bool : false
-    }
-
-    const getText = (key: string) => {
-        const s = settings.find(item => item.key === key);
-        return s?.value && "Text" in s.value ? s.value.Text : ""
-    }
-
-    const getNumber = (key: string) => {
-        const s = settings.find(item => item.key === key);
-        return s?.value && "Number" in s.value ? s.value.Number : 0
-    }
-
-    const appearance = getText("appearance_mode");
+    const appearance = getSetting.text(settings, "appearance_mode");
     if (appearance) {
         applyTheme(appearance as AppearanceMode);
     }
 
-    const highContrast = getBool("high_contrast");
+    const highContrast = getSetting.bool(settings, "high_contrast");
     document.documentElement.classList.toggle("high-contrast", highContrast);
 
-    const colorblind = getText('colour_blind_mode');
+    const colorblind = getSetting.text(settings, 'colour_blind_mode');
     applyColorblindMode(colorblind);
 }

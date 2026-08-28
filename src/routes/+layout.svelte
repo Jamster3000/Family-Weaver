@@ -7,7 +7,7 @@
     import ToastContainer from '$components/app/ToastContainer.svelte';
     import { onMount, onDestroy } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
-    import { settingsData, type Settings, setSettings } from '$settingsStore';
+    import { settingsData, type Settings, setSettings, getSetting } from '$settingsStore';
     import { applyTheme, type AppearanceMode } from "$themeStore";
     import { applyVisualSettings } from '$lib/visualSettings';
     import { invoke } from '@tauri-apps/api/core';
@@ -34,13 +34,11 @@
             updateIntervalTimer = null;
         }
 
-        const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
-        const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value ? checkForSettings.value.Bool : true;
+        const isUpdateEnabled = getSetting.bool($settingsData, "check_for_updates");
 
         if (!isUpdateEnabled) return;
 
-        const intervalSetting = $settingsData.find(s => s.key === 'check_for_updates_interval_hours');
-        const intervalHours = intervalSetting?.value && "Int" in intervalSetting.value ? intervalSetting.value.Int : 2;
+        const intervalHours = getSetting.number($settingsData, "check_for_updates_interval_hours");
 
         // Setting interval to 0 disables runtime checks
         if (intervalHours > 0) {
@@ -52,10 +50,10 @@
 
     onMount(() => {
         loadSettings();
-        const appearanceSetting = $settingsData.find(s => s.key === 'appearance_mode');
+        const appearanceSetting = getSetting.text($settingsData, 'appearance_mode');
 
-        if (appearanceSetting?.value && "Text" in appearanceSetting.value) {
-			applyTheme(appearanceSetting.value.Text as AppearanceMode);
+        if (appearanceSetting) {
+			applyTheme(appearanceSetting as AppearanceMode);
 		}
 
         checkForAppUpdatesBackground();

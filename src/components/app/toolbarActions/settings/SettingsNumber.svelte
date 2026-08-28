@@ -1,31 +1,40 @@
 <script lang="ts">
-	import { type Settings, type Value, updateSettings } from "$settingsStore";
+	import { type Settings, updateSettings, settingsData, type Value } from "$settingsStore";
+	import { applyFontScale } from "$lib/applySettings";
 
 	export let setting: Settings;
 
 	function extractNumber(val: Value | null | undefined, fallback: number): number {
 		if (!val) return fallback;
-		if ("Int" in val) return val.Int;
 		if ("Float" in val) return val.Float;
+		if ("Int" in val) return val.Int;
 		return fallback;
 	}
 
-	$: minValue = extractNumber(setting.min, 1);
+	// Detect type based on setting value payload or step precision
+	$: isFloat = setting.value ? "Float" in setting.value : false;
+	$: minValue = extractNumber(setting.min, isFloat ? 0 : 1);
 	$: maxValue = extractNumber(setting.max, 100);
-	$: stepValue = extractNumber(setting.step, 1);
+	$: stepValue = extractNumber(setting.step, isFloat ? 0.05 : 1);
 	$: currentValue = extractNumber(setting.value, minValue);
 
 	function handleInput(e: Event) {
 		const target = e.currentTarget as HTMLInputElement;
-		const rawVal = parseInt(target.value, 10);
+		const rawVal = isFloat ? parseFloat(target.value) : parseInt(target.value, 10);
 		if (isNaN(rawVal)) return;
 
 		const clamped = Math.max(minValue, Math.min(maxValue, rawVal));
-		updateSettings([{ key: setting.key, value: { Int: clamped } }]);
+		const updatedValue: Value = isFloat ? { Float: clamped } : { Int: clamped };
+
+		updateSettings([{ key: setting.key, value: updatedValue }]);
+
+		if (setting.key === "font_size") {
+			applyFontScale($settingsData);
+		}
 	}
 </script>
 
-<div class="int-control">
+<div class="number-control">
 	<input
 		type="range"
 		min={minValue}
@@ -50,7 +59,7 @@
 </div>
 
 <style>
-	.int-control {
+	.number-control {
 		display: flex;
 		align-items: center;
 		gap: 12px;
@@ -80,7 +89,7 @@
 		border-radius: 50%;
 		background: var(--primary-colour);
 		cursor: pointer;
-		transition: all var(--xshort-transition-duration) ease;
+		transition: all var(--xshort-transition-duration, 0.2s) ease;
 		border: 2px solid var(--primary-colour);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
@@ -100,7 +109,7 @@
 		border-radius: 50%;
 		background: var(--primary-colour);
 		cursor: pointer;
-		transition: all var(--xshort-transition-duration) ease;
+		transition: all var(--xshort-transition-duration, 0.2s) ease;
 		border: 2px solid var(--primary-colour);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}

@@ -8,9 +8,8 @@
 	import { fade } from "svelte/transition";
 	import SettingsBool from "./SettingsBool.svelte";
 	import SettingsEnum from "./SettingsEnum.svelte";
-	import SettingsInt from "./SettingsInt.svelte";
-	import SettingsFloat from "./SettingsFloat.svelte";
 	import SettingsAction from "./SettingsAction.svelte";
+	import SettingsNumber from "./SettingsNumber.svelte";
 	import { getAnimationDuration } from "$lib/animationUtils";
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
@@ -78,8 +77,8 @@
 
 	function getSettingComponent(valueType: any) {
 		if (valueType === "Bool") return SettingsBool;
-		if (valueType === "Int") return SettingsInt;
-		if (valueType === "Float") return SettingsFloat;
+		if (valueType === "Int") return SettingsNumber;
+		if (valueType === "Float") return SettingsNumber;
 		if (valueType && typeof valueType === "object" && "Enum" in valueType)
 			return SettingsEnum;
 		if (valueType === "Action") return SettingsAction;

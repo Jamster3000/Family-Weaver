@@ -13,7 +13,7 @@
 	let updateModalOpen: boolean = false;
 	let updateVersion: string = "";
 	let updateObject: Update | null = null;
-	let showSpinner = true;
+	let showSpinner = false;
 	let hangAtEnd = false;
 	let spinnerText = "Checking for updates...";
 	let enableUpdateModal = true;
@@ -23,6 +23,15 @@
 		const setting = $settingsData.find(s => s.key === 'disable_tree_loading')?.value;
 		return setting && "Bool" in setting ? setting.Bool : false;
 	})();
+
+	async function loadSettings() {
+		try {
+			const settings = await invoke<Settings[]>("get_all_settings");
+			setSettings(settings);
+		} catch (error) {
+			console.error("Error fetching settings on startup:", error);
+		}
+	}
 
 	async function checkTreeExists() {
 		try {
@@ -40,24 +49,17 @@
 		}
 	}
 
-	async function getSettings() {
-		try {
-			const settings = await invoke<Settings[]>("get_all_settings");
-			setSettings(settings);
-		} catch (error) {
-			console.error("Error getting settings:", error);
-		}
-	}
-
 	onMount(async () => {
 		try {
-			await getSettings();
+			if ($settingsData.length === 0) {
+				await loadSettings();
+			}
 			settingsLoaded = true;
 
 			const checkForSettings = $settingsData.find(s => s.key === 'check_for_updates');
 			const startupIntervalSetting = $settingsData.find(s => s.key === 'only_check_updates_every_x_startups');
 
-			const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value && checkForSettings.value.Bool;
+			const isUpdateEnabled = checkForSettings?.value && "Bool" in checkForSettings.value ? checkForSettings.value.Bool : false;
 			const xStartups = startupIntervalSetting?.value && "Int" in startupIntervalSetting.value ? startupIntervalSetting.value.Int : 1;
 
 			if (isUpdateEnabled) {
@@ -68,6 +70,7 @@
 				const shouldCheckThisStartup = xStartups <= 1 || (currentLaunches - 1) % xStartups === 0;
 
 				if (shouldCheckThisStartup) {
+					showSpinner = true;
 					const update = await checkForAppUpdates();
 
 					if (update) {
@@ -77,6 +80,8 @@
 						updateModalOpen = true;
 						return;
 					}
+					// Return here so checkTreeExists() waits for the TreeSpinner on:complete event
+					return;
 				}
 			}
 		} catch (error) {
@@ -85,6 +90,10 @@
 
 		await checkTreeExists();
 	});
+
+	function handleSpinnerComplete() {
+		checkTreeExists();
+	}
 
 	async function handleUpdateNow() {
 		if (!updateObject) return;
@@ -116,6 +125,7 @@
 		loadingText={spinnerText}
 		{hangAtEnd}
 		{disableTree}
+		on:complete={handleSpinnerComplete}
 	/>
 {/if}
 
@@ -128,4 +138,4 @@
 	/>
 {/if}
 
-<CreateTree firstTime={true} />
+<CreateTree />

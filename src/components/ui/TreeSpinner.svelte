@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount, tick, createEventDispatcher } from 'svelte';
   import gsap from 'gsap';
+
+  const dispatch = createEventDispatcher<{ complete: void }>();
 
   export let isVisible = true;
   export let loadingText = '';
@@ -11,6 +13,7 @@
   let svgContainer: SVGSVGElement;
   let overlayContainer: HTMLDivElement;
   let isAnimating = false;
+  let renderOverlay = isVisible;
 
   interface BranchData {
     id: number;
@@ -219,7 +222,10 @@
           );
         }
 
+        // Wait for the full GSAP tree growth animation to finish
         await tl;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       if (waitFor) {
@@ -231,15 +237,19 @@
       }
 
       if (!hangAtEnd) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         if (overlayContainer) {
-          await gsap.to(overlayContainer, { opacity: 0, duration: 0.5 });
+          await gsap.to(overlayContainer, { opacity: 0, duration: 0.4 });
         }
+        renderOverlay = false;
         isVisible = false;
+        dispatch('complete');
       }
     } catch (error) {
       console.error('Tree animation error:', error);
+      renderOverlay = false;
       isVisible = false;
+      dispatch('complete');
     } finally {
       isAnimating = false;
     }
@@ -252,7 +262,7 @@
   });
 </script>
 
-{#if isVisible}
+{#if renderOverlay}
   <div bind:this={overlayContainer} class="tree-spinner-overlay">
     {#if !disableTree}
       <div class="tree-canvas-wrapper">

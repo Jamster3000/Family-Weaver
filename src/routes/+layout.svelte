@@ -7,9 +7,10 @@
     import ToastContainer from '$components/app/ToastContainer.svelte';
     import { onMount, onDestroy } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
-    import { settingsData, type Settings } from '$settingsStore';
+    import { settingsData, type Settings, setSettings } from '$settingsStore';
     import { applyTheme, type AppearanceMode } from "$themeStore";
     import { applyVisualSettings } from '$lib/visualSettings';
+    import { invoke } from '@tauri-apps/api/core';
 
     let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -17,6 +18,15 @@
         setupUpdateInterval();
         applyVisualSettings($settingsData);
     }
+
+    async function loadSettings() {
+		try {
+			const settings = await invoke<Settings[]>("get_all_settings");
+			setSettings(settings);
+		} catch (error) {
+			console.error("Error fetching settings on startup:", error);
+		}
+	}
 
     function setupUpdateInterval() {
         if (updateIntervalTimer) {
@@ -41,6 +51,7 @@
     }
 
     onMount(() => {
+        loadSettings();
         const appearanceSetting = $settingsData.find(s => s.key === 'appearance_mode');
 
         if (appearanceSetting?.value && "Text" in appearanceSetting.value) {

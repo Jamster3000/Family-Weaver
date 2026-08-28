@@ -132,8 +132,8 @@
             short_description: "How often (in hours) to check for updates while open.",
             long_description: "Sets how many hours the app waits before checking for a new version while you have it open. Setting this to 0 will disable automatic update checks.",
             search_terms: ["update frequency", "interval", "hours"],
-            value_type: Int,
-            default: Some(Int(2)),
+            value_type: Float,
+            default: Some(Float(2.0)),
             min: Some(Float(0.0)),
             max: Some(Float(24.0)),
         ),
@@ -146,8 +146,8 @@
             search_terms: ["startup", "launch", "update frequency"],
             value_type: Int,
             default: Some(Int(1)),
-            min: Some(Float(1.0)),
-            max: Some(Float(50.0)),
+            min: Some(Int(1)),
+            max: Some(Int(50)),
         ),
 
         // -------------------- Notifications --------------------

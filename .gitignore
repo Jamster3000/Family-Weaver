@@ -12,3 +12,5 @@
 *.db-wal
 /~/.tauri/family-weaver.key
 /~/.tauri
+/code_backup
+/main.sh

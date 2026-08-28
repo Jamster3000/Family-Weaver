@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Modal from "$components/ui/Modal.svelte";
 	import Button from "$components/ui/Button.svelte";
+	import ConfirmModal from "$components/app/ConfirmModal.svelte";
 	import PersonOverview from "$components/app/person/PersonOverview.svelte";
 	import PersonMedia from "$components/app/person/PersonMedia.svelte";
 	import PersonRelationships from "$components/app/person/PersonRelationships.svelte";
@@ -13,13 +14,12 @@
 		resetPersonData,
 	} from "$personStore";
 	import { activeTree } from "$treeStore";
-	import { modals, timelineEntryModal, addPersonModal, discardPersonChangesModal } from "$modalStore";
+	import { modals, addPersonModal, discardPersonChangesModal } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
 	import { getAnimationDuration } from "$lib/animationUtils";
 
 	let activeTab: string = "overview";
-
 	let isAddingTimelineEvent = false;
 
 	$: isAddingTimelineEvent, updateTimelineModal();
@@ -50,12 +50,10 @@
 		};
 
 		try {
-			let createdPerson = await invoke("create_person", {
-				person: cleanedPerson
-			});
+			await invoke("create_person", { person: cleanedPerson });
 			resetPersonData();
 			toasts.success("Person created successfully!");
-		} catch(error) {
+		} catch (error) {
 			toasts.error("Failed to create person.");
 			return;
 		}
@@ -64,9 +62,7 @@
 	}
 
 	function handlePersonDiscard() {
-		const hasPersonDataChanged = hasPersonChanged();
-
-		if (hasPersonDataChanged) {
+		if (hasPersonChanged()) {
 			modals.open("discardPersonChanges");
 		} else {
 			modals.close("addPerson");
@@ -96,42 +92,17 @@
 	</div>
 
 	<div class="tabs">
-		<Tooltip
-			text="The basic details of the person like name and birth date."
-			position="top"
-		>
-			<button
-				class:active={activeTab === "overview"}
-				on:click={() => (activeTab = "overview")}>Overview</button
-			>
+		<Tooltip text="The basic details of the person like name and birth date." position="top">
+			<button class:active={activeTab === "overview"} on:click={() => (activeTab = "overview")}>Overview</button>
 		</Tooltip>
-		<Tooltip
-			text="Add photos, documents, or other files for this person."
-			position="top"
-		>
-			<button
-				class:active={activeTab === "media"}
-				on:click={() => (activeTab = "media")}>Media</button
-			>
+		<Tooltip text="Add photos, documents, or other files for this person." position="top">
+			<button class:active={activeTab === "media"} on:click={() => (activeTab = "media")}>Media</button>
 		</Tooltip>
-		<Tooltip
-			text="Connect this person to parents, partners, or children."
-			position="top"
-		>
-			<button
-				class:active={activeTab === "relationships"}
-				on:click={() => (activeTab = "relationships")}
-				>Relationships</button
-			>
+		<Tooltip text="Connect this person to parents, partners, or children." position="top">
+			<button class:active={activeTab === "relationships"} on:click={() => (activeTab = "relationships")}>Relationships</button>
 		</Tooltip>
-		<Tooltip
-			text="Track work history, education, and life events over time."
-			position="top"
-		>
-			<button
-				class:active={activeTab === "timelines"}
-				on:click={() => (activeTab = "timelines")}>Timelines</button
-			>
+		<Tooltip text="Track work history, education, and life events over time." position="top">
+			<button class:active={activeTab === "timelines"} on:click={() => (activeTab = "timelines")}>Timelines</button>
 		</Tooltip>
 	</div>
 
@@ -153,57 +124,34 @@
 
 	<svelte:fragment slot="footer">
 		{#if isAddingTimelineEvent}
-			<Tooltip
-				text="You must finish adding the timeline event before saving this person."
-				position="top"
-			>
+			<Tooltip text="You must finish adding the timeline event before saving this person." position="top">
 				<Button disabled={true}>Save</Button>
 			</Tooltip>
 		{:else if !hasChanges}
-			<Tooltip
-				text="Please add some information about this person before saving."
-				position="top"
-			>
+			<Tooltip text="Please add some information about this person before saving." position="top">
 				<Button disabled={true}>Save</Button>
 			</Tooltip>
 		{:else}
-			<Tooltip
-				text="Save this person and return to your family tree."
-				position="top"
-			>
+			<Tooltip text="Save this person and return to your family tree." position="top">
 				<Button on:click={handlePersonSave}>Save</Button>
 			</Tooltip>
 		{/if}
-		<Tooltip
-			text="Discard this person, deleting any progress and returning to your family tree."
-			position="top"
-		>
-			<Button variant="secondary" on:click={handlePersonDiscard}
-				>Discard</Button
-			>
+		<Tooltip text="Discard this person, deleting any progress and returning to your family tree." position="top">
+			<Button variant="secondary" on:click={handlePersonDiscard}>Discard</Button>
 		</Tooltip>
 	</svelte:fragment>
 </Modal>
 
-<Modal isOpen={$discardPersonChangesModal} width="50%" padding="small" onClose={handleDiscardChangesClose}>
-	<svelte:fragment slot="header">
-		<h2>Discard Changes?</h2>
-	</svelte:fragment>
-
-	<p class="confirm-message">
-		You have unsaved changes. Are you sure you want to discard this
-		person?
-	</p>
-
-	<svelte:fragment slot="footer">
-		<Button
-			variant="secondary"
-			on:click={handleDiscardChangesClose}
-			>No, continue editing</Button
-		>
-		<Button on:click={handleDiscard}>Yes, discard</Button>
-	</svelte:fragment>
-</Modal>
+<ConfirmModal
+	isOpen={$discardPersonChangesModal}
+	width="50%"
+	title="Discard Changes?"
+	message="You have unsaved changes. Are you sure you want to discard this person?"
+	confirmLabel="Yes, discard"
+	cancelLabel="No, continue editing"
+	onConfirm={handleDiscard}
+	onClose={handleDiscardChangesClose}
+/>
 
 <style>
 	.modal-header {
@@ -266,13 +214,5 @@
 		overflow-x: hidden;
 		padding-left: 5px;
 		padding-right: 5px;
-	}
-
-	.confirm-message {
-		color: var(--text-colour);
-		opacity: 0.8;
-		text-align: center;
-		margin-bottom: 24px;
-		font-size: var(--font-medium);
 	}
 </style>

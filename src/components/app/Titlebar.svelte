@@ -3,7 +3,12 @@
 	import { onMount } from "svelte";
 	import { invoke } from "@tauri-apps/api/core";
 	import { listen } from "@tauri-apps/api/event";
-	import { IconMinus, IconSquares, IconX } from "@tabler/icons-svelte-runes";
+	import {
+		IconMinus,
+		IconSquares,
+		IconX,
+		IconChevronRight,
+	} from "@tabler/icons-svelte-runes";
 	import Button from "$components/ui/Button.svelte";
 	import { activeTree, setActiveTree, type Tree } from "$treeStore";
 
@@ -37,7 +42,11 @@
 <div class="titlebar" data-tauri-drag-region>
 	<div class="titlebar-title">
 		{#if $activeTree}
-			<p class="title-text">Family Weaver - {$activeTree.name}</p>
+			<p class="title-text">Family Weaver</p>
+			<span class="separator">
+				<IconChevronRight size={20} />
+			</span>
+			<span class="badge">{$activeTree.name}</span>
 		{:else}
 			<p class="title-text">Family Weaver</p>
 		{/if}
@@ -72,7 +81,6 @@
 
 <style>
 	.titlebar {
-		height: var(--titlebar-height);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -85,18 +93,29 @@
 		color: var(--text-colour);
 		z-index: 100000;
 		-webkit-app-region: drag;
+		min-height: var(--titlebar-height);
+		border-bottom: 2px solid var(--border-colour);
 	}
 
 	.titlebar-title {
 		display: flex;
 		align-items: center;
 		gap: 6px;
-		padding-left: 4px;
+		padding-left: 20px;
 		-webkit-app-region: no-drag;
 	}
 
 	.title-text {
-		padding-left: 14px;
+		margin: 0;
+		font-size: var(--font-small);
+		font-weight: 600;
+	}
+
+	.separator {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.6;
 	}
 
 	.titlebar-controls {
@@ -106,7 +125,7 @@
 	}
 
 	.titlebar-controls button {
-		width: 46px;
+		min-width: 46px;
 		height: 100%;
 		border: 0;
 		background: transparent;

@@ -25,7 +25,7 @@
   <svelte:fragment slot="header">
     <h2>What's New</h2>
     {#if version}
-      <span class="version-badge">Version {version}</span>
+      <span class="badge">Version {version}</span>
     {/if}
   </svelte:fragment>
 
@@ -47,17 +47,6 @@
 </Modal>
 
 <style>
-  .version-badge {
-    background: color-mix(in srgb, var(--primary-colour) 10%, var(--secondary-background));
-    border: 1px solid var(--border-colour);
-    color: var(--text-colour);
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: var(--font-small);
-    font-weight: 500;
-    opacity: 0.85;
-  }
-
   .content-box {
     width: 100%;
     background: var(--primary-background);

@@ -82,8 +82,6 @@
   .network-container {
     width: 100%;
     height: calc(100vh - 35px);
-    border: 1px solid var(--secondary-colour);
-    border-radius: 6px;
     background: var(--primary-background);
   }
 

@@ -93,3 +93,16 @@ p {
 form * {
     margin: 4px 0;
 }
+
+.badge {
+    background: color-mix( in srgb, var(--primary-colour) 10%, var(--secondary-background) );
+    border: 1px solid var(--border-colour);
+    color: var(--text-colour);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: var(--font-small);
+    font-weight: 500;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+}

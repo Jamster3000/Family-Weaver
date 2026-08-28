@@ -33,9 +33,13 @@
 	}
 </script>
 
-<CreateTree firstTime={true} />
+<CreateTree />
 
 <Modal isOpen={$deleteTreeConfirmModal} width="40%" padding="small" onClose={handleClose}>
+	<svelte:fragment slot="header">
+		<h2>Delete All Trees?</h2>
+	</svelte:fragment>
+
 	<p class="confirm-message">
 		Are you sure you want to delete all trees? This will permanently delete
 		every family tree, person, relationship, and timeline record in the database.

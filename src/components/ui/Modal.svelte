@@ -13,7 +13,7 @@
   export let onClose: (() => void) | undefined = undefined;
 </script>
 
-<Popup {isOpen} {onClose} {closeOnBackdrop}>
+<Popup {isOpen} {onClose}>
   <Card {width} {padding} {center}>
     {#if showClose}
       <Close onClick={onClose} />
@@ -21,7 +21,7 @@
 
     <div class="modal-content">
       {#if title || $$slots.header}
-        <div class="modal-header">
+        <div class="modal-header" class:has-close={showClose}>
           {#if $$slots.header}
             <slot name="header" />
           {:else}
@@ -59,6 +59,13 @@
     gap: 8px;
     width: 100%;
     text-align: center;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .modal-header.has-close {
+    padding: 0 36px;
   }
 
   .modal-header h2 {

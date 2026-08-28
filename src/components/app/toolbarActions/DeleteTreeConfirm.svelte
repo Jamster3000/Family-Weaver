@@ -37,6 +37,9 @@
 </script>
 
 <Modal isOpen={$deleteTreeConfirmModal} width="40%" padding="small" onClose={handleClose}>
+	<svelte:fragment slot="header">
+		<h2>Delete "{ $activeTree?.name }"?</h2>
+	</svelte:fragment>
 	<p class="confirm-message">
 		Are you sure you want to delete this tree? This will also delete all
 		people associated with this tree. This action cannot be undone.

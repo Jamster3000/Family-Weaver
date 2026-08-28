@@ -40,7 +40,7 @@
           on:click={() => selectedCategory = key as CategoryKey}
           aria-label="View {config.title} timeline"
         >
-          <Card width="100%" padding="medium">
+          <Card width="100%" height="100%" padding="medium">
             <div class="card-content">
               <div class="icon-well">
                 <IconComponent size={28} stroke={1.5} color="white" />
@@ -77,24 +77,32 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    padding-top: 24px;
   }
 
   .categories-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    height: 100%;
+    align-items: stretch;
   }
 
   .card-action-wrapper {
     all: unset;
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     cursor: pointer;
     border-radius: 8px;
     transition: transform var(--xshort-transition-duration) ease;
+  }
+
+  .card-action-wrapper :global(> *) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .card-action-wrapper:hover {
@@ -115,6 +123,7 @@
     text-align: center;
     gap: 16px;
     height: 100%;
+    box-sizing: border-box;
   }
 
   .icon-well {
@@ -126,6 +135,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 4px;
+    flex-shrink: 0;
   }
 
   .text-group {
@@ -159,5 +169,6 @@
     font-size: 0.75rem;
     font-weight: 600;
     opacity: 0.8;
+    margin-top: auto;
   }
 </style>

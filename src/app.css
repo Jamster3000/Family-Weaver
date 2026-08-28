@@ -56,6 +56,8 @@
     padding: 0;
     box-sizing: border-box;
     font-family: var(--font-primary);
+    scrollbar-width: auto;
+    scrollbar-color: var(--primary-colour) var(--secondary-background);
 }
 
 html, body {
@@ -105,4 +107,34 @@ form * {
     opacity: 0.85;
     display: flex;
     align-items: center;
+}
+
+::-webkit-scrollbar {
+    width: 18px;
+    height: 18px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary-background);
+    border-left: 2px solid var(--border-colour);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary-colour);
+    border-radius: 4px;
+    border: 3px solid var(--secondary-background);
+    min-height: 48px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--secondary-colour);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background-color: var(--white);
+        border: 3px solid var(--black);
+    }
+
+::-webkit-scrollbar-corner {
+    background: var(--secondary-background);
 }

@@ -17,10 +17,10 @@
 <style>
   .toast-container {
     position: fixed;
-    bottom: 30px;
+    bottom: var(--toast-bottom);
     right: 30px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 12px;
     z-index: 9999;
     pointer-events: none;

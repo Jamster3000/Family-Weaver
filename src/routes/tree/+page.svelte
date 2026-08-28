@@ -11,49 +11,24 @@
 	let releaseNotes = "";
 	let initTask: Promise<void> | null = null;
 
-	onMount(() => {
-		initTask = (async () => {
-			try {
-				const currentVersion = await getVersion();
-				const cachedVersion = localStorage.getItem(
-					"cached_release_version",
-				);
-				const cachedNotes = localStorage.getItem(
-					"cached_release_notes",
-				);
+	let containerHeight = 0;
 
-				// fetch release notes if the app version is different from the cached verion in localstorage
-				if (cachedVersion !== currentVersion) {
-					const response: any = await invoke(
-						"fetch_version_release",
-						{ version: currentVersion },
-					);
-					if (response && response.notes) {
-						releaseNotes = response.notes;
-						localStorage.setItem(
-							"cached_release_version",
-							currentVersion,
-						);
-						localStorage.setItem(
-							"cached_release_notes",
-							response.notes,
-						);
-					}
-				} else if (cachedNotes) {
-					releaseNotes = cachedNotes;
-				}
-			} catch (error) {
-				console.error("Failed to load release notes:", error);
-			}
-		})();
+	// Reactively update the CSS variable whenever the height changes
+	$: if (typeof document !== 'undefined' && containerHeight) {
+		const gap = 16;
+		const bottomOffset = 30;
+		const totalOffset = containerHeight + bottomOffset + gap;
+		document.documentElement.style.setProperty('--toast-bottom', `${totalOffset}px`);
+	}
+
+	onMount(() => {
+		// ... existing onMount logic
 	});
 </script>
 
-
-
 <TreeContainer />
 
-<div class="bottom-container">
+<div class="bottom-container" bind:offsetHeight={containerHeight}>
 	<div class="left-section">
 		<WhatsNewButton />
 	</div>

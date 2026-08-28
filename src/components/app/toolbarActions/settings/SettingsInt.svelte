@@ -19,7 +19,6 @@
 
 	$: if (setting.value && "Int" in setting.value) {
 		setting.value.Int = currentValue;
-		console.log(`Set ${setting.key} to ${currentValue}`);
 	}
 </script>
 

@@ -18,8 +18,7 @@ const config = {
             $modalStore: path.resolve('./src/lib/stores/modalStore.ts'),
             $toastStore: path.resolve('./src/lib/stores/toastStore.ts'),
             $updateStore: path.resolve('./src/lib/stores/updateStore.ts'),
-            $settingsStore: path.resolve('./src/lib/stores/settingsStore/settingsStore.ts'),
-            $themeStore: path.resolve('./src/lib/stores/settingsStore/themeStore.ts'),
+            $settingsStore: path.resolve('./src/lib/stores/settingsStore.ts'),
         },
     },
 };

@@ -14,6 +14,7 @@
 	import { getAnimationDuration } from "$lib/animationUtils";
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
+	import { applyVisualSettings } from "$lib/applySettings";
 
 	let selectedCategory: string | null = null;
 	let settingsSnapshot: Settings[] = [];
@@ -31,14 +32,7 @@
 			setSettings(structuredClone(settingsSnapshot));
 		}
 
-		const setting = $settingsData.find(
-			(s) => s.key === "font_scale",
-		)?.value;
-		const fontScale = setting && "Float" in setting ? setting.Float : 1;
-		document.documentElement.style.setProperty(
-			"--font-scale",
-			`${fontScale}`,
-		);
+		applyVisualSettings($settingsData);
 
 		modals.close("settings");
 		selectedCategory = null;

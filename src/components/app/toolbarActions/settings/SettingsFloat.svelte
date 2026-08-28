@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { type Settings, updateSettings } from "$settingsStore";
+	import { type Settings, updateSettings, settingsData } from "$settingsStore";
+	import { applyFontScale } from "$lib/applySettings";
 
 	export let setting: Settings;
 
@@ -19,7 +20,7 @@
 		updateSettings([{ key: setting.key, value: { Float: clamped } }]);
 
 		if (setting.key === "font_size") {
-			document.documentElement.style.setProperty("--font-scale", clamped.toString());
+			applyFontScale($settingsData);
 		}
 	}
 </script>

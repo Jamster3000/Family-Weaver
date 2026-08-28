@@ -4,7 +4,7 @@
 	import flatpickr from "flatpickr";
 	import "flatpickr/dist/flatpickr.min.css";
 	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
-    import { settingsData } from "$lib/stores/settingsStore/settingsStore";
+    import { settingsData } from "$lib/stores/settingsStore";
 
 	import darkTheme from "flatpickr/dist/themes/dark.css?inline";
 	import lightTheme from "flatpickr/dist/themes/light.css?inline";

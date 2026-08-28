@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { type Settings, updateSettings, applyFontFamily } from "$settingsStore";
-	import { applyTheme, type AppearanceMode, applyColorblindMode } from "$themeStore";
+	import { type Settings, updateSettings, settingsData } from "$settingsStore";
+	import { applyColourblindMode, type AppearanceMode, applyAppearanceMode, applyFontFamily } from "$lib/applySettings";
 
 	export let setting: Settings;
 
@@ -18,18 +18,18 @@
 		const target = e.currentTarget as HTMLSelectElement;
 		const newValue = target.value;
 
+		updateSettings([{ key: setting.key, value: { Text: newValue } }]);
+
 		if (setting.key === "appearance_mode") {
-			applyTheme(newValue as AppearanceMode);
+			applyAppearanceMode($settingsData);
 		}
 		if (setting.key === "font_family") {
-			applyFontFamily(newValue);
+			applyFontFamily($settingsData);
 		}
 
 		if (setting.key === "colour_blind_mode") {
-			applyColorblindMode(newValue);
+			applyColourblindMode($settingsData);
 		}
-
-		updateSettings([{ key: setting.key, value: { Text: newValue } }]);
 	}
 </script>
 

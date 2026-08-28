@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Toggle from "$components/ui/Toggle.svelte";
-	import { type Settings, updateSettings } from "$settingsStore";
-	import { applyTheme } from "$themeStore";
+	import { type Settings, updateSettings, settingsData } from "$settingsStore";
+	import { applyReduceMotion, applyHighContrast, applyLineSpacing, applyLetterSpacing } from "$lib/applySettings";
 
 	export let setting: Settings;
 
@@ -13,26 +13,19 @@
 		updateSettings([{ key: setting.key, value: { Bool: newValue } }]);
 
 		if (setting.key === "reduce_motion") {
-			document.documentElement.setAttribute(
-				"data-reduce-motion",
-				newValue ? "true" : "false"
-			);
+			applyReduceMotion($settingsData);
 		}
 
 		if (setting.key === "high_contrast_mode") {
-			applyTheme();
+			applyHighContrast($settingsData);
 		}
 
 		if (setting.key === "increase_line_spacing") {
-			document.documentElement.setAttribute("data-increase-line-spacing",
-				newValue ? "true" : "false"
-			);
+			applyLineSpacing($settingsData);
 		}
 
 		if (setting.key === "increase_letter_spacing") {
-			document.documentElement.setAttribute("data-increase-letter-spacing",
-				newValue ? "true" : "false"
-			);
+			applyLetterSpacing($settingsData);
 		}
 	}
 </script>

@@ -50,25 +50,6 @@ export function setSettings(newSettings: Settings[]) {
     settingsData.set(newSettings);
 }
 
-export function applyFontFamily(selectedOption: string) {
-    let fontStack = "'Lora'";
-
-    if (selectedOption.startsWith("Lora")) {
-        fontStack = "'Lora'";
-    } else if (selectedOption.startsWith("Hyperlegible")) {
-        fontStack = "'HyperLegible'";
-    } else if (selectedOption.startsWith("OpenDyslexic")) {
-        fontStack = "'OpenDyslexic'";
-    } else if (selectedOption.startsWith("Lexend")) {
-        fontStack = "'Lexend'";
-    } else if (selectedOption.startsWith("Merriweather")) {
-        fontStack = "'Merriweather'";
-    }
-
-    document.documentElement.style.setProperty("--font-primary", fontStack);
-    document.documentElement.setAttribute("data-font-family", fontStack);
-}
-
 export const getSetting = {
     bool: (settings: Settings[], key: string, fallback = false): boolean => {
         const item = settings.find(s => s.key === key);

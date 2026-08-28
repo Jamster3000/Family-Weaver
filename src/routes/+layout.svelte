@@ -8,8 +8,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { checkForAppUpdatesBackground } from '$lib/CheckForUpdates';
     import { settingsData, type Settings, setSettings, getSetting } from '$settingsStore';
-    import { applyTheme, type AppearanceMode } from "$themeStore";
-    import { applyVisualSettings } from '$lib/visualSettings';
+    import { applyVisualSettings, applyFontFamily, applyFontScale } from '$lib/applySettings';
     import { invoke } from '@tauri-apps/api/core';
 
     let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
@@ -50,11 +49,7 @@
 
     onMount(() => {
         loadSettings();
-        const appearanceSetting = getSetting.text($settingsData, 'appearance_mode');
-
-        if (appearanceSetting) {
-			applyTheme(appearanceSetting as AppearanceMode);
-		}
+        applyVisualSettings($settingsData);
 
         checkForAppUpdatesBackground();
 

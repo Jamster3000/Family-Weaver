@@ -43,6 +43,7 @@
 		leafUrl: string;
 		barkUrl: string;
 		isSakura: boolean;
+		isWinter: boolean;
 	}
 
 	let activeConfig = $state<TreeConfig | null>(null);
@@ -67,8 +68,16 @@
 		return (month === 3 && day >= 20) || (month === 4 && day <= 15);
 	}
 
+	function isWinterSeason(): boolean {
+		const currentDate = new Date();
+		const month = currentDate.getMonth() + 1;
+		const day = currentDate.getDate();
+		return (month === 12 && day >= 1) || (month === 1 && day <= 31);
+	}
+
 	function getTreeConfig(): TreeConfig {
 		const isSakura = isSakuraSeason();
+		const isWinter = isWinterSeason();
 
 		const barks =
 			barkUrls.length > 0
@@ -106,7 +115,7 @@
 				? regularBarks[Math.floor(Math.random() * regularBarks.length)]
 				: barks[0];
 
-		return { leafUrl, barkUrl, isSakura };
+		return { leafUrl, barkUrl, isSakura, isWinter };
 	}
 
 	function generateTreeData(
@@ -161,7 +170,8 @@
 				startTime,
 			});
 
-			if (depth < 4) {
+			// Skip generating leaves entirely if it is winter
+			if (depth < 4 && !config.isWinter) {
 				const leafChance = Math.max(0.55, (4 - depth) / 5.5);
 				if (Math.random() <= leafChance) {
 					const leafCount = Math.floor(Math.random() * 3) + 1;

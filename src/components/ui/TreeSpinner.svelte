@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { onMount, tick, createEventDispatcher } from 'svelte';
-  import gsap from 'gsap';
+  import { onMount, createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher<{ complete: void }>();
 
@@ -10,16 +9,16 @@
   export let waitFor: Promise<any> | null = null;
   export let disableTree = false;
 
-  let svgContainer: SVGSVGElement;
   let overlayContainer: HTMLDivElement;
   let isAnimating = false;
   let renderOverlay = isVisible;
+  let isFadingOut = false;
+  let leafTargetOpacity = 0.8;
 
   interface BranchData {
     id: number;
     d: string;
     strokeWidth: number;
-    barkTextureId: string;
     length: number;
     startTime: number;
   }
@@ -29,43 +28,25 @@
     cx: number;
     cy: number;
     r: number;
-    leafPatternId: string;
+    delay: number;
   }
 
   interface TreeConfig {
-    leafPatternId: string;
-    barkTextureId: string;
+    leafUrl: string;
+    barkUrl: string;
     isSakura: boolean;
   }
 
+  let activeConfig: TreeConfig | null = null;
   let branches: BranchData[] = [];
   let leaves: LeafData[] = [];
 
-  const BARK_TEXTURE_IDS = [
-    'barkTexture1', 'barkTexture2', 'barkTexture3', 'barkTexture4',
-    'barkTexture5', 'barkTexture6', 'barkTexture7', 'barkTexture8',
-    'barkTexture9', 'barkTexture10', 'barkTexture11',
-  ];
+  // Glob .webp files from static directory and convert to root-relative paths (/images/tree/...)
+  const rawBarkFiles = import.meta.glob('/static/images/tree/bark/*.webp');
+  const rawLeafFiles = import.meta.glob('/static/images/tree/leaves/*.webp');
 
-  const BARK_TEXTURE_FILES: Record<string, string> = {
-    barkTexture1: 'bark-bluegum.png',
-    barkTexture2: 'bark-brown-2.png',
-    barkTexture3: 'bark-brown.png',
-    barkTexture4: 'bark-platanus.png',
-    barkTexture5: 'chinese-cedar-bark.png',
-    barkTexture6: 'japanese-hackberry.png',
-    barkTexture7: 'knotted-pine-bark.png',
-    barkTexture8: 'palm-bark.png',
-    barkTexture9: 'pine-bark.png',
-    barkTexture10: 'sakura-bark.png',
-    barkTexture11: 'willow-bark.png',
-  };
-
-  const LEAF_PATTERN_FILES: Record<string, string> = {
-    leafPattern: 'leaves.png',
-    leafPattern2: 'leaves-2.png',
-    sakuraLeafPattern: 'pink-leaves.png',
-  };
+  const barkUrls = Object.keys(rawBarkFiles).map((path) => path.replace(/^\/static/, ''));
+  const leafUrls = Object.keys(rawLeafFiles).map((path) => path.replace(/^\/static/, ''));
 
   function isSakuraSeason(): boolean {
     const currentDate = new Date();
@@ -76,22 +57,30 @@
 
   function getTreeConfig(): TreeConfig {
     const isSakura = isSakuraSeason();
-    const leafPatternId = isSakura
-      ? 'sakuraLeafPattern'
-      : Math.random() < 0.5
-        ? 'leafPattern'
-        : 'leafPattern2';
 
-    const barkTextureId = isSakura
-      ? 'barkTexture10'
-      : BARK_TEXTURE_IDS[Math.floor(Math.random() * BARK_TEXTURE_IDS.length)];
+    const barks = barkUrls.length > 0 ? barkUrls : ['/images/tree/bark/pine-bark.webp'];
+    const leavesList = leafUrls.length > 0 ? leafUrls : ['/images/tree/leaves/leaves.webp'];
 
-    return { leafPatternId, barkTextureId, isSakura };
+    const sakuraBark = barks.find((url) => url.toLowerCase().includes('sakura')) || barks[0];
+    const regularBarks = barks.filter((url) => url !== sakuraBark);
+
+    const sakuraLeaf = leavesList.find((url) => url.toLowerCase().includes('pink') || url.toLowerCase().includes('sakura')) || leavesList[0];
+    const regularLeaves = leavesList.filter((url) => url !== sakuraLeaf);
+
+    const leafUrl = isSakura
+      ? sakuraLeaf
+      : (regularLeaves.length > 0 ? regularLeaves[Math.floor(Math.random() * regularLeaves.length)] : leavesList[0]);
+
+    const barkUrl = isSakura
+      ? sakuraBark
+      : (regularBarks.length > 0 ? regularBarks[Math.floor(Math.random() * regularBarks.length)] : barks[0]);
+
+    return { leafUrl, barkUrl, isSakura };
   }
 
   function generateTreeData(startX: number, startY: number, config: TreeConfig) {
     const branchList: BranchData[] = [];
-    const leafList: LeafData[] = [];
+    const tempLeafList: Omit<LeafData, 'delay'>[] = [];
     let branchId = 0;
     let leafId = 0;
 
@@ -131,7 +120,6 @@
         id: branchId++,
         d: pathD,
         strokeWidth: width,
-        barkTextureId: config.barkTextureId,
         length: Math.ceil(calcLength),
         startTime,
       });
@@ -148,12 +136,11 @@
             const depthFactor = Math.random() * 0.6 + 0.4;
             const r = config.isSakura ? 4 + depthFactor * 2 : 6 + depthFactor * 3;
 
-            leafList.push({
+            tempLeafList.push({
               id: leafId++,
               cx: leafX,
               cy: leafY,
               r,
-              leafPatternId: config.leafPatternId,
             });
           }
         }
@@ -168,7 +155,7 @@
     }
 
     traverse(startX, startY, -Math.PI * 2, 10, 30, 0);
-    return { branchList, leafList };
+    return { branchList, tempLeafList };
   }
 
   async function startAnimation(): Promise<void> {
@@ -176,54 +163,33 @@
     isAnimating = true;
 
     try {
-      if (!disableTree && svgContainer) {
-        const width = svgContainer.clientWidth || 800;
-        const height = svgContainer.clientHeight || 600;
+      if (!disableTree) {
+        const width = 800;
+        const height = 600;
         const startX = width / 2;
         const startY = height - 50;
 
-        svgContainer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        activeConfig = getTreeConfig();
+        const data = generateTreeData(startX, startY, activeConfig);
 
-        const config = getTreeConfig();
-        const data = generateTreeData(startX, startY, config);
-
+        leafTargetOpacity = activeConfig.isSakura ? 0.9 : 0.8;
         branches = data.branchList;
-        leaves = data.leafList;
 
-        await tick();
+        const svgFadeInDuration = 0.3;
+        const maxBranchStartTime = branches.length > 0
+          ? Math.max(...branches.map((b) => b.startTime))
+          : 0;
 
-        const branchElements = svgContainer.querySelectorAll<SVGPathElement>('.branch');
-        const leafElements = svgContainer.querySelectorAll<SVGCircleElement>('.leaf');
+        const leavesStartTime = maxBranchStartTime + 0.15 + svgFadeInDuration;
 
-        const tl = gsap.timeline();
-        tl.to(svgContainer, { opacity: 1, duration: 0.3 });
+        leaves = data.tempLeafList.map((leaf, index) => ({
+          ...leaf,
+          delay: leavesStartTime + (index * 0.001)
+        }));
 
-        branches.forEach((branchData, index) => {
-          const el = branchElements[index];
-          if (el) {
-            tl.to(
-              el,
-              { strokeDashoffset: 0, duration: 0.15, ease: 'none' },
-              branchData.startTime + 0.3
-            );
-          }
-        });
+        const totalAnimationDuration = leavesStartTime + 0.4 + (leaves.length * 0.001);
 
-        if (leafElements.length > 0) {
-          const leavesStartTime = tl.duration();
-          tl.to(
-            leafElements,
-            {
-              opacity: config.isSakura ? 0.9 : 0.8,
-              duration: 0.4,
-              stagger: 0.001,
-            },
-            leavesStartTime
-          );
-        }
-
-        // Wait for the full GSAP tree growth animation to finish
-        await tl;
+        await new Promise((resolve) => setTimeout(resolve, totalAnimationDuration * 1000));
       } else {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
@@ -238,9 +204,10 @@
 
       if (!hangAtEnd) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        if (overlayContainer) {
-          await gsap.to(overlayContainer, { opacity: 0, duration: 0.4 });
-        }
+
+        isFadingOut = true;
+        await new Promise((resolve) => setTimeout(resolve, 400));
+
         renderOverlay = false;
         isVisible = false;
         dispatch('complete');
@@ -263,50 +230,49 @@
 </script>
 
 {#if renderOverlay}
-  <div bind:this={overlayContainer} class="tree-spinner-overlay">
+  <div bind:this={overlayContainer} class="tree-spinner-overlay" class:fade-out={isFadingOut}>
     {#if !disableTree}
       <div class="tree-canvas-wrapper">
-        <svg bind:this={svgContainer} class="tree-spinner-svg" viewBox="0 0 800 600">
+        <svg class="tree-spinner-svg" viewBox="0 0 800 600">
           <defs>
-            <pattern id="leafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
-              <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern}" width="100" height="100" />
-            </pattern>
-            <pattern id="leafPattern2" patternUnits="userSpaceOnUse" width="100" height="100">
-              <image href="/images/tree/{LEAF_PATTERN_FILES.leafPattern2}" width="100" height="100" />
-            </pattern>
-            <pattern id="sakuraLeafPattern" patternUnits="userSpaceOnUse" width="100" height="100">
-              <image href="/images/tree/{LEAF_PATTERN_FILES.sakuraLeafPattern}" width="100" height="100" />
-            </pattern>
-
-            {#each BARK_TEXTURE_IDS as barkId (barkId)}
-              <pattern id={barkId} patternUnits="userSpaceOnUse" width="100" height="100">
-                <image href="/images/tree/{BARK_TEXTURE_FILES[barkId]}" width="100" height="100" />
+            {#if activeConfig}
+              <pattern id="active-leaf-pattern" patternUnits="userSpaceOnUse" width="100" height="100">
+                <image href={activeConfig.leafUrl} width="100" height="100" />
               </pattern>
-            {/each}
+
+              <pattern id="active-bark-pattern" patternUnits="userSpaceOnUse" width="100" height="100">
+                <image href={activeConfig.barkUrl} width="100" height="100" />
+              </pattern>
+            {/if}
           </defs>
 
           <g id="branches-group">
             {#each branches as branch (branch.id)}
               <path
                 d={branch.d}
-                stroke="url(#{branch.barkTextureId})"
+                stroke="url(#active-bark-pattern)"
                 stroke-width={branch.strokeWidth}
                 fill="none"
                 stroke-linecap="round"
                 class="branch"
-                style="stroke-dasharray: {branch.length}; stroke-dashoffset: {branch.length};"
+                style="
+                  stroke-dasharray: {branch.length};
+                  stroke-dashoffset: {branch.length};
+                  animation-delay: {branch.startTime + 0.3}s;
+                "
               />
             {/each}
           </g>
 
-          <g id="leaves-group">
+          <g id="leaves-group" style="--target-opacity: {leafTargetOpacity}">
             {#each leaves as leaf (leaf.id)}
               <circle
                 cx={leaf.cx}
                 cy={leaf.cy}
                 r={leaf.r}
-                fill="url(#{leaf.leafPatternId})"
+                fill="url(#active-leaf-pattern)"
                 class="leaf"
+                style="animation-delay: {leaf.delay}s;"
               />
             {/each}
           </g>
@@ -342,6 +308,11 @@
     opacity: 1;
     padding: 20px;
     box-sizing: border-box;
+    transition: opacity 0.4s ease;
+  }
+
+  .tree-spinner-overlay.fade-out {
+    opacity: 0;
   }
 
   .tree-canvas-wrapper {
@@ -357,6 +328,28 @@
     width: 100%;
     height: 100%;
     opacity: 0;
+    animation: fadeIn 0.3s forwards;
+  }
+
+  .branch {
+    animation: drawBranch 0.15s linear forwards;
+  }
+
+  .leaf {
+    opacity: 0;
+    animation: fadeLeaf 0.4s forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes drawBranch {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes fadeLeaf {
+    to { opacity: var(--target-opacity, 0.8); }
   }
 
   .simple-spinner-wrapper {
@@ -376,9 +369,7 @@
   }
 
   @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
   }
 
   .loading-badge {
@@ -402,9 +393,5 @@
     letter-spacing: 0.02em;
     text-align: center;
     line-height: 1.4;
-  }
-
-  .leaf {
-    opacity: 0;
   }
 </style>

@@ -53,11 +53,13 @@ jobs:
                 - Implemented Settings, focusing on accessability, which can be accessed from the "app" menu in the toolbar.
                 - The animated tree at app open (when check updates is enabled) is faster, smoother, more efficient and it completes it's whole animation - rather than before where it often wouldn't reach the end of the animation before the app was ready to use.'
                 - The `Create family tree" modal's title was the same size as all other text -> made this bigger as it was supposed to be.
+                - The tree loading at the start (if enabled) is improved for better performance.
             ## Under the Hood
                 - Fixed the markdown in "What's new" modal where it wasn't rendering bullet points.
                 - Fixed `CreateTree`, `SwitchTreeModal` & `RenameTreeTitle` as they was managing local close states which wasn't allowing them to close at all.
                 - Changed the "upload" tab in create person modal to "media".
                 - Changed "Settings" in the toolbar to "app" to better fit the content it can include.
+                - Decreased the memory used by the app by a tiny amount, resulting in very slightly better performance.
                 - Squashed lots of minor small bugs.
           releaseDraft: false
           prerelease: false

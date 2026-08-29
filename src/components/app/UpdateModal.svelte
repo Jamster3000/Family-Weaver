@@ -3,23 +3,30 @@
 	import Button from "$components/ui/Button.svelte";
 	import { updateStore } from "$updateStore";
 
-	export let isOpen: boolean = false;
-	export let version: string = "";
-	export let onUpdate: () => void = () => {};
-	export let onDismiss: () => void = () => {};
+	let {
+		isOpen = false,
+		version = "",
+		onupdate = () => {},
+		ondismiss = () => {}
+	}: {
+		isOpen?: boolean;
+		version?: string;
+		onupdate?: () => void;
+		ondismiss?: () => void;
+	} = $props();
 
 	function handleClose() {
 		// Set flag that update is pending for toolbar to show
 		updateStore.setUpdateAvailable(version);
 		isOpen = false;
-		onDismiss();
+		ondismiss();
 	}
 </script>
 
 <Modal {isOpen} width="540px" onClose={handleClose}>
-	<svelte:fragment slot="header">
+	{#snippet header()}
 		<h2>Software Update Available</h2>
-	</svelte:fragment>
+	{/snippet}
 
 	<div class="content-box">
 		<p>
@@ -32,14 +39,14 @@
 		</p>
 	</div>
 
-	<svelte:fragment slot="footer">
-		<Button variant="secondary" type="button" on:click={handleClose}>
+	{#snippet footer()}
+		<Button variant="secondary" type="button" onclick={handleClose}>
 			Later
 		</Button>
-		<Button variant="primary" type="button" on:click={onUpdate}>
+		<Button variant="primary" type="button" onclick={onupdate}>
 			Update Now
 		</Button>
-	</svelte:fragment>
+	{/snippet}
 </Modal>
 
 <style>

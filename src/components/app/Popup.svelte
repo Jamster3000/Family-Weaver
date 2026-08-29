@@ -4,13 +4,21 @@
 	import { IconX } from "@tabler/icons-svelte-runes";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import { getAnimationDuration } from "$lib/animationUtils";
+	import type { Snippet } from "svelte";
 
-	export let isOpen = false;
-	export let onClose: (() => void) | undefined = undefined;
+	let {
+		isOpen = false,
+		onclose = undefined,
+		children
+	}: {
+		isOpen?: boolean;
+		onclose?: (() => void) | undefined;
+	    children?: Snippet;
+	} = $props();
 
 	function handleCloseClick() {
 		isOpen = false;
-		onClose?.();
+		onclose?.();
 	}
 </script>
 
@@ -29,7 +37,9 @@
 			transition:fly={{ y: 20, duration: getAnimationDuration(), easing: quintOut }}
 		>
 			<div class="content-wrapper">
-				<slot />
+				{#if children}
+					{@render children()}
+				{/if}
 			</div>
 		</div>
 	</div>

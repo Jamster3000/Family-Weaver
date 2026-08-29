@@ -9,17 +9,19 @@
 	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 
-	let tree_name: string = "";
+	let tree_name = $state("");
 
 	// Automatically true if no active tree exists in store
-	$: isFirstTime = !$activeTree;
+	let isFirstTime = $derived(!$activeTree);
 
 	function handleClose() {
 		tree_name = "";
 		modals.close("createTree");
 	}
 
-	async function handleSubmit() {
+	async function handleSubmit(e: SubmitEvent) {
+		e.preventDefault();
+
 		try {
 			if (tree_name.trim() === "") return;
 
@@ -49,9 +51,9 @@
 	onClose={handleClose}
 	showClose={!isFirstTime}
 >
-	<svelte:fragment slot="header">
+	{#snippet header()}
 		<IconTree size={42} /> <h1>{isFirstTime ? "Welcome to Family Weaver" : "Create New Family Tree"}</h1>
-	</svelte:fragment>
+	{/snippet}
 
 	{#if isFirstTime}
 		<p>
@@ -80,7 +82,7 @@
 		Tip: Use a surname or your home person's name (e.g., "Smith Family Tree")
 	</p>
 
-	<form class="form" on:submit|preventDefault={handleSubmit}>
+	<form class="form" onsubmit={handleSubmit}>
 		<Input
 			placeholder="Enter a name for your family tree"
 			bind:value={tree_name}
@@ -88,9 +90,6 @@
 		/>
 		<Button type="submit">Create Family Tree</Button>
 	</form>
-
-	<svelte:fragment slot="footer">
-	</svelte:fragment>
 </Modal>
 
 <style>

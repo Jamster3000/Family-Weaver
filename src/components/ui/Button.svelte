@@ -1,12 +1,27 @@
 <script lang="ts">
-	export let href: string | undefined = undefined;
-	export let variant: "primary" | "secondary" | "transparent" = "primary";
-	export let type: "button" | "submit" = "button";
-	export let disabled: boolean = false;
-	export let fontSize: "xsmall" | "small" | "medium" | "large" | "xlarge" =
-		"medium";
-	export let iconOnly: boolean = false;
-	export let ariaLabel: string = "";
+	import type { Snippet } from "svelte";
+
+	let {
+		href = undefined,
+		variant = "primary",
+		type = "button",
+		disabled = false,
+		fontSize = "medium",
+		iconOnly = false,
+		ariaLabel = "",
+		children,
+		onclick
+	}: {
+		href?: string;
+		variant?: "primary" | "secondary" | "transparent";
+		type?: "button" | "submit";
+		disabled?: boolean;
+		fontSize?: "xsmall" | "small" | "medium" | "large" | "xlarge";
+		iconOnly?: boolean;
+		ariaLabel?: string;
+		children?: Snippet;
+		onclick?: (event: MouseEvent) => void;
+	} = $props();
 </script>
 
 {#if href}
@@ -17,7 +32,11 @@
 		class:iconOnly
 		aria-label={ariaLabel || "Link"}
 	>
-		<span class="btn-text"><slot /></span>
+		<span class="btn-text">
+			{#if children}
+				{@render children()}
+			{/if}
+		</span>
 	</a>
 {:else}
 	<button
@@ -25,10 +44,14 @@
 		{disabled}
 		class="btn keep-white {variant} {fontSize}"
 		class:iconOnly
-		on:click
+		{onclick}
 		aria-label={ariaLabel || "Button"}
 	>
-		<span class="btn-text"><slot /></span>
+		<span class="btn-text">
+			{#if children}
+				{@render children()}
+			{/if}
+		</span>
 	</button>
 {/if}
 

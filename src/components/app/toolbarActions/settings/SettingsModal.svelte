@@ -15,16 +15,34 @@
 	import { toasts } from "$toastStore";
 	import { applyVisualSettings } from "$lib/applySettings";
 
-	let selectedCategory: string | null = null;
-	let settingsSnapshot: Settings[] = [];
-	let wasModalOpen = false;
+	let selectedCategory = $state<string | null>(null);
+	let settingsSnapshot = $state<Settings[]>([]);
+	let wasModalOpen = $state(false);
 
-	$: if ($modals.settings && !wasModalOpen) {
-		settingsSnapshot = structuredClone($settingsData);
-		wasModalOpen = true;
-	} else if (!$modals.settings && wasModalOpen) {
-		wasModalOpen = false;
-	}
+	$effect(() => {
+		if ($modals.settings && !wasModalOpen) {
+			settingsSnapshot = structuredClone($settingsData);
+			wasModalOpen = true;
+		} else if (!$modals.settings && wasModalOpen) {
+			wasModalOpen = false;
+		}
+	});
+
+	let categories = $derived(
+		Array.from(new Set($settingsData.map((s) => s.category))).sort()
+	);
+
+	let categorySettings = $derived(
+		selectedCategory
+			? $settingsData.filter((s) => s.category === selectedCategory)
+			: []
+	);
+
+	$effect(() => {
+		if ($modals.settings && !selectedCategory && categories.length > 0) {
+			selectedCategory = categories[0];
+		}
+	});
 
 	function handleClose() {
 		if (settingsSnapshot.length > 0) {
@@ -40,7 +58,7 @@
 
 	async function handleSave() {
 		try {
-			let saveSettings = invoke("save_settings", {
+			await invoke("save_settings", {
 				settings: $settingsData,
 			});
 			toasts.success("Settings saved successfully.");
@@ -49,18 +67,6 @@
 		} catch (error) {
 			console.error("Error saving settings:", error);
 		}
-	}
-
-	$: categories = Array.from(
-		new Set($settingsData.map((s) => s.category)),
-	).sort();
-
-	$: categorySettings = selectedCategory
-		? $settingsData.filter((s) => s.category === selectedCategory)
-		: [];
-
-	$: if ($modals.settings && !selectedCategory && categories.length > 0) {
-		selectedCategory = categories[0];
 	}
 
 	function getCategoryDisplayName(category: string): string {
@@ -104,7 +110,7 @@
 					<button
 						class="category-button"
 						class:active={selectedCategory === category}
-						on:click={() => (selectedCategory = category)}
+						onclick={() => (selectedCategory = category)}
 						type="button"
 					>
 						<span class="category-name">
@@ -166,10 +172,7 @@
 											setting.value_type,
 										)}
 										{#if Component}
-											<svelte:component
-												this={Component}
-												{setting}
-											/>
+											<Component {setting} />
 										{/if}
 									{/key}
 								</div>
@@ -184,7 +187,7 @@
 			</div>
 
 			<footer class="settings-footer">
-				<Button variant="primary" on:click={handleSave}>
+				<Button variant="primary" onclick={handleSave}>
 					Save Settings
 				</Button>
 			</footer>

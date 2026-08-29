@@ -2,17 +2,25 @@
 	import { type Settings, updateSettings, settingsData } from "$settingsStore";
 	import { applyColourblindMode, type AppearanceMode, applyAppearanceMode, applyFontFamily } from "$lib/applySettings";
 
-	export let setting: Settings;
+	let {
+		setting,
+	}: {
+		setting: Settings;
+	} = $props();
 
-	let options: string[] = [];
+	let options = $derived(
+		setting.value_type &&
+			typeof setting.value_type === "object" &&
+			"Enum" in setting.value_type
+			? setting.value_type.Enum
+			: []
+	);
 
-	$: if (setting.value_type && typeof setting.value_type === "object" && "Enum" in setting.value_type) {
-		options = setting.value_type.Enum;
-	}
-
-	let currentValue = setting.value && "Text" in setting.value
-		? setting.value.Text
-		: options[0] ?? "";
+	let currentValue = $derived(
+		setting.value && "Text" in setting.value
+			? setting.value.Text
+			: options[0] ?? ""
+	);
 
 	function handleChange(e: Event) {
 		const target = e.currentTarget as HTMLSelectElement;
@@ -36,7 +44,7 @@
 <div class="enum-select-wrapper">
 	<select
 		value={currentValue}
-		on:change={handleChange}
+		onchange={handleChange}
 		aria-label={setting.name}
 		class="enum-select"
 	>

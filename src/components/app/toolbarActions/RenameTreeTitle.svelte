@@ -7,20 +7,23 @@
 	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 
-	let treeName: string = "";
-	let error: string = "";
+	let treeName = $state("");
+	let error = $state("");
 
-	$: if ($modals.renameTree) {
-		treeName = $activeTree?.name || "";
-		error = "";
-	}
+	$effect(() => {
+		if ($modals.renameTree) {
+			treeName = $activeTree?.name || "";
+			error = "";
+		}
+	});
 
 	function handleClose() {
 		modals.close("renameTree");
 	}
 
-	function handleSubmit() {
+	function executeSubmit() {
 		const newTreeName = treeName.trim();
+		if (!newTreeName || newTreeName === $activeTree?.name) return;
 
 		try {
 			invoke("set_tree_name", {
@@ -40,14 +43,19 @@
 			error = "Failed to rename tree.";
 		}
 	}
+
+	function handleSubmit(e: SubmitEvent) {
+		e.preventDefault();
+		executeSubmit();
+	}
 </script>
 
 <Modal isOpen={$modals.renameTree} width="420px" padding="medium" onClose={handleClose}>
-	<svelte:fragment slot="header">
+	{#snippet header()}
 		<h2>Rename "{treeName}"</h2>
-	</svelte:fragment>
+	{/snippet}
 
-	<form class="modal-form" on:submit|preventDefault={handleSubmit}>
+	<form id="rename-tree-form" class="modal-form" onsubmit={handleSubmit}>
 		<div class="input-container">
 			<Input
 				label="Tree Name"
@@ -59,24 +67,23 @@
 		</div>
 	</form>
 
-	<svelte:fragment slot="footer">
+	{#snippet footer()}
 		<Button
 			variant="secondary"
 			type="button"
-			on:click={handleClose}
+			onclick={handleClose}
 		>
 			Cancel
 		</Button>
 		<Button
 			variant="primary"
 			type="submit"
-			disabled={!treeName.trim() ||
-				treeName === $activeTree?.name}
-			on:click={handleSubmit}
+			form="rename-tree-form"
+			disabled={!treeName.trim() || treeName === $activeTree?.name}
 		>
 			Save
 		</Button>
-	</svelte:fragment>
+	{/snippet}
 </Modal>
 
 <style>

@@ -1,15 +1,18 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
-	export let checked: boolean = false;
-	export let disabled: boolean = false;
-
-	const dispatch = createEventDispatcher<{ change: boolean }>();
+	let {
+		checked = $bindable(false),
+		disabled = false,
+		onchange
+	}: {
+		checked?: boolean;
+		disabled?: boolean;
+		onchange?: (checked: boolean) => void;
+	} = $props();
 
 	function handleToggle() {
 		if (!disabled) {
 			checked = !checked;
-			dispatch('change', checked);
+			onchange?.(checked);
 		}
 	}
 </script>
@@ -21,7 +24,7 @@
 	{disabled}
 	class="toggle-container"
 	class:is-checked={checked}
-	on:click={handleToggle}
+	onclick={handleToggle}
 >
 	<span class="toggle-track">
 		<span class="toggle-thumb"></span>

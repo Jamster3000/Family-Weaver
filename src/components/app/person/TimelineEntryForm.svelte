@@ -7,17 +7,24 @@
 
 	type CategoryKey = "lifeEvents" | "workEducation" | "placesLived";
 
-	export let categoryKey: CategoryKey;
-	export let categoryTitle: string = "";
-	export let onCancel: () => void;
-	export let onSave: () => void;
+	let {
+		categoryKey,
+		categoryTitle = "",
+		onCancel,
+		onSave,
+	}: {
+		categoryKey: CategoryKey;
+		categoryTitle?: string;
+		onCancel?: () => void;
+		onSave?: () => void;
+	} = $props();
 
-	let title = "";
-	let startDate = "";
-	let endDate = "";
-	let description = "";
+	let title = $state("");
+	let startDate = $state("");
+	let endDate = $state("");
+	let description = $state("");
 
-	$: isValid = title.trim().length > 0;
+	let isValid = $derived(title.trim().length > 0);
 
 	function handleSubmit() {
 		if (!isValid) return;
@@ -36,7 +43,7 @@
 			[categoryKey]: [...currentEntries, newEntry],
 		});
 
-		onSave();
+		onSave?.();
 	}
 </script>
 
@@ -45,7 +52,7 @@
 		<Tooltip text="Cancel and return to '{categoryTitle}' timeline.">
 			<button
 				class="back-btn"
-				on:click={onCancel}
+				onclick={onCancel}
 				type="button"
 				aria-label="Cancel and return to list"
 			>
@@ -68,7 +75,7 @@
 				<Button
 					type="button"
 					disabled={!isValid}
-					on:click={handleSubmit}
+					onclick={handleSubmit}
 				>
 					<IconPlus size={18} stroke={2} />
 					<span>Add Entry</span>

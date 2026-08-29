@@ -19,20 +19,18 @@
 	import { toasts } from "$toastStore";
 	import { getAnimationDuration } from "$lib/animationUtils";
 
-	let activeTab: string = "overview";
-	let isAddingTimelineEvent = false;
+	let activeTab = $state("overview");
+	let isAddingTimelineEvent = $state(false);
 
-	$: isAddingTimelineEvent, updateTimelineModal();
-
-	function updateTimelineModal() {
+	$effect(() => {
 		if (isAddingTimelineEvent) {
 			modals.open("timelineEntry");
 		} else {
 			modals.close("timelineEntry");
 		}
-	}
+	});
 
-	$: hasChanges = $personData ? hasPersonChanged() : false;
+	let hasChanges = $derived($personData ? hasPersonChanged() : false);
 
 	async function handlePersonSave() {
 		const rawData = $personData;
@@ -93,16 +91,16 @@
 
 	<div class="tabs">
 		<Tooltip text="The basic details of the person like name and birth date." position="top">
-			<button class:active={activeTab === "overview"} on:click={() => (activeTab = "overview")}>Overview</button>
+			<button class:active={activeTab === "overview"} onclick={() => (activeTab = "overview")}>Overview</button>
 		</Tooltip>
 		<Tooltip text="Add photos, documents, or other files for this person." position="top">
-			<button class:active={activeTab === "media"} on:click={() => (activeTab = "media")}>Media</button>
+			<button class:active={activeTab === "media"} onclick={() => (activeTab = "media")}>Media</button>
 		</Tooltip>
 		<Tooltip text="Connect this person to parents, partners, or children." position="top">
-			<button class:active={activeTab === "relationships"} on:click={() => (activeTab = "relationships")}>Relationships</button>
+			<button class:active={activeTab === "relationships"} onclick={() => (activeTab = "relationships")}>Relationships</button>
 		</Tooltip>
 		<Tooltip text="Track work history, education, and life events over time." position="top">
-			<button class:active={activeTab === "timelines"} on:click={() => (activeTab = "timelines")}>Timelines</button>
+			<button class:active={activeTab === "timelines"} onclick={() => (activeTab = "timelines")}>Timelines</button>
 		</Tooltip>
 	</div>
 
@@ -122,7 +120,7 @@
 		{/key}
 	</div>
 
-	<svelte:fragment slot="footer">
+	{#snippet footer()}
 		{#if isAddingTimelineEvent}
 			<Tooltip text="You must finish adding the timeline event before saving this person." position="top">
 				<Button disabled={true}>Save</Button>
@@ -133,13 +131,13 @@
 			</Tooltip>
 		{:else}
 			<Tooltip text="Save this person and return to your family tree." position="top">
-				<Button on:click={handlePersonSave}>Save</Button>
+				<Button onclick={handlePersonSave}>Save</Button>
 			</Tooltip>
 		{/if}
 		<Tooltip text="Discard this person, deleting any progress and returning to your family tree." position="top">
-			<Button variant="secondary" on:click={handlePersonDiscard}>Discard</Button>
+			<Button variant="secondary" onclick={handlePersonDiscard}>Discard</Button>
 		</Tooltip>
-	</svelte:fragment>
+	{/snippet}
 </Modal>
 
 <ConfirmModal

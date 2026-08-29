@@ -3,13 +3,17 @@
 	import { type Settings, updateSettings, settingsData } from "$settingsStore";
 	import { applyReduceMotion, applyHighContrast, applyLineSpacing, applyLetterSpacing } from "$lib/applySettings";
 
-	export let setting: Settings;
+	let {
+		setting,
+	}: {
+		setting: Settings;
+	} = $props();
 
-	$: isChecked = setting.value && "Bool" in setting.value ? setting.value.Bool : false;
+	let isChecked = $derived(
+		setting.value && "Bool" in setting.value ? setting.value.Bool : false
+	);
 
-	function handleChange(e: CustomEvent<boolean>) {
-		const newValue = e.detail;
-
+	function handleChange(newValue: boolean) {
 		updateSettings([{ key: setting.key, value: { Bool: newValue } }]);
 
 		if (setting.key === "reduce_motion") {
@@ -31,7 +35,7 @@
 </script>
 
 <div class="settings-bool-wrapper">
-	<Toggle checked={isChecked} on:change={handleChange} />
+	<Toggle checked={isChecked} onchange={handleChange} />
 </div>
 
 <style>

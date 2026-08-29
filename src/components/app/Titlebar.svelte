@@ -55,7 +55,7 @@
 		<button
 			class="minimise"
 			type="button"
-			on:click={() => appWindow.minimize()}
+			onclick={() => appWindow.minimize()}
 			aria-label="Minimise Button"
 		>
 			<IconMinus size={16} />
@@ -63,7 +63,7 @@
 		<button
 			class="maximise"
 			type="button"
-			on:click={() => appWindow.toggleMaximize()}
+			onclick={() => appWindow.toggleMaximize()}
 			aria-label="Maximise Button"
 		>
 			<IconSquares size={16} />
@@ -72,7 +72,7 @@
 			class="close"
 			type="button"
 			aria-label="Close Button"
-			on:click={() => appWindow.close()}
+			onclick={() => appWindow.close()}
 		>
 			<IconX size={16} />
 		</button>

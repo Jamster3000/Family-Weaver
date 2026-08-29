@@ -18,10 +18,18 @@
 	import { updateStore } from "$lib/stores/updateStore";
 	import { getAnimationDuration } from "$lib/animationUtils";
 
+	let {
+		onZoomIn = zoomIn,
+		onZoomOut = zoomOut,
+	}: {
+		onZoomIn?: () => void;
+		onZoomOut?: () => void;
+	} = $props();
+
 	let CreateTree_first_time: boolean = false;
 	let hasUpdate: boolean = false;
 	let updateAvailable: Update | null = null;
-	let leftItems: ToolbarItem[] = [];
+	let leftItems: ToolbarItem[] = $state([]);
 
 	async function checkForUpdate() {
 		try {
@@ -49,7 +57,7 @@
 		})();
 	});
 
-	let openDropup: string | null = null;
+	let openDropup: string | null = $state(null);
 
 	function handleClick(item: ToolbarItem) {
 		if (item.submenu) {
@@ -87,14 +95,15 @@
 <div class="toolbar">
 	<div class="toolbar-left">
 		{#each leftItems as item (item.id)}
+			{@const Icon = item.icon}
 			<div class="toolbar-item">
 				<Tooltip text={item.tooltip} position="bottom">
 					<Button
 						variant={item.submenu ? "secondary" : "primary"}
-						on:click={() => handleClick(item)}
+						onclick={() => handleClick(item)}
 						ariaLabel={item.label}
 					>
-						<svelte:component this={item.icon} size={28} />
+						<Icon size={28} />
 						{item.label}
 						{#if item.submenu}
 							<IconChevronUp
@@ -110,15 +119,13 @@
 				{#if item.submenu && openDropup === item.id}
 					<div class="dropup" transition:fade={{ duration: getAnimationDuration() }}>
 						{#each item.submenu as subitem (subitem.id)}
+							{@const SubIcon = subitem.icon}
 							<Tooltip text={subitem.tooltip} position="right">
 								<button
 									class="dropup-item"
-									on:click={() => handleSubmenuClick(subitem)}
+									onclick={() => handleSubmenuClick(subitem)}
 								>
-									<svelte:component
-										this={subitem.icon}
-										size={28}
-									/>
+									<SubIcon size={28} />
 									<span>{subitem.label}</span>
 								</button>
 							</Tooltip>
@@ -131,14 +138,15 @@
 
 	<div class="toolbar-right">
 		{#each rightItems as item (item.id)}
+			{@const Icon = item.icon}
 			<div class="toolbar-item">
 				<Tooltip text={item.tooltip} position="bottom">
 					<Button
 						variant="primary"
-						on:click={() => handleClick(item)}
+						onclick={() => handleClick(item)}
 						ariaLabel={item.label}
 					>
-						<svelte:component this={item.icon} size={28} />
+						<Icon size={28} />
 						{item.label}
 					</Button>
 				</Tooltip>
@@ -150,7 +158,7 @@
 {#if openDropup}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="backdrop" on:click={closeDropup}></div>
+	<div class="backdrop" onclick={closeDropup}></div>
 {/if}
 
 <style>

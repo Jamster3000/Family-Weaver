@@ -2,7 +2,11 @@
 	import { type Settings, updateSettings, settingsData, type Value } from "$settingsStore";
 	import { applyFontScale } from "$lib/applySettings";
 
-	export let setting: Settings;
+	let {
+		setting,
+	}: {
+		setting: Settings;
+	} = $props();
 
 	function extractNumber(val: Value | null | undefined, fallback: number): number {
 		if (!val) return fallback;
@@ -11,12 +15,11 @@
 		return fallback;
 	}
 
-	// Detect type based on setting value payload or step precision
-	$: isFloat = setting.value ? "Float" in setting.value : false;
-	$: minValue = extractNumber(setting.min, isFloat ? 0 : 1);
-	$: maxValue = extractNumber(setting.max, 100);
-	$: stepValue = extractNumber(setting.step, isFloat ? 0.05 : 1);
-	$: currentValue = extractNumber(setting.value, minValue);
+	let isFloat = $derived(setting.value ? "Float" in setting.value : false);
+	let minValue = $derived(extractNumber(setting.min, isFloat ? 0 : 1));
+	let maxValue = $derived(extractNumber(setting.max, 100));
+	let stepValue = $derived(extractNumber(setting.step, isFloat ? 0.05 : 1));
+	let currentValue = $derived(extractNumber(setting.value, minValue));
 
 	function handleInput(e: Event) {
 		const target = e.currentTarget as HTMLInputElement;
@@ -41,7 +44,7 @@
 		max={maxValue}
 		step={stepValue}
 		value={currentValue}
-		on:input={handleInput}
+		oninput={handleInput}
 		class="slider"
 		aria-label={setting.name}
 	/>
@@ -52,12 +55,11 @@
 		max={maxValue}
 		step={stepValue}
 		value={currentValue}
-		on:input={handleInput}
+		oninput={handleInput}
 		class="number-input"
 		aria-label={`${setting.name} value`}
 	/>
 </div>
-
 <style>
 	.number-control {
 		display: flex;

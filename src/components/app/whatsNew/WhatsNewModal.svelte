@@ -1,49 +1,60 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import Modal from '$components/ui/Modal.svelte';
   import Button from '$components/ui/Button.svelte';
   import { modals } from '$modalStore';
   import { marked } from 'marked';
 
-  let version: string = '';
-  let releaseNotes: string = '';
+  let {
+    children,
+  }: {
+    children?: Snippet;
+  } = $props();
+
+  let version = $state('');
+  let releaseNotes = $state('');
 
   //When the modal opens, reread the localstorage as the version number cached is
   //updated after the modal reads the data originally.
-  $: if ($modals.whatsNew) {
-    version = localStorage.getItem('cached_release_version') || '';
-    releaseNotes = localStorage.getItem('cached_release_notes') || '';
-  }
+  $effect(() => {
+    if ($modals.whatsNew) {
+      version = localStorage.getItem('cached_release_version') || '';
+      releaseNotes = localStorage.getItem('cached_release_notes') || '';
+    }
+  });
 
   function handleClose() {
     modals.close('whatsNew');
   }
 
-  $: renderedNotes = releaseNotes ? marked.parse(releaseNotes) : '';
+  let renderedNotes = $derived(
+    releaseNotes ? (marked.parse(releaseNotes) as string) : ''
+  );
 </script>
 
 <Modal isOpen={$modals.whatsNew} width="70%" onClose={handleClose}>
-  <svelte:fragment slot="header">
+  {#snippet header()}
     <h2>What's New</h2>
     {#if version}
       <span class="badge">Version {version}</span>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 
   <div class="content-box">
     <div class="content-body">
       {#if renderedNotes}
         {@html renderedNotes}
-      {:else}
-        <slot />
+      {:else if children}
+        {@render children()}
       {/if}
     </div>
   </div>
 
-  <svelte:fragment slot="footer">
-    <Button variant="primary" type="button" on:click={handleClose}>
+  {#snippet footer()}
+    <Button variant="primary" type="button" onclick={handleClose}>
       Close
     </Button>
-  </svelte:fragment>
+  {/snippet}
 </Modal>
 
 <style>

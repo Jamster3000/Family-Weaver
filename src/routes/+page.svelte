@@ -120,7 +120,7 @@
 		loadingText={spinnerText}
 		{hangAtEnd}
 		{disableTree}
-		on:complete={handleSpinnerComplete}
+		oncomplete={handleSpinnerComplete}
 	/>
 {/if}
 

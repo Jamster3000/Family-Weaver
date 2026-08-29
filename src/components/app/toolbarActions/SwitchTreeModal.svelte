@@ -7,18 +7,22 @@
 	import { toasts } from "$toastStore";
 	import { getActiveTree } from "$treeStore";
 
-	export let activeTreeId: string = "";
+	let { activeTreeId = "" }: { activeTreeId?: string } = $props();
 
-	let trees: Array<{
-		id: string;
-		name: string;
-		active_tree: number;
-		updated_at: string;
-	}> = [];
+	let trees = $state<
+		Array<{
+			id: string;
+			name: string;
+			active_tree: number;
+			updated_at: string;
+		}>
+	>([]);
 
-	$: if ($modals.switchTree) {
-		fetchTrees();
-	}
+	$effect(() => {
+		if ($modals.switchTree) {
+			fetchTrees();
+		}
+	});
 
 	async function fetchTrees() {
 		try {
@@ -60,21 +64,21 @@
 </script>
 
 <Modal isOpen={$modals.switchTree} width="90%" onClose={handleClose}>
-	<svelte:fragment slot="header">
+	{#snippet header()}
 		<h2>Switch Family Tree</h2>
 		<p class="subtitle">
 			Select the family tree you would like to view or edit:
 		</p>
-	</svelte:fragment>
+	{/snippet}
 
 	<div class="tree-grid">
-		{#each trees as tree}
+		{#each trees as tree (tree.id)}
 			<button
 				type="button"
 				class="tree-card"
 				class:active={tree.id === activeTreeId ||
 					tree.active_tree === 1}
-				on:click={() => handleSelectTree(tree.id)}
+				onclick={() => handleSelectTree(tree.id)}
 			>
 				<div class="tree-card-header">
 					<div class="icon-wrapper">
@@ -101,11 +105,11 @@
 		{/each}
 	</div>
 
-	<svelte:fragment slot="footer">
-		<Button variant="secondary" type="button" on:click={handleClose}>
+	{#snippet footer()}
+		<Button variant="secondary" type="button" onclick={handleClose}>
 			Cancel
 		</Button>
-	</svelte:fragment>
+	{/snippet}
 </Modal>
 
 <style>

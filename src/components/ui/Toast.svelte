@@ -10,25 +10,33 @@
 	import { getAnimationDuration } from "$lib/animationUtils";
 	import { settingsData } from "$settingsStore";
 
-	export let message: string = "";
-	export let type: "success" | "error" | "info" = "info";
-	export let onDismiss: (() => void) | undefined = undefined;
-	export let duration: number | undefined = undefined;
+	let {
+		message = "",
+		type = "info",
+		onDismiss = undefined,
+		duration = undefined,
+	}: {
+		message?: string;
+		type?: "success" | "error" | "info";
+		onDismiss?: (() => void) | undefined;
+		duration?: number | undefined;
+	} = $props();
 
-	$: effectiveDuration = (() => {
-		if (duration !== undefined) return duration;
+	let effectiveDuration = $derived(
+		duration !== undefined
+			? duration
+			: (() => {
+				const toastSetting = $settingsData.find(
+					(s) => s.key === "toast_appearance_time",
+				);
+				const seconds = toastSetting?.value && "Float" in toastSetting.value
+					? toastSetting.value.Float
+					: 4;
+				return seconds * 1000;
+			})()
+	);
 
-		const toastSetting = $settingsData.find(
-			(s) => s.key === "toast_appearance_time",
-		);
-		const seconds = toastSetting?.value && "Float" in toastSetting.value
-			? toastSetting.value.Float
-			: 4;
-
-		return seconds * 1000;
-	})();
-
-	let isVisible = true;
+	let isVisible = $state(true);
 
 	const icons = {
 		success: IconCheck,
@@ -45,10 +53,12 @@
 
 	let timeout: ReturnType<typeof setTimeout>;
 
-	$: if (effectiveDuration > 0 && isVisible) {
-		clearTimeout(timeout);
-		timeout = setTimeout(handleDismiss, effectiveDuration);
-	}
+	$effect(() => {
+		if (effectiveDuration > 0 && isVisible) {
+			clearTimeout(timeout);
+			timeout = setTimeout(handleDismiss, effectiveDuration);
+		}
+	});
 
 	onMount(() => {
 		return () => clearTimeout(timeout);
@@ -56,6 +66,7 @@
 </script>
 
 {#if isVisible}
+	{@const Icon = icons[type]}
 	<div
 		class="toast toast-{type}"
 		transition:fly={{ x: 400, duration: getAnimationDuration() * 2 }}
@@ -63,7 +74,7 @@
 		aria-live="polite"
 	>
 		<div class="toast-icon">
-			<svelte:component this={icons[type]} size={20} />
+			<Icon size={20} />
 		</div>
 
 		<div class="toast-content">
@@ -71,7 +82,7 @@
 		</div>
 
 		<div class="toast-close">
-			<Close onClick={handleDismiss} size={16} />
+			<Close onclick={handleDismiss} size={16} />
 		</div>
 	</div>
 {/if}

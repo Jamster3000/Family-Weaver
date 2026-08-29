@@ -4,48 +4,60 @@
 	import flatpickr from "flatpickr";
 	import "flatpickr/dist/flatpickr.min.css";
 	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
-    import { settingsData } from "$lib/stores/settingsStore";
+	import { settingsData } from "$lib/stores/settingsStore";
 
 	import darkTheme from "flatpickr/dist/themes/dark.css?inline";
 	import lightTheme from "flatpickr/dist/themes/light.css?inline";
 
-	$: appearanceMode = $settingsData.find(s => s.key === 'appearance_mode');
+	// Derived values
+	let appearanceMode = $derived($settingsData.find(s => s.key === 'appearance_mode'));
 
-	$: isDark = (() => {
-		if (!appearanceMode?.value) return false;
-		const val = appearanceMode.value as Record<string, any>;
-		const modeVal = (val.Enum || val.Text || "") as string;
-		return modeVal.toLowerCase() === "dark";
-	})();
+	let isDark = $derived(
+		!appearanceMode?.value ? false :
+		(() => {
+			const val = appearanceMode.value as Record<string, any>;
+			const modeVal = (val.Enum || val.Text || "") as string;
+			return modeVal.toLowerCase() === "dark";
+		})()
+	);
 
-	$: currentTheme = isDark ? darkTheme : lightTheme;
+	let currentTheme = $derived(isDark ? darkTheme : lightTheme);
 
-	export let label: string = "";
-	export let type:
-		| "text"
-		| "email"
-		| "hidden"
-		| "number"
-		| "search"
-		| "tel"
-		| "url"
-		| "date"
-		| "datetime-local"
-		| "month"
-		| "time"
-		| "week"
-		| "color" = "text";
-	export let placeholder: string = "";
-	export let value: string = "";
-	export let error: string = "";
-	export let helper: string = "";
-	export let disabled: boolean = false;
-	export let required: boolean = false;
-	export let counter: boolean = false;
-	export let maxLength: number | undefined = undefined;
-	export let multiline: boolean = false;
-	export let id: string = crypto.randomUUID();
-	export let centerPlaceholder: boolean = true;
+	let {
+		label = "",
+		type = "text",
+		placeholder = "",
+		value = $bindable(""),
+		error = "",
+		helper = "",
+		disabled = false,
+		required = false,
+		counter = false,
+		maxLength = undefined,
+		multiline = false,
+		id = crypto.randomUUID(),
+		centerPlaceholder = true,
+		oninput,
+		onblur,
+		onfocus,
+	}: {
+		label?: string;
+		type?: "text" | "email" | "hidden" | "number" | "search" | "tel" | "url" | "date" | "datetime-local" | "month" | "time" | "week" | "color";
+		placeholder?: string;
+		value?: string;
+		error?: string;
+		helper?: string;
+		disabled?: boolean;
+		required?: boolean;
+		counter?: boolean;
+		maxLength?: number;
+		multiline?: boolean;
+		id?: string;
+		centerPlaceholder?: boolean;
+		oninput?: (e: Event) => void;
+		onblur?: (e: FocusEvent) => void;
+		onfocus?: (e: FocusEvent) => void;
+	} = $props();
 
 	const validTypes = [
 		"text",
@@ -63,23 +75,25 @@
 		"color",
 	];
 
-	$: safeType =
-		type === "date" ? "text" : validTypes.includes(type) ? type : "text";
+	let safeType = $derived(
+		type === "date" ? "text" : validTypes.includes(type) ? type : "text"
+	);
 
-	$: charWidth = 8.5;
-	$: bufferPixels = 56;
-	$: calculatedWidth = placeholder
-		? `${placeholder.length * charWidth + bufferPixels}px`
-		: "auto";
+	const charWidth = 8.5;
+	const bufferPixels = 56;
+	let calculatedWidth = $derived(
+		placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : "auto"
+	);
 
-	let inputNode: HTMLInputElement;
-	let fpNode: HTMLInputElement;
-	let fp: flatpickr.Instance;
+	let inputNode: HTMLInputElement | undefined = $state();
+	let fpNode: HTMLInputElement | undefined = $state();
+	let fp: flatpickr.Instance | undefined = $state();
 
-	$: dateSetting = $settingsData.find(s => s.key === "date_format");
-	$: rawFormatString = dateSetting?.value && "Text" in dateSetting.value ? dateSetting.value.Text : "";
+	let dateSetting = $derived($settingsData.find(s => s.key === "date_format"));
+	let rawFormatString = $derived(
+		dateSetting?.value && "Text" in dateSetting.value ? dateSetting.value.Text : ""
+	);
 
-	//map our Enum date format settings to flatpickr
 	function getFlatpickrFormat(enumString: string): string {
 		if (enumString.includes("14 December 2025")) return "d F Y";
 		if (enumString.includes("12/14/2025")) return "m/d/Y";
@@ -88,17 +102,7 @@
 		return "d-m-Y";
 	}
 
-    $: activeDateFormat = getFlatpickrFormat(rawFormatString);
-
-	// If the settings change, update flatpickr date picker
-	$: if (fp && activeDateFormat) {
-		fp.set("dateFormat", activeDateFormat);
-
-		if (value) {
-			const parsedDate = fp.parseDate(value, activeDateFormat); // Try parsing with new format
-			if (parsedDate) fp.setDate(parsedDate, false, activeDateFormat);
-		}
-	}
+	let activeDateFormat = $derived(getFlatpickrFormat(rawFormatString));
 
 	onMount(() => {
 		if (type === "date" && fpNode) {
@@ -108,8 +112,6 @@
 				onChange: (selectedDates, dateStr) => {
 					value = dateStr;
 					if (inputNode) {
-						// Force the DOM to update before dispatching the event
-						// so Svelte's bind:value doesn't overwrite it with the old value
 						inputNode.value = dateStr;
 						inputNode.dispatchEvent(
 							new Event("input", { bubbles: true }),
@@ -124,9 +126,23 @@
 		if (fp) fp.destroy();
 	});
 
-	$: if (fp && typeof value === "string") {
-		fp.setDate(value || "", false);
-	}
+	// Update flatpickr when date format changes
+	$effect(() => {
+		if (fp && activeDateFormat) {
+			fp.set("dateFormat", activeDateFormat);
+			if (value) {
+				const parsedDate = fp.parseDate(value, activeDateFormat);
+				if (parsedDate) fp.setDate(parsedDate, false, activeDateFormat);
+			}
+		}
+	});
+
+	// Update flatpickr when value changes
+	$effect(() => {
+		if (fp && typeof value === "string") {
+			fp.setDate(value || "", false);
+		}
+	});
 
 	function openCalendar(e: Event) {
 		e.preventDefault();
@@ -166,9 +182,9 @@
 				maxlength={maxLength}
 				data-testid="textarea-field"
 				bind:value
-				on:input
-				on:blur
-				on:focus
+				{oninput}
+				{onblur}
+				{onfocus}
 			></textarea>
 		{:else}
 			<input
@@ -181,9 +197,9 @@
 				maxlength={maxLength}
 				data-testid="input-field"
 				bind:value
-				on:input
-				on:blur
-				on:focus
+				{oninput}
+				{onblur}
+				{onfocus}
 			/>
 			{#if type === "date"}
 				<input
@@ -194,7 +210,7 @@
 				<button
 					type="button"
 					class="calendar-btn"
-					on:click={openCalendar}
+					onclick={openCalendar}
 					{disabled}
 					title="Open Calendar"
 				>

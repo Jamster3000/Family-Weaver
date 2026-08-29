@@ -22,21 +22,21 @@
       label="First Name"
       placeholder="e.g. Margaret"
       value={$personData.firstName}
-      on:input={(e) => handleInput('firstName', e)}
+      oninput={(e) => handleInput('firstName', e)}
       centerPlaceholder={false}
     />
     <Input
       label="Middle Name(s)"
       placeholder="e.g. Anne Mary"
       value={$personData.middleNames}
-      on:input={(e) => handleInput('middleNames', e)}
+      oninput={(e) => handleInput('middleNames', e)}
       centerPlaceholder={false}
     />
     <Input
       label="Surname"
       placeholder="e.g. Smith"
       value={$personData.lastName}
-      on:input={(e) => handleInput('lastName', e)}
+      oninput={(e) => handleInput('lastName', e)}
       centerPlaceholder={false}
     />
   </div>
@@ -49,7 +49,7 @@
           label="Date of Birth"
           placeholder="e.g. 14 May 1892 or c. 1890"
           value={$personData.dob ?? ""}
-          on:input={(e) => handleInput('dob', e)}
+          oninput={(e) => handleInput('dob', e)}
           centerPlaceholder={false}
           type="date"
         />
@@ -57,7 +57,7 @@
           label="Birth Location"
           placeholder="Town, County, Country"
           value={$personData.birthLocation}
-          on:input={(e) => handleInput('birthLocation', e)}
+          oninput={(e) => handleInput('birthLocation', e)}
           centerPlaceholder={false}
         />
       </div>
@@ -70,7 +70,7 @@
           label="Date of Death"
           placeholder="e.g. 21 Oct 1965"
           value={$personData.dod ?? ""}
-          on:input={(e) => handleInput('dod', e)}
+          oninput={(e) => handleInput('dod', e)}
           centerPlaceholder={false}
           type="date"
         />
@@ -78,7 +78,7 @@
           label="Death Location"
           placeholder="Town, County, Country"
           value={$personData.deathLocation}
-          on:input={(e) => handleInput('deathLocation', e)}
+          oninput={(e) => handleInput('deathLocation', e)}
           centerPlaceholder={false}
         />
       </div>
@@ -90,7 +90,7 @@
       label="Biography & Important Notes"
       placeholder="Add military service, occupations, nicknames, or notable achievements..."
       value={$personData.importantNotes}
-      on:input={(e) => handleTextareaInput('importantNotes', e)}
+      oninput={(e) => handleTextareaInput('importantNotes', e)}
       multiline={true}
       centerPlaceholder={false}
     />

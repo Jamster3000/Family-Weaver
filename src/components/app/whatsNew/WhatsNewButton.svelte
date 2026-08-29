@@ -7,7 +7,7 @@
 
 <WhatsNewModal />
 
-<Button variant="secondary" on:click={() => modals.open('whatsNew')} ariaLabel="What's New">
+<Button variant="secondary" onclick={() => modals.open('whatsNew')} ariaLabel="What's New">
     <IconSparkles size={28} />
     <span>What's New</span>
 </Button>

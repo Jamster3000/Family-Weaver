@@ -5,16 +5,20 @@
 	import DeleteAllData from "$components/app/toolbarActions/settings/actions/DeleteAllData.svelte";
 	import { modals } from "$modalStore";
 
-	export let setting: Settings;
+	let {
+		setting
+	}: {
+		setting?: Settings;
+	} = $props();
 
 	function handleAction() {
-		if (setting.key === "delete_all_data") {
+		if (setting?.key === "delete_all_data") {
 			modals.open("deleteTreeConfirm");
 		}
 	}
 
 	function getActionButton() {
-		if (setting.key === "delete_all_data") {
+		if (setting?.key === "delete_all_data") {
 			return {
 				label: "Delete All Data",
 				variant: "primary" as const,
@@ -28,18 +32,19 @@
 		};
 	}
 
-	$: actionConfig = getActionButton();
+	let actionConfig = $derived(getActionButton());
+	let ActionIcon = $derived(actionConfig.icon);
 </script>
 
 <DeleteAllData />
 
 <Button
 	variant={actionConfig.variant}
-	on:click={handleAction}
+	onclick={handleAction}
 	ariaLabel={actionConfig.label}
 >
-	{#if actionConfig.icon}
-		<svelte:component this={actionConfig.icon} size={20} />
+	{#if ActionIcon}
+		<ActionIcon size={20} />
 	{/if}
 	<span>{actionConfig.label}</span>
 </Button>

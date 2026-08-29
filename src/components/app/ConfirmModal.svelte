@@ -2,21 +2,36 @@
 	import Button from "$components/ui/Button.svelte";
 	import Modal from "$components/ui/Modal.svelte";
 
-	export let isOpen: boolean;
-	export let title: string;
-	export let message: string;
-	export let confirmLabel: string = "Confirm";
-	export let cancelLabel: string = "Cancel";
-	export let onConfirm: () => void;
-	export let onClose: () => void;
-	export let width: string = "40%";
+	let {
+		isOpen = false,
+		title = "",
+		message = "",
+		confirmLabel = "Confirm",
+		cancelLabel = "Cancel",
+		onConfirm,
+		onClose,
+		width = "40%",
+	}: {
+		isOpen?: boolean;
+		title?: string;
+		message?: string;
+		confirmLabel?: string;
+		cancelLabel?: string;
+		onConfirm?: () => void;
+		onClose?: () => void;
+		width?: string;
+	} = $props();
 </script>
 
 <Modal {isOpen} {width} padding="small" {onClose}>
-	<svelte:fragment slot="header"><h2>{title}</h2></svelte:fragment>
+	{#snippet header()}
+		<h2>{title}</h2>
+	{/snippet}
+
 	<p class="confirm-message">{message}</p>
-	<svelte:fragment slot="footer">
-		<Button variant="secondary" on:click={onClose}>{cancelLabel}</Button>
-		<Button on:click={onConfirm}>{confirmLabel}</Button>
-	</svelte:fragment>
+
+	{#snippet footer()}
+		<Button variant="secondary" onclick={onClose}>{cancelLabel}</Button>
+		<Button onclick={onConfirm}>{confirmLabel}</Button>
+	{/snippet}
 </Modal>

@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { getVersion } from "@tauri-apps/api/app";
-	import { invoke } from "@tauri-apps/api/core";
 	import TreeContainer from "$components/app/TreeContainer.svelte";
 	import Toolbar from "$components/app/Toolbar.svelte";
 	import WhatsNewButton from "$components/app/whatsNew/WhatsNewButton.svelte";
 	import { zoomIn, zoomOut } from "$networkStore";
-	import TreeSpinner from "$components/ui/TreeSpinner.svelte";
 
 	let releaseNotes = "";
 	let initTask: Promise<void> | null = null;
@@ -20,10 +16,6 @@
 		const totalOffset = containerHeight + bottomOffset + gap;
 		document.documentElement.style.setProperty('--toast-bottom', `${totalOffset}px`);
 	}
-
-	onMount(() => {
-		// ... existing onMount logic
-	});
 </script>
 
 <TreeContainer />

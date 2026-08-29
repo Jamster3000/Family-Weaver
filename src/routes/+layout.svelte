@@ -2,7 +2,6 @@
     import '../app.css';
     import '../theme.css';
     import '../fonts.css';
-    import { navigating } from '$app/stores';
     import Titlebar from '$components/app/Titlebar.svelte';
     import ToastContainer from '$components/app/ToastContainer.svelte';
     import { onMount, onDestroy } from 'svelte';

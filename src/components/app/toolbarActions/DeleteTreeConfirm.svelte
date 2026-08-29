@@ -4,9 +4,15 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { activeTree, setActiveTree, type Tree } from "$treeStore";
 	import { toasts } from "$toastStore";
+	import { createLogger } from "$lib/logger";
+
+	const logger = createLogger("DeleteTreeConfirm.svelte");
 
 	async function handleTreeDeletion() {
 		const tree_id = $activeTree?.id;
+
+		logger.info(`Attempting to delete tree with ID: ${tree_id}`);
+
 		try {
 			await invoke("delete_tree", { treeId: tree_id });
 			const tree: Tree = await invoke("set_new_active_tree");
@@ -15,10 +21,12 @@
 			handleClose();
 			toasts.success("Tree deleted successfully!");
 			toasts.success(`Switching to ${tree.name}`);
+			logger.info(`Tree deleted successfully. New active tree: ${tree.name}`);
 		} catch (error) {
 			console.error("Error deleting tree:", error);
 			handleClose();
 			toasts.error("Failed to delete tree.");
+			logger.error(`Failed to delete tree with ID: ${tree_id}. Error: ${error}`);
 		}
 	}
 

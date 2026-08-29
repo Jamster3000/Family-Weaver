@@ -6,9 +6,12 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
+	import { createLogger } from "$lib/logger";
 
 	let treeName = $state("");
 	let error = $state("");
+
+	const logger = createLogger("RenameTreeTitle.svelte");
 
 	$effect(() => {
 		if ($modals.renameTree) {
@@ -25,6 +28,8 @@
 		const newTreeName = treeName.trim();
 		if (!newTreeName || newTreeName === $activeTree?.name) return;
 
+		logger.info(`Renaming tree from "${$activeTree?.name}" to "${newTreeName}"`);
+
 		try {
 			invoke("set_tree_name", {
 				treeName: newTreeName,
@@ -32,15 +37,19 @@
 				.then(() => {
 					handleClose();
 					toasts.success("Tree renamed successfully!");
+					logger.info(`Tree renamed to "${newTreeName}" successfully`);
 				})
 				.catch((err) => {
 					console.error("Error renaming tree:", err);
 					error = "Failed to rename tree.";
 					toasts.error("Failed to rename tree.");
+					logger.error(`Failed to rename tree: ${err}`);
 				});
 		} catch (err) {
 			console.error("Error renaming tree:", err);
 			error = "Failed to rename tree.";
+			toasts.error("Failed to rename tree.");
+			logger.error(`Failed to rename tree: ${err}`);
 		}
 	}
 

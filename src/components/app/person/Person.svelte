@@ -18,9 +18,12 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
 	import { getAnimationDuration } from "$lib/animationUtils";
+	import { createLogger } from "$lib/logger";
 
 	let activeTab = $state("overview");
 	let isAddingTimelineEvent = $state(false);
+
+	const logger = createLogger("Person.svelte");
 
 	$effect(() => {
 		if (isAddingTimelineEvent) {
@@ -33,6 +36,7 @@
 	let hasChanges = $derived($personData ? hasPersonChanged() : false);
 
 	async function handlePersonSave() {
+		logger.info("Starting saving person");
 		const rawData = $personData;
 
 		const cleanedPerson = {
@@ -47,12 +51,19 @@
 			tree_id: $activeTree?.id,
 		};
 
+		const debugString = Object.entries(rawData)
+			.map(([key, val]) => `${key}: ${typeof val === 'object' && val !== null ? JSON.stringify(val) : val}`)
+			.join(", ");
+
+		logger.info(`Raw Data -> ${debugString}`);
+
 		try {
 			await invoke("create_person", { person: cleanedPerson });
 			resetPersonData();
 			toasts.success("Person created successfully!");
 		} catch (error) {
 			toasts.error("Failed to create person.");
+			logger.error(`Error creating person: ${error}`);
 			return;
 		}
 
@@ -72,7 +83,7 @@
 		modals.close("discardPersonChanges");
 		setTimeout(() => {
 			modals.close("addPerson");
-		}, 300);
+		}, 100);
 	}
 
 	function handleAddPersonClose() {

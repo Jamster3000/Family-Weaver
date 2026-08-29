@@ -8,6 +8,9 @@
 	import { setActiveTree, activeTree, type Tree } from "$treeStore";
 	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
+	import { createLogger } from "$lib/logger";
+
+	const logger = createLogger("CreateTree.svelte");
 
 	let tree_name = $state("");
 
@@ -22,6 +25,8 @@
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 
+		logger.info(`Creating new family tree with name: ${tree_name}`);
+
 		try {
 			if (tree_name.trim() === "") return;
 
@@ -33,6 +38,9 @@
 			});
 			if (result) {
 				setActiveTree(result);
+
+				logger.info(`Family tree '${tree_name}' created successfully.`);
+
 				handleClose();
 				goto("/tree");
 
@@ -41,6 +49,7 @@
 		} catch (error) {
 			console.error("Error creating family tree:", error);
 			toasts.error("Failed to create family tree.");
+			logger.error(`Failed to create family tree: ${error}`);
 		}
 	}
 </script>

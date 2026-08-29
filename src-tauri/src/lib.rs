@@ -5,6 +5,7 @@ pub mod database;
 pub mod commands;
 pub mod models;
 pub mod state;
+pub mod logging;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,13 +22,21 @@ pub fn run() {
         exe_dir.join("family_weaver.db")
     };
 
+    if let Err(e) = logging::init_logging(&db_path) {
+        eprintln!("Failed to initialize logging: {}", e);
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
+            tracing::info!("=== Family Weaver Starting ===");
+
             let mut conn = database::initial::open(db_path.to_str().unwrap()).unwrap();
             database::settings::sync_settings(&mut conn).expect("Failed to sync settings");
+
+            tracing::info!("Database and settings initialized");
 
             let conn = Arc::new(Mutex::new(conn));
 
@@ -51,6 +60,7 @@ pub fn run() {
             database::set::set_tree_name,
             database::set::switch_active_tree,
             commands::release::fetch_version_release,
+            commands::logging::log_message,
             database::settings::save_settings,
         ])
         .run(tauri::generate_context!())

@@ -3,10 +3,9 @@ use rusqlite::{Connection, Result};
 pub fn open(path: &str) -> Result<Connection> {
     let conn = Connection::open(path)?;
 
-    //        PRAGMA journal_mode=WAL;
-
     conn.execute_batch(
         "
+        PRAGMA journal_mode=WAL;
         PRAGMA foreign_keys=ON;
 
         CREATE TABLE IF NOT EXISTS person (

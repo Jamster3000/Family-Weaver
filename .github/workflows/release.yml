@@ -54,6 +54,7 @@ jobs:
                 - The animated tree at app open (when check updates is enabled) is faster, smoother, more efficient and it completes it's whole animation - rather than before where it often wouldn't reach the end of the animation before the app was ready to use.'
                 - The `Create family tree" modal's title was the same size as all other text -> made this bigger as it was supposed to be.
                 - The tree loading at the start (if enabled) is improved for better performance.
+                - The tree loading at the start (if enabled) doesn't render leaves in winter time.
             ## Under the Hood
                 - Fixed the markdown in "What's new" modal where it wasn't rendering bullet points.
                 - Fixed `CreateTree`, `SwitchTreeModal` & `RenameTreeTitle` as they was managing local close states which wasn't allowing them to close at all.
@@ -63,6 +64,3 @@ jobs:
                 - Squashed lots of minor small bugs.
           releaseDraft: false
           prerelease: false
-
-
-                (mention regular checking of updated at set intervals)

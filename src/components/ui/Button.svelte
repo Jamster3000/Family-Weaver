@@ -6,6 +6,7 @@
 		variant = "primary",
 		type = "button",
 		disabled = false,
+		form = undefined,
 		fontSize = "medium",
 		iconOnly = false,
 		ariaLabel = "",
@@ -16,6 +17,7 @@
 		variant?: "primary" | "secondary" | "transparent";
 		type?: "button" | "submit";
 		disabled?: boolean;
+		form?: string;
 		fontSize?: "xsmall" | "small" | "medium" | "large" | "xlarge";
 		iconOnly?: boolean;
 		ariaLabel?: string;
@@ -42,6 +44,7 @@
 	<button
 		{type}
 		{disabled}
+		{form}
 		class="btn keep-white {variant} {fontSize}"
 		class:iconOnly
 		{onclick}

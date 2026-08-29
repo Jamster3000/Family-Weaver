@@ -6,6 +6,9 @@
 	import { modals } from "$modalStore";
 	import { toasts } from "$toastStore";
 	import { getActiveTree } from "$treeStore";
+	import { createLogger } from "$lib/logger";
+
+	const logger = createLogger("SwitchTreeModal.svelte");
 
 	let { activeTreeId = "" }: { activeTreeId?: string } = $props();
 
@@ -26,9 +29,11 @@
 
 	async function fetchTrees() {
 		try {
+			logger.info("Fetching all trees...");
 			trees = await invoke("get_all_trees");
 		} catch (error) {
 			console.error("Failed to load trees:", error);
+			logger.error(`Failed to load trees: ${error}`);
 		}
 	}
 
@@ -39,12 +44,16 @@
 			return;
 		}
 
+		logger.info(`Switching to tree with ID: ${treeId}`);
+
 		try {
 			await invoke("switch_active_tree", { treeId });
 			handleClose();
 			toasts.success(`Switched to '${getActiveTree()?.name}' family tree.`);
+			logger.info(`Successfully switched to tree with ID: ${treeId}`);
 		} catch (error) {
 			console.error("Failed to switch active tree:", error);
+			logger.error(`Failed to switch active tree: ${error}`);
 		}
 	}
 
@@ -142,7 +151,11 @@
 		flex-direction: column;
 		gap: 1rem;
 		padding: 1.5rem;
-		background: color-mix(in srgb, var(--secondary-background) 80%, var(--black));
+		background: color-mix(
+			in srgb,
+			var(--secondary-background) 80%,
+			var(--black)
+		);
 		border: 2px solid var(--primary-colour);
 		border-radius: 12px;
 		cursor: pointer;
@@ -186,7 +199,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: color-mix(in srgb, var(--secondary-colour) 50%, transparent);
+		background: color-mix(
+			in srgb,
+			var(--secondary-colour) 50%,
+			transparent
+		);
 		color: var(--text-colour);
 		padding: 0.5rem;
 		border-radius: 8px;

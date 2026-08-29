@@ -12,17 +12,29 @@ pub async fn create_tree(
     state: tauri::State<'_, AppState>,
     app: AppHandle,
 ) -> Result<Tree, String> {
-    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
     let now = Utc::now().to_rfc3339();
     let tree_id = uuid::Uuid::new_v4().to_string();
 
+    tracing::info!("Creating tree: {}", tree.name);
+
     conn.execute("UPDATE trees SET active_tree = 0", [])
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            tracing::error!("Failed to deactivate existing trees: {}", e);
+            e.to_string()
+        })?;
 
     conn.execute(
         "INSERT INTO trees (id, name, active_tree, created_at, updated_at) VALUES (?1, ?2, ?3, ?4, ?5)",
         params![&tree_id, &tree.name, &tree.active_tree, &now, &now],
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Failed to create tree: {}", e);
+        e.to_string()
+    })?;
 
     let created_tree = Tree {
         id: tree_id,
@@ -44,10 +56,18 @@ pub async fn create_person(
 ) -> Result<String, String> {
     let validator = PersonValidator::default();
 
-    // Validate the person data
-    validator.validate(&person).map_err(|e| e.to_string())?;
+    tracing::info!("Creating new person");
 
-    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+    // Validate the person data
+    validator.validate(&person).map_err(|e| {
+        tracing::error!("Person validation failed: {}", e);
+        e.to_string()
+    })?;
+
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Failed to lock database connection: {}", e);
+        e.to_string()
+    })?;
 
     // Insert the person
     conn.execute(
@@ -67,7 +87,10 @@ pub async fn create_person(
             Utc::now().to_rfc3339(),
             Utc::now().to_rfc3339()
         ],
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Failed to insert person: {}", e);
+        e.to_string()
+    })?;
 
     // Insert relationships (parents)
     for parent_id in &person.parent_ids {
@@ -75,7 +98,10 @@ pub async fn create_person(
             "INSERT INTO person_parents (person_id, parent_id) VALUES (?1, ?2)",
             params![&person.id, parent_id],
         )
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            tracing::error!("Failed to insert parent relationship: {}", e);
+            e.to_string()
+        })?;
     }
 
     // Insert relationships (partners)
@@ -84,7 +110,10 @@ pub async fn create_person(
             "INSERT INTO person_partners (person_id, partner_id) VALUES (?1, ?2)",
             params![&person.id, partner_id],
         )
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            tracing::error!("Failed to insert partner relationship: {}", e);
+            e.to_string()
+        })?;
     }
 
     // Insert relationships (children)
@@ -93,7 +122,10 @@ pub async fn create_person(
             "INSERT INTO person_children (person_id, child_id) VALUES (?1, ?2)",
             params![&person.id, child_id],
         )
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            tracing::error!("Failed to insert child relationship: {}", e);
+            e.to_string()
+        })?;
     }
 
     // Insert marriages
@@ -110,7 +142,10 @@ pub async fn create_person(
                 &marriage.divorce_date,
                 &marriage.divorce_location
             ],
-        ).map_err(|e| e.to_string())?;
+        ).map_err(|e| {
+            tracing::error!("Failed to insert marriage: {}", e);
+            e.to_string()
+        })?;
     }
 
     // Insert timeline entries
@@ -128,7 +163,10 @@ pub async fn create_person(
                 &event.end_date,
                 &event.location
             ],
-        ).map_err(|e| e.to_string())?;
+        ).map_err(|e| {
+            tracing::error!("Failed to insert life event: {}", e);
+            e.to_string()
+        })?;
     }
 
     for event in &person.work_education {
@@ -145,7 +183,10 @@ pub async fn create_person(
                 &event.end_date,
                 &event.location
             ],
-        ).map_err(|e| e.to_string())?;
+        ).map_err(|e| {
+            tracing::error!("Failed to insert work/education event: {}", e);
+            e.to_string()
+        })?;
     }
 
     for event in &person.places_lived {
@@ -162,7 +203,10 @@ pub async fn create_person(
                 &event.end_date,
                 &event.location
             ],
-        ).map_err(|e| e.to_string())?;
+        ).map_err(|e| {
+            tracing::error!("Failed to insert places lived event: {}", e);
+            e.to_string()
+        })?;
     }
 
     Ok(person.id)

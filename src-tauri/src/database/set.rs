@@ -8,12 +8,20 @@ pub async fn set_new_active_tree(
     state: tauri::State<'_, AppState>,
     app: AppHandle,
 ) -> Result<Option<Tree>, String> {
-    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    tracing::info!("Setting new active tree");
 
     conn.execute(
         "UPDATE trees SET active_tree = 1 WHERE id = (SELECT id FROM trees ORDER BY created_at DESC LIMIT 1)",
         [],
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Error updating active tree: {}", e);
+        e.to_string()
+    })?;
 
     let created_tree = conn.query_row(
         "SELECT id, name, active_tree, created_at, updated_at FROM trees WHERE active_tree = 1 LIMIT 1",
@@ -32,10 +40,14 @@ pub async fn set_new_active_tree(
     match created_tree {
         Ok(tree) => {
             let _ = app.emit("tree-changed", &tree);
+            tracing::info!("New active tree set: {}", tree.name);
             Ok(Some(tree))
         }
         Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
-        Err(e) => Err(e.to_string()),
+        Err(e) => Err({
+            tracing::error!("Error setting new active tree: {}", e);
+            e.to_string()
+        }),
     }
 }
 
@@ -45,12 +57,20 @@ pub async fn set_tree_name(
     state: tauri::State<'_, AppState>,
     app: AppHandle,
 ) -> Result<Option<Tree>, String> {
-    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    tracing::info!("Setting tree name to: {}", tree_name);
 
     conn.execute(
         "UPDATE trees SET name = ?1 WHERE active_tree = 1",
         [tree_name],
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Error updating tree name: {}", e);
+        e.to_string()
+    })?;
 
     let updated_tree = conn.query_row(
         "SELECT id, name, active_tree, created_at, updated_at FROM trees WHERE active_tree = 1 LIMIT 1",
@@ -72,7 +92,10 @@ pub async fn set_tree_name(
             Ok(Some(tree))
         }
         Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
-        Err(e) => Err(e.to_string()),
+        Err(e) => Err({
+            tracing::error!("Error updating tree name: {}", e);
+            e.to_string()
+        }),
     }
 }
 
@@ -82,18 +105,29 @@ pub async fn switch_active_tree(
     state: tauri::State<'_, AppState>,
     app: AppHandle,
 ) -> Result<Tree, String> {
-    let conn = state.conn.lock().map_err(|e| e.to_string())?;
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    tracing::info!("Switching active tree to ID: {}", tree_id);
 
     //set active trees to deactive
     conn.execute("UPDATE trees SET active_tree = 0",
         []
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Error updating active tree: {}", e);
+        e.to_string()
+    })?;
 
     //set the selected tree to active
     conn.execute(
         "UPDATE trees SET active_tree = 1 WHERE id = ?1",
         [&tree_id],
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Error setting new active tree: {}", e);
+        e.to_string()
+    })?;
 
     //select the tree so we can return the entire tree data for the frontend to store
     let tree = conn.query_row(
@@ -108,7 +142,10 @@ pub async fn switch_active_tree(
                 updated_at: row.get(4)?,
             })
         },
-    ).map_err(|e| e.to_string())?;
+    ).map_err(|e| {
+        tracing::error!("Error selecting tree: {}", e);
+        e.to_string()
+    })?;
 
     let _ = app.emit("tree-changed", &tree);
     Ok(tree)

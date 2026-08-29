@@ -13,13 +13,20 @@ pub async fn fetch_version_release(version: String) -> Result<ReleaseInfo, Strin
         .header(USER_AGENT, "Family-Weaver-App")
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            tracing::error!("Error sending request with tag {}: {}", tag, e);
+            e.to_string()
+        })?;
 
     if !res.status().is_success() {
+        tracing::error!("GitHub API error: {}", res.status());
         return Err(format!("GitHub API error: {}", res.status()));
     }
 
-    let release: GithubRelease = res.json().await.map_err(|e| e.to_string())?;
+    let release: GithubRelease = res.json().await.map_err(|e| {
+        tracing::error!("Error parsing JSON: {}", e);
+        e.to_string()
+    })?;
 
     Ok(ReleaseInfo {
         version: release.tag_name.trim_start_matches('v').to_string(),

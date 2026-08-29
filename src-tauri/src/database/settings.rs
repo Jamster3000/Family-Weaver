@@ -8,6 +8,8 @@ pub fn sync_settings(conn: &mut Connection) -> Result<(), Box<dyn std::error::Er
 	let parsed_ron: SettingsFile = ron::from_str(ron_str)?;
 	let ron_settings = parsed_ron.settings;
 
+	tracing::info!("Syncing settings with {} entries", ron_settings.len());
+
 	// Fetch keys currently in the database
 	let mut stmt = conn.prepare("SELECT key FROM settings")?;
 	let db_keys: HashSet<String> = stmt
@@ -160,26 +162,47 @@ pub async fn save_settings(
     settings: Vec<Settings>,
     state: tauri::State<'_, AppState>,
 ) -> Result<(), String> {
-    let mut conn = state.conn.lock().map_err(|e| e.to_string())?;
-    let tx = conn.transaction().map_err(|e| e.to_string())?;
+    let mut conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    let tx = conn.transaction().map_err(|e| {
+        tracing::error!("Error creating database transaction: {}", e);
+        e.to_string()
+    })?;
+
+	tracing::info!("Saving {} settings to the database", settings.len());
 
     {
         let mut stmt = tx
             .prepare("UPDATE settings SET value = ?1 WHERE key = ?2")
-            .map_err(|e| e.to_string())?;
+            .map_err(|e| {
+                tracing::error!("Error preparing update statement: {}", e);
+                e.to_string()
+            })?;
 
         for setting in settings {
             let val_str: Option<String> = match &setting.value {
-                Some(v) => Some(serde_json::to_string(v).map_err(|e| e.to_string())?),
+                Some(v) => Some(serde_json::to_string(v).map_err(|e| {
+                    tracing::error!("Error serializing setting value: {}", e);
+                    e.to_string()
+                })?),
                 None => None,
             };
 
             stmt.execute(params![val_str, setting.key])
-                .map_err(|e| e.to_string())?;
+                .map_err(|e| {
+                    tracing::error!("Error executing update statement: {}", e);
+                    e.to_string()
+                })?;
         }
     }
 
-    tx.commit().map_err(|e| e.to_string())?;
+    tx.commit().map_err(|e| {
+        tracing::error!("Error committing database transaction: {}", e);
+        e.to_string()
+    })?;
 
     Ok(())
 }

@@ -14,6 +14,9 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { toasts } from "$toastStore";
 	import { applyVisualSettings } from "$lib/applySettings";
+	import { createLogger } from "$lib/logger";
+
+	const logger = createLogger("SettingsModal.svelte");
 
 	let selectedCategory = $state<string | null>(null);
 	let settingsSnapshot = $state<Settings[]>([]);
@@ -57,6 +60,7 @@
 	}
 
 	async function handleSave() {
+		logger.info("Saving settings...");
 		try {
 			await invoke("save_settings", {
 				settings: $settingsData,
@@ -64,8 +68,10 @@
 			toasts.success("Settings saved successfully.");
 			settingsSnapshot = structuredClone($settingsData);
 			modals.close("settings");
+			logger.info("Settings saved successfully.");
 		} catch (error) {
 			console.error("Error saving settings:", error);
+			logger.error(`Error saving settings: ${error}`);
 		}
 	}
 

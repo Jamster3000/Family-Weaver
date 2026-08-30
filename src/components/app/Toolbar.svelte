@@ -11,6 +11,7 @@
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 	import DeleteTreeConfirm from "$components/app/toolbarActions/DeleteTreeConfirm.svelte";
 	import Settings from "$components/app/toolbarActions/settings/SettingsModal.svelte";
+	import Logs from "$components/app/toolbarActions/Logs.svelte";
 	import { modals } from "$modalStore";
 	import { type ToolbarItem, getLeftItems, rightItems } from "$lib/Toolbar";
 	import { check, type Update } from "@tauri-apps/plugin-updater";
@@ -91,6 +92,8 @@
 <DeleteTreeConfirm />
 
 <Settings />
+
+<Logs />
 
 <div class="toolbar">
 	<div class="toolbar-left">

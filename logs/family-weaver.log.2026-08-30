@@ -1,0 +1,520 @@
+2026-08-30T13:04:48.456515Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:26: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T13:04:49.221208Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: === Family Weaver Starting ===
+2026-08-30T13:04:49.227852Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T13:04:49.228941Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T13:04:49.840627Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:04:49.840885Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:04:49.841116Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:04:49.850462Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T13:04:53.858174Z  INFO ThreadId(12) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T13:04:54.024872Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:04:54.029415Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 1552 bytes
+2026-08-30T13:04:54.045360Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:05:30.645089Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:05:30.664199Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:05:32.263931Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-29
+2026-08-30T13:05:32.978860Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:05:32.979786Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 2602 bytes
+2026-08-30T13:05:32.983399Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:06:50.658661Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:06:50.659394Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 3125 bytes
+2026-08-30T13:06:50.659926Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:06:50.659982Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:06:50.663931Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:07:07.461118Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:07:07.461833Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 3969 bytes
+2026-08-30T13:07:07.462802Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:07:07.463614Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:07:07.469614Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:08:13.843914Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:08:13.844641Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 4813 bytes
+2026-08-30T13:08:13.851965Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:08:13.852543Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:08:13.858204Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:21:09.838671Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:21:09.841737Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 5657 bytes
+2026-08-30T13:21:09.842789Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:21:09.842908Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:21:09.851471Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:21:32.774338Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:21:32.790745Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:21:33.899676Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 4 log entries for 2026-08-29
+2026-08-30T13:21:44.486977Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:21:44.487749Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 7028 bytes
+2026-08-30T13:21:44.492385Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:22:34.052287Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:22:34.066397Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:22:35.142516Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 4 log entries for 2026-08-29
+2026-08-30T13:22:46.696860Z ERROR ThreadId(10) tauri_plugin_updater::updater: C:\Users\jrbai\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-updater-2.10.1\src\updater.rs:515: failed to check for updates: error sending request for url (https://github.com/Jamster3000/Family-Weaver/releases/latest/download/latest.json)
+2026-08-30T13:22:46.700765Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Error checking for updates in background: error sending request for url (https://github.com/Jamster3000/Family-Weaver/releases/latest/download/latest.json)
+2026-08-30T13:24:48.063165Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:24:48.063830Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 8501 bytes
+2026-08-30T13:24:48.067715Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:24:48.068622Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:24:48.080659Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:26:18.451913Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:59: Log file downloaded to: C:\Users\jrbai\Downloads\family-weaver-2026-08-30.log
+2026-08-30T13:26:18.465637Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Downloaded log for 2026-08-30
+2026-08-30T13:26:43.299676Z ERROR ThreadId(10) tauri_plugin_updater::updater: C:\Users\jrbai\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-updater-2.10.1\src\updater.rs:515: failed to check for updates: error sending request for url (https://github.com/Jamster3000/Family-Weaver/releases/latest/download/latest.json)
+2026-08-30T13:26:43.302729Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Error checking for updates in background: error sending request for url (https://github.com/Jamster3000/Family-Weaver/releases/latest/download/latest.json)
+2026-08-30T13:28:44.221594Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:28:44.222536Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 10524 bytes
+2026-08-30T13:28:44.230530Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:28:53.851496Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:28:53.866978Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:28:54.922914Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 4 log entries for 2026-08-29
+2026-08-30T13:28:55.631696Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-28
+2026-08-30T13:28:55.631770Z  WARN ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Log file not found: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-28
+2026-08-30T13:28:55.646230Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Failed to load logs: Log file not found for date: 2026-08-28
+2026-08-30T13:28:57.273232Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:28:57.287688Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:28:58.385054Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 4 log entries for 2026-08-29
+2026-08-30T13:29:13.451860Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:29:13.452613Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 12689 bytes
+2026-08-30T13:29:13.458002Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 71 log entries for 2026-08-30
+2026-08-30T13:29:16.923719Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-31
+2026-08-30T13:29:16.923778Z  WARN ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Log file not found: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-31
+2026-08-30T13:29:16.930106Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Failed to load logs: Log file not found for date: 2026-08-31
+2026-08-30T13:29:19.200087Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:29:19.200769Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 13801 bytes
+2026-08-30T13:29:19.208272Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 77 log entries for 2026-08-30
+2026-08-30T13:31:40.915517Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:31:40.916403Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 14122 bytes
+2026-08-30T13:31:40.929056Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:31:44.031539Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:31:44.032148Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 14850 bytes
+2026-08-30T13:31:44.033020Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:31:44.037309Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:31:44.038500Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:31:47.630636Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:31:47.631378Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 15695 bytes
+2026-08-30T13:31:47.640922Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:32:12.841271Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T13:32:12.855586Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T13:32:13.950714Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 4 log entries for 2026-08-29
+2026-08-30T13:32:39.866591Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:32:39.867812Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 16746 bytes
+2026-08-30T13:32:39.873501Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 2 log entries for 2026-08-30
+2026-08-30T13:33:00.082908Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:33:00.083725Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 17270 bytes
+2026-08-30T13:33:00.089289Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 97 log entries for 2026-08-30
+2026-08-30T13:34:20.725183Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:34:20.726052Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 17795 bytes
+2026-08-30T13:34:20.731143Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:34:22.812288Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:34:22.813548Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 18319 bytes
+2026-08-30T13:34:22.814540Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T13:34:22.816711Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T13:34:22.817878Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 0 log entries for 2026-08-30
+2026-08-30T13:34:26.290237Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-31
+2026-08-30T13:34:26.290306Z  WARN ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Log file not found: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-31
+2026-08-30T13:34:26.293265Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Failed to load logs: Log file not found for date: 2026-08-31
+2026-08-30T13:34:43.249915Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T13:34:43.250828Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 19547 bytes
+2026-08-30T13:34:43.268090Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 110 log entries for 2026-08-30
+2026-08-30T14:35:18.612063Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:26: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T14:35:19.618055Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: === Family Weaver Starting ===
+2026-08-30T14:35:19.632255Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T14:35:19.633909Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T14:35:22.004775Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T14:35:22.005036Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T14:35:22.005087Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T14:35:22.010920Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T14:35:26.003497Z  INFO ThreadId(12) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T14:35:26.595645Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:35:26.596770Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 21625 bytes
+2026-08-30T14:35:26.612382Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 123 log entries for 2026-08-30
+2026-08-30T14:44:00.619528Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:44:00.621240Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 22151 bytes
+2026-08-30T14:44:00.627425Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 126 log entries for 2026-08-30
+2026-08-30T14:45:22.060868Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:45:22.061871Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 22677 bytes
+2026-08-30T14:45:22.070807Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 129 log entries for 2026-08-30
+2026-08-30T14:45:34.797984Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:45:34.798888Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 23203 bytes
+2026-08-30T14:45:34.805242Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 132 log entries for 2026-08-30
+2026-08-30T14:45:38.053801Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:45:38.055034Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 23525 bytes
+2026-08-30T14:45:38.059897Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 134 log entries for 2026-08-30
+2026-08-30T14:45:39.807871Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:45:39.808994Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 24255 bytes
+2026-08-30T14:45:39.810437Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T14:45:39.810476Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T14:45:39.817281Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 138 log entries for 2026-08-30
+2026-08-30T14:59:18.581535Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T14:59:18.583006Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 25102 bytes
+2026-08-30T14:59:18.591406Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 143 log entries for 2026-08-30
+2026-08-30T15:03:04.663351Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T15:03:04.663524Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 25424 bytes
+2026-08-30T15:03:04.678283Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 145 log entries for 2026-08-30
+2026-08-30T15:04:08.890169Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:26: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T15:04:09.910427Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T15:04:09.916009Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T15:04:09.916769Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T15:04:10.312874Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T15:04:10.313551Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T15:04:10.314034Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T15:04:10.320414Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T15:04:14.319340Z  INFO ThreadId(11) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T15:04:14.440773Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T15:04:14.441459Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 27530 bytes
+2026-08-30T15:04:14.452665Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 158 log entries for 2026-08-30
+2026-08-30T15:07:52.373589Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:27: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T15:07:52.429494Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:37: Successfully read log file with 32058084 bytes
+2026-08-30T15:07:53.492816Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:13: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:01:51.115668Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:01:52.072502Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:01:52.089026Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:01:52.093651Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:01:53.857223Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:01:53.857493Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:01:53.861238Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:01:53.867630Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:01:57.857856Z  INFO ThreadId(09) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:01:58.374822Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:01:58.379594Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:49: Successfully parsed 173 log entries
+2026-08-30T16:01:58.387522Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 173 log entries for 2026-08-30
+2026-08-30T16:02:18.742228Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:02:19.381172Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:49: Successfully parsed 181200 log entries
+2026-08-30T16:02:21.734796Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:02:39.999885Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:02:40.431969Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:02:40.436627Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:02:40.437206Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:02:42.219399Z  INFO ThreadId(07) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:02:42.219678Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:02:42.219939Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:02:42.227213Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:02:46.229822Z  INFO ThreadId(06) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:02:46.859678Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:02:46.863307Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:49: Successfully parsed 188 log entries
+2026-08-30T16:02:46.872451Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 188 log entries for 2026-08-30
+2026-08-30T16:02:52.486617Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:30: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:02:53.176851Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:49: Successfully parsed 181200 log entries
+2026-08-30T16:02:55.876046Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:09:59.258036Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:10:00.224934Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:10:00.230635Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:10:00.231515Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:10:02.596259Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:10:02.596611Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:10:02.596669Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:10:02.601728Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:10:06.593483Z  INFO ThreadId(06) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:10:07.134993Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:10:07.139278Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 203 log entries
+2026-08-30T16:10:07.146202Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 203 log entries for 2026-08-30
+2026-08-30T16:10:19.886222Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:10:20.558722Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:10:22.963438Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:12:39.434802Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:12:39.437941Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 209 log entries
+2026-08-30T16:12:39.452283Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 209 log entries for 2026-08-30
+2026-08-30T16:12:41.400434Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:12:41.400076Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:12:41.402948Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:12:41.404810Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 214 log entries
+2026-08-30T16:12:41.422367Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 214 log entries for 2026-08-30
+2026-08-30T16:12:45.534800Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:12:46.200489Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:12:48.559314Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:12:58.182582Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:12:58.185129Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 220 log entries
+2026-08-30T16:12:58.196712Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 220 log entries for 2026-08-30
+2026-08-30T16:17:26.848798Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:17:28.314026Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:17:28.329790Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:17:28.332272Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:17:28.958699Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:17:28.959724Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:17:28.960948Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:17:28.970267Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:17:32.968605Z  INFO ThreadId(11) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:17:33.172520Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:17:33.179398Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 232 log entries
+2026-08-30T16:17:33.190262Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 232 log entries for 2026-08-30
+2026-08-30T16:18:03.851555Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:18:03.855092Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 234 log entries
+2026-08-30T16:18:03.870795Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 234 log entries for 2026-08-30
+2026-08-30T16:18:22.188658Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:18:22.191357Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 238 log entries
+2026-08-30T16:18:22.205190Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 238 log entries for 2026-08-30
+2026-08-30T16:18:30.163441Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:18:30.845782Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:18:33.158206Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:18:45.171807Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:18:45.173823Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 244 log entries
+2026-08-30T16:18:45.187877Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 244 log entries for 2026-08-30
+2026-08-30T16:19:45.994274Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:19:46.961927Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:19:46.969005Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:19:46.969878Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:19:47.437021Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:19:47.437313Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:19:47.437495Z  INFO ThreadId(09) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:19:47.448896Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:19:51.473260Z  INFO ThreadId(12) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:19:51.712378Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:19:51.718752Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 256 log entries
+2026-08-30T16:19:51.737633Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 256 log entries for 2026-08-30
+2026-08-30T16:19:57.498968Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:19:58.133011Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:20:00.384999Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:20:26.561966Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:20:26.565383Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 262 log entries
+2026-08-30T16:20:26.578737Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 262 log entries for 2026-08-30
+2026-08-30T16:22:50.276573Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:22:51.308569Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:22:51.314547Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:22:51.315432Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:22:51.817703Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:22:51.817965Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:22:51.819078Z  INFO ThreadId(09) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:22:51.830374Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:22:55.781071Z  INFO ThreadId(09) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:22:55.984416Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:33: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:22:55.991494Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:52: Successfully parsed 274 log entries
+2026-08-30T16:22:56.011683Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 274 log entries for 2026-08-30
+2026-08-30T16:23:26.262088Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:23:26.897941Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:23:26.903041Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:23:26.904387Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:23:27.319759Z  INFO ThreadId(07) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:23:27.320170Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:23:27.326603Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:23:27.336341Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:23:31.415846Z  INFO ThreadId(05) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:23:31.545215Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:56: Parsed 285 log entries in 3.81ms (Avg: 13380 ns/line | 0.0134 ms/line)
+2026-08-30T16:23:31.555412Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 285 log entries for 2026-08-30
+2026-08-30T16:23:34.625847Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:56: Parsed 181200 log entries in 554.68ms (Avg: 3061 ns/line | 0.0031 ms/line)
+2026-08-30T16:23:36.889820Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:23:46.634946Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:56: Parsed 289 log entries in 1.28ms (Avg: 4415 ns/line | 0.0044 ms/line)
+2026-08-30T16:23:46.646170Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 289 log entries for 2026-08-30
+2026-08-30T16:25:25.364702Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:25:26.075269Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:25:26.109277Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:25:26.110432Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:25:26.543330Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:25:26.546393Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:25:26.547693Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:25:26.572545Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:26:03.081156Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:31: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:26:03.788997Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:26:03.794193Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:26:03.795118Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:26:04.197089Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:26:04.199924Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:26:04.200060Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:26:04.207916Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:26:08.206874Z  INFO ThreadId(10) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:26:08.330806Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:56: Parsed 308 log entries in 898.80µs (Avg: 2918 ns/line | 0.0029 ms/line)
+2026-08-30T16:26:08.341267Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 308 log entries for 2026-08-30
+2026-08-30T16:26:52.671411Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:56: Parsed 181200 log entries in 337.05ms (Avg: 1860 ns/line | 0.0019 ms/line)
+2026-08-30T16:26:54.944474Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:18: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:31:35.966293Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:31:36.967394Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:31:36.976815Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:31:36.977857Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:31:38.996786Z  INFO ThreadId(11) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:31:38.997152Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:31:38.997217Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:31:39.003798Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:31:43.010401Z  INFO ThreadId(12) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:31:43.642060Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:31:43.643556Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 322 log entries
+2026-08-30T16:31:43.653961Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 322 log entries for 2026-08-30
+2026-08-30T16:31:50.227812Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:31:50.612017Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:31:52.871871Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:32:09.044345Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:32:09.046652Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 328 log entries
+2026-08-30T16:32:09.060273Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 328 log entries for 2026-08-30
+2026-08-30T16:32:35.900474Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:32:35.902781Z  INFO ThreadId(16) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 331 log entries
+2026-08-30T16:32:35.916951Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 331 log entries for 2026-08-30
+2026-08-30T16:34:28.823705Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:34:28.825683Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 334 log entries
+2026-08-30T16:34:28.842921Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 334 log entries for 2026-08-30
+2026-08-30T16:34:33.602831Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:34:33.988351Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:34:37.002539Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:34:37.815424Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:34:37.816619Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 340 log entries
+2026-08-30T16:34:37.824529Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 340 log entries for 2026-08-30
+2026-08-30T16:34:39.719809Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:34:40.119561Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:34:42.454618Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:34:49.328977Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:34:49.344130Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 346 log entries
+2026-08-30T16:34:49.356160Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 346 log entries for 2026-08-30
+2026-08-30T16:34:57.411264Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:34:57.797548Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:35:00.076242Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:35:04.213716Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:35:04.219579Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 352 log entries
+2026-08-30T16:35:04.232168Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 352 log entries for 2026-08-30
+2026-08-30T16:35:08.158307Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:35:08.161109Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 355 log entries
+2026-08-30T16:35:08.178426Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 355 log entries for 2026-08-30
+2026-08-30T16:35:09.105322Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:35:09.530551Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:35:11.849881Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:35:18.786069Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:35:18.789114Z  INFO ThreadId(17) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 361 log entries
+2026-08-30T16:35:18.803210Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 361 log entries for 2026-08-30
+2026-08-30T16:35:29.613756Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:35:29.615847Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 364 log entries
+2026-08-30T16:35:29.632393Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 364 log entries for 2026-08-30
+2026-08-30T16:35:32.158396Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-29
+2026-08-30T16:35:32.573092Z  INFO ThreadId(18) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 181200 log entries
+2026-08-30T16:35:34.881250Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 181200 log entries for 2026-08-29
+2026-08-30T16:37:23.224747Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:37:23.224816Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:37:23.225310Z  INFO ThreadId(19) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:37:23.227505Z  INFO ThreadId(19) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 372 log entries
+2026-08-30T16:37:23.240796Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 372 log entries for 2026-08-30
+2026-08-30T16:47:44.039788Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:47:44.039867Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:47:44.040806Z  INFO ThreadId(21) family_weaver_lib::commands::logging: src\commands\logging.rs:31: Attempting to read log from: \\?\D:\source\Family-Weaver\logs\family-weaver.log.2026-08-30
+2026-08-30T16:47:44.047314Z  INFO ThreadId(21) family_weaver_lib::commands::logging: src\commands\logging.rs:50: Successfully parsed 377 log entries
+2026-08-30T16:47:44.059682Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:16: [Logs.svelte] Loaded 377 log entries for 2026-08-30
+2026-08-30T16:57:58.366759Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T16:58:02.723475Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T16:58:02.747214Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T16:58:02.748818Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T16:58:05.486808Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:58:05.487261Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T16:58:05.487205Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T16:58:05.494475Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T16:58:09.498875Z  INFO ThreadId(06) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T16:58:10.092388Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: state not managed for field `state` on command `load_log_file`. You must call `.manage()` before using this command
+2026-08-30T16:58:16.058494Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: state not managed for field `state` on command `load_log_file`. You must call `.manage()` before using this command
+2026-08-30T16:58:17.422891Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: state not managed for field `state` on command `load_log_file`. You must call `.manage()` before using this command
+2026-08-30T17:01:33.043318Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:01:34.094548Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:01:34.106718Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:01:34.108089Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:01:34.526226Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:01:34.526572Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:01:34.526726Z  INFO ThreadId(09) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:01:34.539911Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:01:38.534689Z  INFO ThreadId(11) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:01:38.668845Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 400 entries
+2026-08-30T17:03:54.736483Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:03:54.736824Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:03:54.755331Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 403 entries
+2026-08-30T17:04:01.403929Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-29: 181200 entries
+2026-08-30T17:04:29.805501Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 405 entries
+2026-08-30T17:06:49.113216Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 406 entries
+2026-08-30T17:06:53.487307Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:06:53.488793Z  INFO ThreadId(09) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:06:53.495997Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 407 entries
+2026-08-30T17:08:43.558889Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 410 entries
+2026-08-30T17:08:49.190806Z  INFO ThreadId(11) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:08:49.190875Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:08:49.202232Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 413 entries
+2026-08-30T17:12:21.476637Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30: 414 entries
+2026-08-30T17:12:45.779114Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-29: 181200 entries
+2026-08-30T17:22:07.203526Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: invalid args `showRaw` for command `load_log_file`: command load_log_file missing required key showRaw
+2026-08-30T17:22:18.515581Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: invalid args `showRaw` for command `load_log_file`: command load_log_file missing required key showRaw
+2026-08-30T17:22:20.300043Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: invalid args `showRaw` for command `load_log_file`: command load_log_file missing required key showRaw
+2026-08-30T17:22:22.873389Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: invalid args `showRaw` for command `load_log_file`: command load_log_file missing required key showRaw
+2026-08-30T17:22:23.931652Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:22:23.931733Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:22:23.938502Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:19: [Logs.svelte] Failed to load log file metadata: invalid args `showRaw` for command `load_log_file`: command load_log_file missing required key showRaw
+2026-08-30T17:27:23.296334Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:27:24.745654Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:27:24.767495Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:27:24.769433Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:27:25.226959Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:27:25.227249Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:27:25.227394Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:27:25.232995Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:27:29.263877Z  INFO ThreadId(05) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:27:29.408090Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 432 entries
+2026-08-30T17:27:56.505578Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: TRACE]: 0 entries
+2026-08-30T17:27:58.231570Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: DEBUG]: 0 entries
+2026-08-30T17:28:00.680850Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ERROR]: 15 entries
+2026-08-30T17:30:48.273511Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ERROR]: 0 entries
+2026-08-30T17:30:50.960063Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ALL]: 181200 entries
+2026-08-30T17:31:34.622618Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:31:34.622716Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:31:34.693347Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 440 entries
+2026-08-30T17:31:40.966037Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ALL]: 362400 entries
+2026-08-30T17:32:35.140837Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 442 entries
+2026-08-30T17:34:02.552146Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:34:03.647650Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:34:03.661033Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:34:03.662618Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:34:04.103945Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:34:04.104307Z  INFO ThreadId(07) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:34:04.104268Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:34:04.111572Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:34:08.048459Z  INFO ThreadId(06) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:34:08.203454Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 452 entries
+2026-08-30T17:34:14.045210Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ALL]: 362400 entries
+2026-08-30T17:34:17.997895Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ERROR]: 0 entries
+2026-08-30T17:36:18.469498Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:36:18.469715Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:36:18.487094Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 457 entries
+2026-08-30T17:38:01.738073Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:38:01.738218Z  INFO ThreadId(08) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:38:01.761512Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 460 entries
+2026-08-30T17:38:03.792897Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 461 entries
+2026-08-30T17:38:13.358051Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: WARN]: 3 entries
+2026-08-30T17:38:46.556714Z  INFO ThreadId(19) family_weaver_lib::commands::logging: src\commands\logging.rs:101: Log file downloaded to: C:\Users\jrbai\Downloads\family-weaver-2026-08-30.log
+2026-08-30T17:40:38.771873Z  INFO ThreadId(07) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:40:38.771976Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:40:38.784420Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 466 entries
+2026-08-30T17:40:42.592388Z  INFO ThreadId(21) family_weaver_lib::commands::logging: src\commands\logging.rs:101: Log file downloaded to: C:\Users\jrbai\Downloads\family-weaver-2026-08-30.log
+2026-08-30T17:40:42.598608Z ERROR ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:17: [Logs.svelte] Failed to download log: ReferenceError: s is not defined
+2026-08-30T17:41:05.317945Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 469 entries
+2026-08-30T17:41:08.272675Z  INFO ThreadId(22) family_weaver_lib::commands::logging: src\commands\logging.rs:101: Log file downloaded to: C:\Users\jrbai\Downloads\family-weaver-2026-08-30.log
+2026-08-30T17:42:16.328873Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-29 [Level: ALL]: 362400 entries
+2026-08-30T17:45:44.175607Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:45:45.680356Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:45:45.686662Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:45:45.687687Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:45:46.316332Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:45:46.317014Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:45:46.319581Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:45:46.332425Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:45:50.339350Z  INFO ThreadId(07) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:45:50.570944Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:34: Loading '2026-08-30' log file
+2026-08-30T17:45:50.584882Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 482 entries
+2026-08-30T17:48:14.815856Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:48:15.758331Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:48:15.763311Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:48:15.764152Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:48:16.200832Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:48:16.201693Z  INFO ThreadId(12) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:48:16.201810Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:48:16.208879Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:48:20.189808Z  INFO ThreadId(11) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:48:20.345338Z  INFO ThreadId(13) family_weaver_lib::commands::logging: src\commands\logging.rs:34: Loading '2026-08-30' log file
+2026-08-30T17:48:20.361605Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 493 entries
+2026-08-30T17:49:21.300278Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:49:22.191195Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:49:22.200857Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:49:22.202387Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:49:22.634330Z  INFO ThreadId(06) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:49:22.634641Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:49:22.634696Z  INFO ThreadId(07) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:49:22.641077Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:49:26.599126Z  INFO ThreadId(05) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:49:26.733105Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:34: Loading '2026-08-30' log file
+2026-08-30T17:49:26.744409Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 504 entries
+2026-08-30T17:52:11.935839Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:52:11.936005Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:52:11.945036Z  INFO ThreadId(15) family_weaver_lib::commands::logging: src\commands\logging.rs:34: Loading '2026-08-30' log file
+2026-08-30T17:52:11.951625Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 508 entries
+2026-08-30T17:54:48.504413Z  INFO ThreadId(01) family_weaver_lib::logging: src\logging.rs:27: Logging initialized. Logs directory: D:\source\Family-Weaver\src-tauri\target\debug\..\..\..\logs
+2026-08-30T17:54:49.355374Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:34: ================= Family Weaver Starting =================
+2026-08-30T17:54:49.360066Z  INFO ThreadId(01) family_weaver_lib::database::settings: src\database\settings.rs:11: Syncing settings with 15 entries
+2026-08-30T17:54:49.361317Z  INFO ThreadId(01) family_weaver_lib: src\lib.rs:39: Database and settings initialized
+2026-08-30T17:54:49.807162Z  INFO ThreadId(05) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:54:49.807537Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates in background...
+2026-08-30T17:54:49.807605Z  INFO ThreadId(10) family_weaver_lib::database::get: src\database\get.rs:87: Fetching all settings from the database
+2026-08-30T17:54:49.822296Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [CheckForUpdates.ts] Checking for app updates...
+2026-08-30T17:54:53.892404Z  INFO ThreadId(07) family_weaver_lib::database::check: src\database\check.rs:10: Checking if any trees exist in the database
+2026-08-30T17:54:54.011797Z  INFO ThreadId(14) family_weaver_lib::commands::logging: src\commands\logging.rs:34: Loading '2026-08-30' log file
+2026-08-30T17:54:54.023145Z  INFO ThreadId(01) family_weaver_lib::commands::logging: src\commands\logging.rs:15: [Logs.svelte] Loaded log metadata for 2026-08-30 [Level: ALL]: 519 entries

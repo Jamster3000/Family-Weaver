@@ -11,7 +11,8 @@ export type ModalType =
 	| 'appUpdate'
 	| 'timelineEntry'
 	| 'settings'
-	| 'deleteAllData';
+	| 'deleteAllData'
+	| 'logs';
 
 type ModalState = Record<ModalType, boolean>;
 
@@ -27,6 +28,7 @@ const initialState: ModalState = {
 	timelineEntry: false,
 	settings: false,
 	deleteAllData: false,
+    logs: false,
 };
 
 function createModalStore() {

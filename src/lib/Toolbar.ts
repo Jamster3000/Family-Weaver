@@ -8,6 +8,7 @@ import {
     IconZoomIn,
     IconZoomOut,
     IconDownload,
+    IconBug,
 } from "@tabler/icons-svelte-runes";
 import { modals } from "$modalStore";
 import { zoomIn, zoomOut } from "$networkStore";
@@ -86,6 +87,13 @@ export const getLeftItems = (hasUpdate: boolean = false): ToolbarItem[] => [
                 tooltip: "Open app settings to change preferences",
                 icon: IconSettings,
                 action: () => modals.open("settings"),
+            },
+            {
+                id: "logs",
+                label: "Logs",
+                tooltip: "View logs for Family Weaver ideal to give to the developer.",
+                icon: IconBug,
+                action: () => modals.open("logs"),
             },
             ...(hasUpdate ? [{
                 id: "update-now",

@@ -1,3 +1,17 @@
+use serde::Serialize;
+use std::sync::Mutex;
+
+pub struct LogState(pub Mutex<Vec<LogEntry>>);
+
+#[derive(Serialize, Clone)]
+pub struct LogEntry {
+    pub timestamp: String,
+    pub level: String,
+    pub file: String,
+    pub message: String,
+    pub raw: String,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum LogLevel {
 	Trace,

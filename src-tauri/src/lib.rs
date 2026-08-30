@@ -31,7 +31,7 @@ pub fn run() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
-            tracing::info!("=== Family Weaver Starting ===");
+            tracing::info!("================= Family Weaver Starting =================");
 
             let mut conn = database::initial::open(db_path.to_str().unwrap()).unwrap();
             database::settings::sync_settings(&mut conn).expect("Failed to sync settings");
@@ -44,6 +44,8 @@ pub fn run() {
                 conn,
                 hwnd: 0.into(),
             });
+
+            app.manage(crate::models::logs::LogState(Mutex::new(Vec::new())));
 
             Ok(())
         })
@@ -61,6 +63,9 @@ pub fn run() {
             database::set::switch_active_tree,
             commands::release::fetch_version_release,
             commands::logging::log_message,
+            commands::logging::download_log_file,
+            commands::logging::get_log_chunk,
+            commands::logging::load_log_file,
             database::settings::save_settings,
         ])
         .run(tauri::generate_context!())

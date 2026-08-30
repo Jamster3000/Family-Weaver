@@ -47,6 +47,24 @@ pub fn run() {
 
             app.manage(crate::models::logs::LogState(Mutex::new(Vec::new())));
 
+            tauri::async_runtime::spawn(async move {
+                const RETENTION_DAYS: u64 = 14;
+
+                let result = tokio::task::spawn_blocking(move || {
+                    logging::cleanup_old_logs(RETENTION_DAYS)
+                })
+                .await;
+
+                match result {
+                    Ok(Ok(count)) if count > 0 => {
+                        tracing::info!("Cleaned up {} log file(s) older than {} days", count, RETENTION_DAYS);
+                    }
+                    Ok(Err(e)) => tracing::error!("Log cleanup failed: {}", e),
+                    Err(e) => tracing::error!("Log cleanup task panicked: {}", e),
+                    _ => {}
+                }
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

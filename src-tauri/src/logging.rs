@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 use tracing_subscriber::fmt::format::FmtSpan;
 use crate::models::logs::LogEntry;
+use std::fs;
+use std::time::{Duration, SystemTime};
 
 pub fn init_logging(db_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
     let log_dir = db_path
@@ -112,4 +114,39 @@ pub fn parse_line(line: &str) -> LogEntry {
         message: message.to_string(),
         raw: line.to_string(),
     }
+}
+
+pub fn cleanup_old_logs(max_age_days: u64) -> Result<usize, String> {
+    let log_dir = get_log_directory()?;
+    let entries = fs::read_dir(&log_dir).map_err(|e| format!("Failed to read log dir: {}", e))?;
+
+    let max_age = Duration::from_secs(max_age_days * 24 * 60 * 60);
+    let now = SystemTime::now();
+    let mut deleted_count = 0;
+
+    for entry in entries.flatten() {
+        let path = entry.path();
+
+        if path.is_file() {
+            let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            if file_name.starts_with("family-weaver.log.") {
+                if let Ok(metadata) = entry.metadata() {
+                    if let Ok(modified) = metadata.modified() {
+                        if let Ok(elapsed) = now.duration_since(modified) {
+                            if elapsed > max_age {
+                                if let Err(e) = fs::remove_file(&path) {
+                                    tracing::warn!("Failed to delete old log file {:?}: {}", path, e);
+                                } else {
+                                    tracing::info!("Deleted old log file: {:?}", path);
+                                    deleted_count += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(deleted_count)
 }

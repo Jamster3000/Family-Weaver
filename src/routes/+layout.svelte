@@ -12,7 +12,6 @@
 
     let { children } = $props();
 
-    // Removed $state here. It's just a standard variable now.
     let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
 
     $effect(() => {

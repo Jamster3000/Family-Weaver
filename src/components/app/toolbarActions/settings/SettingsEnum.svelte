@@ -1,6 +1,15 @@
 <script lang="ts">
-	import { type Settings, updateSettings, settingsData } from "$settingsStore";
-	import { applyColourblindMode, type AppearanceMode, applyAppearanceMode, applyFontFamily } from "$lib/applySettings";
+	import {
+		type Settings,
+		updateSettings,
+		settingsData,
+	} from "$settingsStore";
+	import {
+		applyColourblindMode,
+		type AppearanceMode,
+		applyAppearanceMode,
+		applyFontFamily,
+	} from "$lib/applySettings";
 
 	let {
 		setting,
@@ -13,13 +22,13 @@
 			typeof setting.value_type === "object" &&
 			"Enum" in setting.value_type
 			? setting.value_type.Enum
-			: []
+			: [],
 	);
 
 	let currentValue = $derived(
 		setting.value && "Text" in setting.value
 			? setting.value.Text
-			: options[0] ?? ""
+			: (options[0] ?? ""),
 	);
 
 	function handleChange(e: Event) {
@@ -67,12 +76,13 @@
 		width: 100%;
 		padding: 10px 16px;
 		padding-right: 40px;
-		background: color-mix(in srgb, var(--secondary-background) 75%, var(--black));
-		border: 2px solid color-mix(
+		background: color-mix(
 			in srgb,
-			var(--border-colour) 50%,
-			transparent
+			var(--secondary-background) 75%,
+			var(--black)
 		);
+		border: 2px solid
+			color-mix(in srgb, var(--border-colour) 50%, transparent);
 		border-radius: 8px;
 		font-size: var(--font-medium);
 		font-family: var(--font-primary);

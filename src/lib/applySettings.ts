@@ -19,7 +19,7 @@ export function applyAppearanceMode(settings: Settings[], mode?: AppearanceMode)
     const root = document.documentElement;
 
     //get some settings from the store
-    const activeMode = mode ?? getSetting.text(settings, "appearance_mode", "Dark");
+    const activeMode = mode ?? getSetting.text(settings, "appearance_mode");
     const isHighContrast = getSetting.bool(settings, "high_contrast_mode") || getSetting.bool(settings, "high_contrast");
 
     // Get reduce motion (used to know whether to change appearance immediately or gradually)
@@ -57,9 +57,13 @@ export function applyHighContrast(settings: Settings[]) {
 }
 
 export function applyColourblindMode(settings: Settings[]) {
+    console.log("1");
     let mode = "off";
 
-    const selectedOption = getSetting.text(settings, "colorblind_mode");
+    const selectedOption = getSetting.text(settings, "colour_blind_mode");
+
+    console.log("2");
+    console.log(selectedOption);
 
     const lower = selectedOption.toLowerCase();
     if (lower.includes("protanopia")) {

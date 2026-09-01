@@ -43,6 +43,7 @@
 		leafUrl: string;
 		barkUrl: string;
 		isSakura: boolean;
+		isAutumn: boolean;
 		isWinter: boolean;
 	}
 
@@ -50,7 +51,6 @@
 	let branches = $state<BranchData[]>([]);
 	let leaves = $state<LeafData[]>([]);
 
-	// Glob .webp files from static directory and convert to root-relative paths (/images/tree/...)
 	const rawBarkFiles = import.meta.glob("/static/images/tree/bark/*.webp");
 	const rawLeafFiles = import.meta.glob("/static/images/tree/leaves/*.webp");
 
@@ -68,15 +68,28 @@
 		return (month === 3 && day >= 20) || (month === 4 && day <= 15);
 	}
 
+	function isAutumnSeason(): boolean {
+		const currentDate = new Date();
+		const month = currentDate.getMonth() + 1;
+		const day = currentDate.getDate();
+		return (
+			(month === 9 && day >= 22) ||
+			month === 10 ||
+			month === 11 ||
+			(month === 12 && day <= 20)
+		);
+	}
+
 	function isWinterSeason(): boolean {
 		const currentDate = new Date();
 		const month = currentDate.getMonth() + 1;
 		const day = currentDate.getDate();
-		return (month === 12 && day >= 1) || (month === 1 && day <= 31);
+		return (month === 12 && day >= 21) || month === 1 || month === 2 || (month === 3 && day <= 19);
 	}
 
 	function getTreeConfig(): TreeConfig {
 		const isSakura = isSakuraSeason();
+		const isAutumn = isAutumnSeason();
 		const isWinter = isWinterSeason();
 
 		const barks =
@@ -99,15 +112,35 @@
 					url.toLowerCase().includes("pink") ||
 					url.toLowerCase().includes("sakura"),
 			) || leavesList[0];
-		const regularLeaves = leavesList.filter((url) => url !== sakuraLeaf);
 
-		const leafUrl = isSakura
-			? sakuraLeaf
-			: regularLeaves.length > 0
-				? regularLeaves[
-						Math.floor(Math.random() * regularLeaves.length)
-					]
-				: leavesList[0];
+		const autumnLeaf =
+			leavesList.find(
+				(url) =>
+					url.toLowerCase().includes("autum") ||
+					url.toLowerCase().includes("autumn"),
+			) || leavesList[0];
+
+		const regularLeaves = leavesList.filter(
+			(url) =>
+				!url.toLowerCase().includes("pink") &&
+				!url.toLowerCase().includes("sakura") &&
+				!url.toLowerCase().includes("autum") &&
+				!url.toLowerCase().includes("autumn"),
+		);
+
+		let leafUrl: string;
+		if (isSakura) {
+			leafUrl = sakuraLeaf;
+		} else if (isAutumn) {
+			leafUrl = autumnLeaf;
+		} else {
+			leafUrl =
+				regularLeaves.length > 0
+					? regularLeaves[
+							Math.floor(Math.random() * regularLeaves.length)
+						]
+					: leavesList[0];
+		}
 
 		const barkUrl = isSakura
 			? sakuraBark
@@ -115,7 +148,7 @@
 				? regularBarks[Math.floor(Math.random() * regularBarks.length)]
 				: barks[0];
 
-		return { leafUrl, barkUrl, isSakura, isWinter };
+		return { leafUrl, barkUrl, isSakura, isAutumn, isWinter };
 	}
 
 	function generateTreeData(
@@ -170,7 +203,6 @@
 				startTime,
 			});
 
-			// Skip generating leaves entirely if it is winter
 			if (depth < 4 && !config.isWinter) {
 				const leafChance = Math.max(0.55, (4 - depth) / 5.5);
 				if (Math.random() <= leafChance) {
@@ -183,7 +215,9 @@
 						const depthFactor = Math.random() * 0.6 + 0.4;
 						const r = config.isSakura
 							? 4 + depthFactor * 2
-							: 6 + depthFactor * 3;
+							: config.isAutumn
+								? 5 + depthFactor * 2.5
+								: 6 + depthFactor * 3;
 
 						tempLeafList.push({
 							id: leafId++,

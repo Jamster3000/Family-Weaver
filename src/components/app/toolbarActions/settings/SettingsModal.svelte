@@ -24,7 +24,7 @@
 
 	$effect(() => {
 		if ($modals.settings && !wasModalOpen) {
-			settingsSnapshot = structuredClone($settingsData);
+			settingsSnapshot = $state.snapshot($settingsData);
 			wasModalOpen = true;
 		} else if (!$modals.settings && wasModalOpen) {
 			wasModalOpen = false;
@@ -49,7 +49,7 @@
 
 	function handleClose() {
 		if (settingsSnapshot.length > 0) {
-			setSettings(structuredClone(settingsSnapshot));
+			setSettings($state.snapshot(settingsSnapshot));
 		}
 
 		applyVisualSettings($settingsData);
@@ -66,7 +66,7 @@
 				settings: $settingsData,
 			});
 			toasts.success("Settings saved successfully.");
-			settingsSnapshot = structuredClone($settingsData);
+			settingsSnapshot = $state.snapshot($settingsData);
 			modals.close("settings");
 			logger.info("Settings saved successfully.");
 		} catch (error) {

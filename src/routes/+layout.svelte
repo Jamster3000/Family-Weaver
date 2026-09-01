@@ -9,6 +9,7 @@
     import { settingsData, type Settings, setSettings, getSetting } from '$settingsStore';
     import { applyVisualSettings, applyFontFamily, applyFontScale } from '$lib/applySettings';
     import { invoke } from '@tauri-apps/api/core';
+    import { getVersion } from '@tauri-apps/api/app';
 
     let { children } = $props();
 
@@ -22,13 +23,13 @@
     });
 
     async function loadSettings() {
-        try {
-            const settings = await invoke<Settings[]>("get_all_settings");
-            setSettings(settings);
-        } catch (error) {
-            console.error("Error fetching settings on startup:", error);
-        }
-    }
+		try {
+			const settings = await invoke<Settings[]>("get_all_settings");
+			setSettings(settings);
+		} catch (error) {
+			console.error("Error fetching settings on startup:", error);
+		}
+	}
 
     function setupUpdateInterval() {
         if (updateIntervalTimer) {
@@ -49,11 +50,32 @@
         }
     }
 
+    async function cacheReleaseNotes() {
+        try {
+            const currentVersion = await getVersion();
+            const cachedVersion = localStorage.getItem('cached_release_version');
+
+            if (cachedVersion !== currentVersion) {
+                const releaseInfo: { notes: string } = await invoke('fetch_version_release', {
+                    version: currentVersion
+                });
+
+                if (releaseInfo && releaseInfo.notes) {
+                    localStorage.setItem('cached_release_version', currentVersion);
+                    localStorage.setItem('cached_release_notes', releaseInfo.notes);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch release notes:", error);
+        }
+    }
+
     onMount(() => {
         loadSettings();
         applyVisualSettings($settingsData);
 
         checkForAppUpdatesBackground();
+        cacheReleaseNotes();
 
         onDestroy(() => {
             if (updateIntervalTimer) {

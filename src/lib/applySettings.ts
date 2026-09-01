@@ -57,13 +57,9 @@ export function applyHighContrast(settings: Settings[]) {
 }
 
 export function applyColourblindMode(settings: Settings[]) {
-    console.log("1");
     let mode = "off";
 
     const selectedOption = getSetting.text(settings, "colour_blind_mode");
-
-    console.log("2");
-    console.log(selectedOption);
 
     const lower = selectedOption.toLowerCase();
     if (lower.includes("protanopia")) {

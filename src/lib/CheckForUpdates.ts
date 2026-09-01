@@ -1,6 +1,7 @@
 import { check, type Update } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { updateStore } from '$updateStore';
+import { modals } from '$modalStore';
 import { toasts } from '$toastStore';
 import { createLogger } from '$lib/logger';
 
@@ -12,9 +13,10 @@ export async function checkForAppUpdates(): Promise<Update | null> {
         const update = await check();
         if (update) {
             logger.info(`Update available: ${update.version}`);
+            updateStore.setUpdateAvailable(update.version);
+            modals.open('appUpdate');
             return update;
         } else {
-            // Clear the pendingUpdate flag if no update is found
             updateStore.clearUpdate();
         }
     } catch (error) {
@@ -30,7 +32,12 @@ export async function checkForAppUpdatesBackground(): Promise<Update | null> {
         const update = await check();
         if (update) {
             updateStore.setUpdateAvailable(update.version);
-            toasts.info(`Family Weaver ${update.version} is available. Check the app menu to update.`);
+            modals.open('appUpdate');
+
+            if (window.location.pathname === '/tree') {
+                toasts.info(`Family Weaver ${update.version} is available. Check the app menu to update.`);
+            }
+
             logger.info(`Update available in background: ${update.version}`);
             return update;
         }
@@ -43,7 +50,6 @@ export async function checkForAppUpdatesBackground(): Promise<Update | null> {
 
 export async function installUpdate(update: Update): Promise<void> {
     logger.info(`Installing update: ${update.version}`);
-
     await update.downloadAndInstall();
     await relaunch();
 }

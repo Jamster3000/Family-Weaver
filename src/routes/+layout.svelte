@@ -10,21 +10,26 @@
     import { applyVisualSettings, applyFontFamily, applyFontScale } from '$lib/applySettings';
     import { invoke } from '@tauri-apps/api/core';
 
+    let { children } = $props();
+
+    // Removed $state here. It's just a standard variable now.
     let updateIntervalTimer: ReturnType<typeof setInterval> | null = null;
 
-    $: if ($settingsData.length > 0) {
-        setupUpdateInterval();
-        applyVisualSettings($settingsData);
-    }
+    $effect(() => {
+        if ($settingsData.length > 0) {
+            setupUpdateInterval();
+            applyVisualSettings($settingsData);
+        }
+    });
 
     async function loadSettings() {
-		try {
-			const settings = await invoke<Settings[]>("get_all_settings");
-			setSettings(settings);
-		} catch (error) {
-			console.error("Error fetching settings on startup:", error);
-		}
-	}
+        try {
+            const settings = await invoke<Settings[]>("get_all_settings");
+            setSettings(settings);
+        } catch (error) {
+            console.error("Error fetching settings on startup:", error);
+        }
+    }
 
     function setupUpdateInterval() {
         if (updateIntervalTimer) {
@@ -38,7 +43,6 @@
 
         const intervalHours = getSetting.number($settingsData, "check_for_updates_interval_hours");
 
-        // Setting interval to 0 disables runtime checks
         if (intervalHours > 0) {
             updateIntervalTimer = setInterval(() => {
                 checkForAppUpdatesBackground();
@@ -62,4 +66,4 @@
 
 <Titlebar />
 <ToastContainer />
-<slot />
+{@render children()}

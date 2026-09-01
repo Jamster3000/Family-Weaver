@@ -10,18 +10,21 @@
 	import { modals } from "$modalStore";
 	import { type Settings, setSettings, settingsData, getSetting } from "$settingsStore";
 
-	let updateModalOpen: boolean = false;
-	let updateVersion: string = "";
-	let updateObject: Update | null = null;
-	let showSpinner = false;
-	let hangAtEnd = false;
-	let spinnerText = "Checking for updates...";
-	let enableUpdateModal = true;
-	let settingsLoaded = false;
+	let updateVersion = $state("");
+	let updateObject = $state<Update | null>(null);
+	let showSpinner = $state(false);
+	let hangAtEnd = $state(false);
+	let spinnerText = $state("Checking for updates...");
+	let settingsLoaded = $state(false);
+	let shouldNavigateToTree = $state(false);
 
-	$: disableTree = (() => {
-		return getSetting.bool($settingsData, 'disable_tree_loading');
-	})();
+	let disableTree = $derived(getSetting.bool($settingsData, 'disable_tree_loading'));
+
+	$effect(() => {
+		if (shouldNavigateToTree && !$modals.appUpdate) {
+			goto('/tree');
+		}
+	});
 
 	async function loadSettings() {
 		try {
@@ -37,7 +40,7 @@
 			const exists = await invoke<boolean>("check_tree_exists");
 			if (exists) {
 				modals.close("createTree");
-				await goto("/tree");
+				shouldNavigateToTree = true;
 			} else {
 				modals.open("createTree");
 				showSpinner = false;
@@ -59,7 +62,6 @@
 			const xStartups = getSetting.number($settingsData, 'only_check_updates_every_x_startups');
 
 			if (isUpdateEnabled) {
-				//use localstorage rather than database for tracking startup count
 				const currentLaunches = parseInt(localStorage.getItem("app_launch_count") || "0", 10) + 1;
 				localStorage.setItem("app_launch_count", currentLaunches.toString());
 
@@ -73,7 +75,6 @@
 						updateVersion = update.version;
 						updateObject = update;
 						showSpinner = false;
-						updateModalOpen = true;
 						return;
 					}
 					return;
@@ -93,7 +94,7 @@
 	async function handleUpdateNow() {
 		if (!updateObject) return;
 
-		updateModalOpen = false;
+		modals.close("appUpdate");
 		showSpinner = true;
 		spinnerText = "Installing update...";
 		hangAtEnd = true;
@@ -108,7 +109,7 @@
 	}
 
 	function handleDismissUpdate() {
-		updateModalOpen = false;
+		modals.close("appUpdate");
 		showSpinner = false;
 		checkTreeExists();
 	}
@@ -124,12 +125,12 @@
 	/>
 {/if}
 
-{#if updateModalOpen && updateObject}
+{#if $modals.appUpdate && updateObject}
 	<UpdateModal
-		bind:isOpen={updateModalOpen}
+		isOpen={$modals.appUpdate}
 		version={updateVersion}
-		onUpdate={handleUpdateNow}
-		onDismiss={handleDismissUpdate}
+		onupdate={handleUpdateNow}
+		ondismiss={handleDismissUpdate}
 	/>
 {/if}
 

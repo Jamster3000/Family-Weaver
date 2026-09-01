@@ -216,4 +216,8 @@
 	:root[data-theme="high-contrast-light"] :global(.close-button svg) {
 		stroke: var(--white);
 	}
+
+	:root[data-colorblind="achromatopsia"] .primary {
+		color: var(--black);
+	}
 </style>

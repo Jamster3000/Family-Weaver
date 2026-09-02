@@ -74,6 +74,7 @@ pub fn run() {
             database::get::get_active_tree,
             database::get::get_all_trees,
             database::get::get_all_settings,
+            database::get::get_all_people,
             database::delete::delete_tree,
             database::delete::delete_all_trees,
             database::set::set_new_active_tree,

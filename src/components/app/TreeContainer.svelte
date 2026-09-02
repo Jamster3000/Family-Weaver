@@ -1,27 +1,79 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { invoke } from '@tauri-apps/api/core';
   import { Network, type Node, type Edge, type Options } from 'vis-network/standalone';
   import { networkStore } from '$networkStore';
+  import { personTreeStore, type Person } from '$personTreeStore';
 
-  let container: HTMLDivElement;
-  let network: Network;
+  let container = $state<HTMLDivElement | null>(null);
+  let network: Network | null = null;
 
   onMount(() => {
-    const nodes: Node[] = [
-      { id: 1, label: 'John Doe', title: 'b. 1945' },
-      { id: 2, label: 'Jane Doe', title: 'b. 1947' },
-      { id: 3, label: 'Robert Doe', title: 'b. 1970' },
-      { id: 4, label: 'Sarah Doe', title: 'b. 1972' },
-      { id: 5, label: 'Michael Smith', title: 'b. 1968' },
-    ];
+    (async () => {
+      try {
+        const people = await invoke<Person[]>('get_all_people');
+        personTreeStore.set(people);
+      } catch (err) {
+        console.error('Failed to fetch people:', err);
+      }
+    })();
 
-    const edges: Edge[] = [
-      { from: 1, to: 3 },
-      { from: 2, to: 3 },
-      { from: 1, to: 4 },
-      { from: 2, to: 4 },
-      { from: 3, to: 5 },
-    ];
+    return () => {
+      if (network) {
+        network.destroy();
+      }
+    };
+  });
+
+  let nodes = $derived.by<Node[]>(() => {
+    return $personTreeStore.map((person) => {
+      const name = [person.firstName, person.lastName].filter(Boolean).join(' ') || 'Unknown';
+      const birthInfo = person.dob ? `b. ${person.dob}` : '';
+      return {
+        id: person.id,
+        label: name,
+        title: birthInfo,
+      };
+    });
+  });
+
+  let edges = $derived.by<Edge[]>(() => {
+    const edgeList: Edge[] = [];
+    const drawnEdges = new Set<string>();
+
+    $personTreeStore.forEach((person) => {
+      if (person.childrenIds) {
+        person.childrenIds.forEach((childId: string) => {
+          const key = `parent-${person.id}-${childId}`;
+          if (!drawnEdges.has(key)) {
+            edgeList.push({ from: person.id, to: childId });
+            drawnEdges.add(key);
+          }
+        });
+      }
+
+      if (person.partnerIds) {
+        person.partnerIds.forEach((partnerId: string) => {
+          const sorted = [person.id, partnerId].sort();
+          const key = `partner-${sorted[0]}-${sorted[1]}`;
+          if (!drawnEdges.has(key)) {
+            edgeList.push({
+              from: sorted[0],
+              to: sorted[1],
+              dashes: true,
+              color: { color: '#aa8b56' },
+            });
+            drawnEdges.add(key);
+          }
+        });
+      }
+    });
+
+    return edgeList;
+  });
+
+  $effect(() => {
+    if (!container || !$personTreeStore.length) return;
 
     const options: Options = {
       layout: {
@@ -33,9 +85,6 @@
       physics: false,
       nodes: {
         shape: 'box',
-        widthConstraint: {
-          maximum: 200,
-        },
         font: {
           size: 14,
           face: 'Lora, sans-serif',
@@ -60,20 +109,16 @@
       },
     };
 
+    if (network) {
+      network.destroy();
+    }
+
     network = new Network(container, { nodes, edges }, options);
-
     networkStore.set(network);
-
-    return () => {
-      if (network) {
-        network.destroy();
-      }
-    };
   });
 </script>
 
-<!-- svelte-ignore element_invalid_self_closing_tag -->
-<div bind:this={container} class="network-container" />
+<div class="network-container" bind:this={container}></div>
 
 <style>
   .network-container {

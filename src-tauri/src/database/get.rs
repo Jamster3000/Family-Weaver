@@ -3,6 +3,8 @@ use crate::models::settings::{Settings, Value, ValueType};
 use crate::state::AppState;
 use rusqlite::OptionalExtension;
 use serde::de::DeserializeOwned;
+use crate::models::person::{MarriageDetails, Person, TimelineEntry};
+use std::collections::HashMap;
 
 #[tauri::command]
 pub async fn get_active_tree(state: tauri::State<'_, AppState>) -> Result<Option<Tree>, String> {
@@ -176,6 +178,176 @@ pub async fn get_all_settings(state: tauri::State<'_, AppState>) -> Result<Vec<S
     }
 
     Ok(settings)
+}
+#[tauri::command]
+pub async fn get_all_people(
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<Person>, String> {
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    tracing::info!("Fetching all people from the database");
+
+    //Query for person table records
+    let mut stmt = conn
+        .prepare(
+            "SELECT id, tree_id, first_name, middle_names, last_name,
+                    dob, birth_location, dod, death_location, important_notes
+             FROM person",
+        )
+        .map_err(|e| {
+            tracing::error!("Error preparing query for all people: {}", e);
+            e.to_string()
+        })?;
+
+    let mut people_map: HashMap<String, Person> = stmt
+        .query_map([], |row| {
+            let id: String = row.get(0)?;
+            Ok((
+                id.clone(),
+                Person {
+                    id,
+                    tree_id: row.get(1)?,
+                    first_name: row.get(2)?,
+                    middle_names: row.get(3)?,
+                    last_name: row.get(4)?,
+                    dob: row.get(5)?,
+                    birth_location: row.get(6)?,
+                    dod: row.get(7)?,
+                    death_location: row.get(8)?,
+                    key_facts: None,
+                    important_notes: row.get(9)?,
+                    parent_ids: Vec::new(),
+                    partner_ids: Vec::new(),
+                    children_ids: Vec::new(),
+                    marriages: HashMap::new(),
+                    life_events: Vec::new(),
+                    work_education: Vec::new(),
+                    places_lived: Vec::new(),
+                },
+            ))
+        })
+        .map_err(|e| {
+            tracing::error!("Error querying people table: {}", e);
+            e.to_string()
+        })?
+        .collect::<Result<HashMap<_, _>, _>>()
+        .map_err(|e| {
+            tracing::error!("Error mapping people rows: {}", e);
+            e.to_string()
+        })?;
+
+    //get the parents ids for each person and populate the parent_ids field
+    let mut parents_stmt = conn
+        .prepare("SELECT person_id, parent_id FROM person_parents")
+        .map_err(|e| e.to_string())?;
+    let parent_rows = parents_stmt
+        .query_map([], |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?)))
+        .map_err(|e| e.to_string())?;
+
+    for row in parent_rows.flatten() {
+        if let Some(person) = people_map.get_mut(&row.0) {
+            person.parent_ids.push(row.1);
+        }
+    }
+
+    // get the partner ids for each person and populate the partner_ids field
+    let mut partners_stmt = conn
+        .prepare("SELECT person_id, partner_id FROM person_partners")
+        .map_err(|e| e.to_string())?;
+    let partner_rows = partners_stmt
+        .query_map([], |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?)))
+        .map_err(|e| e.to_string())?;
+
+    for row in partner_rows.flatten() {
+        if let Some(person) = people_map.get_mut(&row.0) {
+            person.partner_ids.push(row.1);
+        }
+    }
+
+    // get the children ids for each person and populate the children_ids field
+    let mut children_stmt = conn
+        .prepare("SELECT person_id, child_id FROM person_children")
+        .map_err(|e| e.to_string())?;
+    let child_rows = children_stmt
+        .query_map([], |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?)))
+        .map_err(|e| e.to_string())?;
+
+    for row in child_rows.flatten() {
+        if let Some(person) = people_map.get_mut(&row.0) {
+            person.children_ids.push(row.1);
+        }
+    }
+
+    // Get the marriage details for each person and populate the marriages field
+    let mut marriages_stmt = conn
+        .prepare(
+            "SELECT person_id, partner_id, marriage_date, marriage_location, divorce_date, divorce_location
+             FROM marriages",
+        )
+        .map_err(|e| e.to_string())?;
+
+    let marriage_rows = marriages_stmt
+        .query_map([], |row| {
+            Ok((
+                row.get::<_, String>(0)?,
+                row.get::<_, String>(1)?,
+                MarriageDetails {
+                    marriage_date: row.get(2)?,
+                    marriage_location: row.get(3)?,
+                    divorce_date: row.get(4)?,
+                    divorce_location: row.get(5)?,
+                },
+            ))
+        })
+        .map_err(|e| e.to_string())?;
+
+    for row in marriage_rows.flatten() {
+        if let Some(person) = people_map.get_mut(&row.0) {
+            person.marriages.insert(row.1, row.2);
+        }
+    }
+
+    // get the timeline entries for each person and populate the appropriate fields
+    let mut timeline_stmt = conn
+        .prepare(
+            "SELECT id, person_id, entry_type, title, description, start_date, end_date, location
+             FROM timeline_entries",
+        )
+        .map_err(|e| e.to_string())?;
+
+    let timeline_rows = timeline_stmt
+        .query_map([], |row| {
+            Ok((
+                row.get::<_, String>(1)?, // person_id
+                row.get::<_, String>(2)?, // entry_type
+                TimelineEntry {
+                    id: row.get(0)?,
+                    title: row.get(3)?,
+                    description: row.get(4)?,
+                    start_date: row.get(5)?,
+                    end_date: row.get(6)?,
+                    location: row.get(7)?,
+                },
+            ))
+        })
+        .map_err(|e| e.to_string())?;
+
+    for row in timeline_rows.flatten() {
+        let (person_id, entry_type, entry) = row;
+        if let Some(person) = people_map.get_mut(&person_id) {
+            match entry_type.as_str() {
+                "life_event" | "life_events" => person.life_events.push(entry),
+                "work_education" => person.work_education.push(entry),
+                "place_lived" | "places_lived" => person.places_lived.push(entry),
+                _ => person.life_events.push(entry),
+            }
+        }
+    }
+
+    Ok(people_map.into_values().collect())
 }
 
 fn parse_optional_json<T: DeserializeOwned>(

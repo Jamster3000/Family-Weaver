@@ -47,19 +47,9 @@ jobs:
             # Family Weaver v__VERSION__
 
             ## What's new
-            - Added confirmation notifications when creating people, saving changes, or performing actions.
-            - Update option now available in the "app" menu without restarting (choose "later" first).
-            - App automatically checks for updates every 2 hours (configurable).
-            - Implemented Settings panel focused on accessibility (accessible from "app" menu).
-            - Increased modal title sizes for better visual hierarchy.
-            - Added logging viewer under "Logs" in the "app" menu for debugging.
-            - Improved tree loading animation performance with seasonal variations (autumn leaves, no winter leaves).
+            - You can now add relationships when creating people adding parents, children, and spouses to your family tree.
 
             ## Under the Hood
-            - Fixed markdown rendering in "What's new" modal.
-            - Fixed modal close state management in `CreateTree`, `SwitchTreeModal`, and `RenameTreeTitle`.
-            - Renamed "upload" tab to "media" in create person modal.
-            - Renamed toolbar "Settings" to "app" for better context.
-            - Minor performance improvements and bug fixes.
+            -
           releaseDraft: false
           prerelease: false

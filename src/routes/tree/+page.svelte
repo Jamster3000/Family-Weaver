@@ -3,11 +3,13 @@
 	import Toolbar from "$components/app/Toolbar.svelte";
 	import WhatsNewButton from "$components/app/whatsNew/WhatsNewButton.svelte";
 	import { zoomIn, zoomOut } from "$networkStore";
-
-	let releaseNotes = "";
-	let initTask: Promise<void> | null = null;
+	import { onMount } from "svelte";
+	import { invoke } from "@tauri-apps/api/core";
+	import { personTreeStore, type Person } from "$personTreeStore";
 
 	let containerHeight = 0;
+	let loading = true;
+	let error: String | null = null;
 
 	// Reactively update the CSS variable whenever the height changes
 	$: if (typeof document !== 'undefined' && containerHeight) {
@@ -16,6 +18,18 @@
 		const totalOffset = containerHeight + bottomOffset + gap;
 		document.documentElement.style.setProperty('--toast-bottom', `${totalOffset}px`);
 	}
+
+	onMount(async () => {
+		try {
+			const people = await invoke<Person[]>('get_all_people');
+			personTreeStore.set(people);
+		} catch (err) {
+			console.error("Failed to fetch people for active tree:", err);
+			error = typeof err === 'string' ? err :  "Failed to load people data";
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <TreeContainer />

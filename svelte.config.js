@@ -19,6 +19,7 @@ const config = {
             $toastStore: path.resolve('./src/lib/stores/toastStore.ts'),
             $updateStore: path.resolve('./src/lib/stores/updateStore.ts'),
             $settingsStore: path.resolve('./src/lib/stores/settingsStore.ts'),
+            $personTreeStore: path.resolve('./src/lib/stores/personTreeStore.ts'),
         },
     },
 };

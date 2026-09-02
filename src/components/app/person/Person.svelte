@@ -13,6 +13,8 @@
 		hasPersonChanged,
 		resetPersonData,
 	} from "$personStore";
+	import type { Person } from "$personTreeStore";
+	import { updatePersonTreeData } from "$personTreeStore";
 	import { activeTree } from "$treeStore";
 	import { modals } from "$modalStore";
 	import { invoke } from "@tauri-apps/api/core";
@@ -38,8 +40,9 @@
 	async function handlePersonSave() {
 		logger.info("Starting saving person");
 		const rawData = $personData;
+		const currentTreeId = $activeTree?.id ? String($activeTree.id) : "";
 
-		const cleanedPerson = {
+		const cleanedPerson: Person = {
 			...rawData,
 			firstName: rawData.firstName.trim(),
 			middleNames: rawData.middleNames.trim(),
@@ -48,17 +51,22 @@
 			deathLocation: rawData.deathLocation.trim(),
 			importantNotes: rawData.importantNotes.trim(),
 			id: crypto.randomUUID(),
-			tree_id: $activeTree?.id,
+			treeId: currentTreeId,
+			tree_id: currentTreeId,
 		};
 
 		const debugString = Object.entries(rawData)
-			.map(([key, val]) => `${key}: ${typeof val === 'object' && val !== null ? JSON.stringify(val) : val}`)
+			.map(
+				([key, val]) =>
+					`${key}: ${typeof val === "object" && val !== null ? JSON.stringify(val) : val}`,
+			)
 			.join(", ");
 
 		logger.info(`Raw Data -> ${debugString}`);
 
 		try {
 			await invoke("create_person", { person: cleanedPerson });
+			updatePersonTreeData(cleanedPerson);
 			resetPersonData();
 			toasts.success("Person created successfully!");
 		} catch (error) {
@@ -95,29 +103,62 @@
 	}
 </script>
 
-<Modal isOpen={$modals.addPerson} width="100%" padding="medium" onClose={handleAddPersonClose} showClose={true}>
+<Modal
+	isOpen={$modals.addPerson}
+	width="100%"
+	padding="medium"
+	onClose={handleAddPersonClose}
+	showClose={true}>
 	<div class="modal-header">
 		<h1>Add new family member</h1>
 	</div>
 
 	<div class="tabs">
-		<Tooltip text="The basic details of the person like name and birth date." position="top">
-			<button class:active={activeTab === "overview"} onclick={() => (activeTab = "overview")}>Overview</button>
+		<Tooltip
+			text="The basic details of the person like name and birth date."
+			position="top"
+		>
+			<button
+				class:active={activeTab === "overview"}
+				onclick={() => (activeTab = "overview")}>Overview</button
+			>
 		</Tooltip>
-		<Tooltip text="Add photos, documents, or other files for this person." position="top">
-			<button class:active={activeTab === "media"} onclick={() => (activeTab = "media")}>Media</button>
+		<Tooltip
+			text="Add photos, documents, or other files for this person."
+			position="top"
+		>
+			<button
+				class:active={activeTab === "media"}
+				onclick={() => (activeTab = "media")}>Media</button
+			>
 		</Tooltip>
-		<Tooltip text="Connect this person to parents, partners, or children." position="top">
-			<button class:active={activeTab === "relationships"} onclick={() => (activeTab = "relationships")}>Relationships</button>
+		<Tooltip
+			text="Connect this person to parents, partners, or children."
+			position="top"
+		>
+			<button
+				class:active={activeTab === "relationships"}
+				onclick={() => (activeTab = "relationships")}
+				>Relationships</button
+			>
 		</Tooltip>
-		<Tooltip text="Track work history, education, and life events over time." position="top">
-			<button class:active={activeTab === "timelines"} onclick={() => (activeTab = "timelines")}>Timelines</button>
+		<Tooltip
+			text="Track work history, education, and life events over time."
+			position="top"
+		>
+			<button
+				class:active={activeTab === "timelines"}
+				onclick={() => (activeTab = "timelines")}>Timelines</button
+			>
 		</Tooltip>
 	</div>
 
 	<div class="tab-content">
 		{#key activeTab}
-			<div in:fade={{ duration: getAnimationDuration() }} class="tab-panel">
+			<div
+				in:fade={{ duration: getAnimationDuration() }}
+				class="tab-panel"
+			>
 				{#if activeTab === "overview"}
 					<PersonOverview />
 				{:else if activeTab === "media"}
@@ -125,7 +166,9 @@
 				{:else if activeTab === "relationships"}
 					<PersonRelationships />
 				{:else if activeTab === "timelines"}
-					<PersonTimelines bind:isAddingEntry={isAddingTimelineEvent} />
+					<PersonTimelines
+						isAddingEntry={isAddingTimelineEvent}
+					/>
 				{/if}
 			</div>
 		{/key}
@@ -133,20 +176,34 @@
 
 	{#snippet footer()}
 		{#if isAddingTimelineEvent}
-			<Tooltip text="You must finish adding the timeline event before saving this person." position="top">
+			<Tooltip
+				text="You must finish adding the timeline event before saving this person."
+				position="top"
+			>
 				<Button disabled={true}>Save</Button>
 			</Tooltip>
 		{:else if !hasChanges}
-			<Tooltip text="Please add some information about this person before saving." position="top">
+			<Tooltip
+				text="Please add some information about this person before saving."
+				position="top"
+			>
 				<Button disabled={true}>Save</Button>
 			</Tooltip>
 		{:else}
-			<Tooltip text="Save this person and return to your family tree." position="top">
+			<Tooltip
+				text="Save this person and return to your family tree."
+				position="top"
+			>
 				<Button onclick={handlePersonSave}>Save</Button>
 			</Tooltip>
 		{/if}
-		<Tooltip text="Discard this person, deleting any progress and returning to your family tree." position="top">
-			<Button variant="secondary" onclick={handlePersonDiscard}>Discard</Button>
+		<Tooltip
+			text="Discard this person, deleting any progress and returning to your family tree."
+			position="top"
+		>
+			<Button variant="secondary" onclick={handlePersonDiscard}
+				>Discard</Button
+			>
 		</Tooltip>
 	{/snippet}
 </Modal>
@@ -159,8 +216,7 @@
 	confirmLabel="Yes, discard"
 	cancelLabel="No, continue editing"
 	onConfirm={handleDiscard}
-	onClose={handleDiscardChangesClose}
-/>
+	onClose={handleDiscardChangesClose}/>
 
 <style>
 	.modal-header {

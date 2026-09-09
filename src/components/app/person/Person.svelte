@@ -69,9 +69,11 @@
 			updatePersonTreeData(cleanedPerson);
 			resetPersonData();
 			toasts.success("Person created successfully!");
+			activeTab = "overview";
 		} catch (error) {
 			toasts.error("Failed to create person.");
 			logger.error(`Error creating person: ${error}`);
+			activeTab = "overview";
 			return;
 		}
 
@@ -83,6 +85,7 @@
 			modals.open("discardPersonChanges");
 		} else {
 			modals.close("addPerson");
+			activeTab = "overview";
 		}
 	}
 
@@ -91,15 +94,18 @@
 		modals.close("discardPersonChanges");
 		setTimeout(() => {
 			modals.close("addPerson");
+			activeTab = "overview";
 		}, 100);
 	}
 
 	function handleAddPersonClose() {
 		modals.close("addPerson");
+		activeTab = "overview";
 	}
 
 	function handleDiscardChangesClose() {
 		modals.close("discardPersonChanges");
+		activeTab = "overview";
 	}
 </script>
 

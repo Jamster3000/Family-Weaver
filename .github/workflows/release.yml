@@ -46,18 +46,11 @@ jobs:
           releaseBody: |
             # Family Weaver v__VERSION__
 
-            This version adds the second most important feature to Family Weaver.
-            The rendering which shows people and relationships.
-
-            Please bare in mind that this rendering of the tree and each person is actively
-            experiemental. You almost definitely will find something in the wrong place, lines going to the wrong places,
-            and other visual problems.
-
             ## What's new
-            - You can now add relationships when creating people adding parents, children, and spouses to your family tree.
-            - Fixed bug where `What's new` didn't format correctly.
+            -
 
             ## Under the Hood
-            -
+            - Fixed a bug where deleting the last/only tree wouldn't correctly delete and continue to show the same tree.
+            - People are no longer shared between trees as this was a bug. Each tree now has their own set of people that aren't shared between other trees.
           releaseDraft: false
           prerelease: false

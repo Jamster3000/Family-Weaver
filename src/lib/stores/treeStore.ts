@@ -10,8 +10,12 @@ export interface Tree {
 
 export const activeTree = writable<Tree | null>(null);
 
-export function setActiveTree(tree: Tree) {
-    activeTree.set(tree);
+export function setActiveTree(tree: Tree | null) {
+    if (tree !== null) {
+        activeTree.set(tree);
+    } else {
+        activeTree.set(null);
+    }
 }
 
 export function getActiveTree(): Tree | null {

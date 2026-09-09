@@ -195,10 +195,11 @@ pub async fn get_all_people(
         .prepare(
             "SELECT id, tree_id, first_name, middle_names, last_name,
                     dob, birth_location, dod, death_location, important_notes
-             FROM person",
+             FROM person
+             WHERE tree_id = (SELECT id FROM trees WHERE active_tree = 1 LIMIT 1)",
         )
         .map_err(|e| {
-            tracing::error!("Error preparing query for all people: {}", e);
+            tracing::error!("Error preparing query for active tree people: {}", e);
             e.to_string()
         })?;
 

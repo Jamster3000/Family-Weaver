@@ -17,11 +17,19 @@
 			await invoke("delete_tree", { treeId: tree_id });
 			const tree: Tree = await invoke("set_new_active_tree");
 
-			setActiveTree(tree);
+			if (tree !== null) {
+				setActiveTree(tree);
+				toasts.success("Tree deleted successfully!");
+				toasts.success(`Switching to ${tree.name}`);
+				logger.info(`Tree deleted successfully. New active tree: ${tree.name}`);
+			} else {
+				toasts.success("Tree deleted successfully!");
+				setActiveTree(null);
+				modals.open("createTree");
+				logger.info('Tree deleted successfully. No new active tree.');
+			}
+
 			handleClose();
-			toasts.success("Tree deleted successfully!");
-			toasts.success(`Switching to ${tree.name}`);
-			logger.info(`Tree deleted successfully. New active tree: ${tree.name}`);
 		} catch (error) {
 			console.error("Error deleting tree:", error);
 			handleClose();

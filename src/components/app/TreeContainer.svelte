@@ -1,21 +1,28 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { invoke } from "@tauri-apps/api/core";
+	import { listen } from "@tauri-apps/api/event";
 	import { personTreeStore, type Person } from "$personTreeStore";
 	import { FamilyTreeLayout } from "$lib/treeLayout/index";
 
 	let container = $state<HTMLDivElement | null>(null);
 	let layoutInstance = $state<FamilyTreeLayout | null>(null);
 
+	async function fetchPeople() {
+		try {
+			const people = await invoke<Person[]>("get_all_people");
+			personTreeStore.set(people);
+		} catch (err) {
+			console.error("Failed to fetch people:", err);
+		}
+	}
+
 	onMount(() => {
-		(async () => {
-			try {
-				const people = await invoke<Person[]>("get_all_people");
-				personTreeStore.set(people);
-			} catch (err) {
-				console.error("Failed to fetch people:", err);
-			}
-		})();
+		fetchPeople();
+
+		const unlistenPromise = listen("tree-changed", () => {
+			fetchPeople();
+		});
 
 		if (container) {
 			layoutInstance = new FamilyTreeLayout(container, {
@@ -24,6 +31,7 @@
 		}
 
 		return () => {
+			unlistenPromise.then((unlisten) => unlisten());
 			if (layoutInstance) {
 				layoutInstance.destroy();
 			}
@@ -31,7 +39,7 @@
 	});
 
 	$effect(() => {
-		if (layoutInstance && $personTreeStore.length > 0) {
+		if (layoutInstance) {
 			layoutInstance.render($personTreeStore);
 		}
 	});

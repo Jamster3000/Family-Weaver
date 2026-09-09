@@ -11,6 +11,9 @@ pub async fn delete_tree(tree_id: String, state: tauri::State<'_, AppState>) -> 
         e.to_string()
     })?;
 
+    conn.execute_batch("PRAGMA foreign_keys = ON;")
+        .map_err(|e| e.to_string())?;
+
     tracing::info!("Deleting tree with ID: {}", tree_id);
 
     conn.execute("DELETE FROM trees WHERE id = ?1", params![&tree_id])
@@ -21,7 +24,6 @@ pub async fn delete_tree(tree_id: String, state: tauri::State<'_, AppState>) -> 
 
     Ok(())
 }
-
 
 #[tauri::command]
 pub async fn delete_all_trees(state: tauri::State<'_, AppState>, app: AppHandle) -> Result<(), String> {

@@ -15,6 +15,19 @@ pub async fn set_new_active_tree(
 
     tracing::info!("Setting new active tree");
 
+    //Check if there are any other trees to set active before trying to set one as active
+    let count: i64 = conn
+        .query_row("SELECT COUNT(*) FROM trees", [], |row| row.get(0))
+        .map_err(|e| {
+            tracing::error!("Error counting trees: {}", e);
+            e.to_string()
+        })?;
+
+    if count == 0 {
+        tracing::info!("No trees found to set active");
+        return Ok(None);
+    }
+
     conn.execute(
         "UPDATE trees SET active_tree = 1 WHERE id = (SELECT id FROM trees ORDER BY created_at DESC LIMIT 1)",
         [],

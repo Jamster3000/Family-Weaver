@@ -7,6 +7,7 @@
 	import { toasts } from "$toastStore";
 	import { getActiveTree } from "$treeStore";
 	import { createLogger } from "$lib/logger";
+	import { personTreeStore, type Person } from "$personTreeStore";
 
 	const logger = createLogger("SwitchTreeModal.svelte");
 
@@ -40,7 +41,9 @@
 	async function handleSelectTree(treeId: string) {
 		if (treeId === String(getActiveTree()?.id)) {
 			handleClose();
-			toasts.info(`'${getActiveTree()?.name}' family tree was already switched to.`);
+			toasts.info(
+				`'${getActiveTree()?.name}' family tree was already switched to.`,
+			);
 			return;
 		}
 
@@ -48,8 +51,14 @@
 
 		try {
 			await invoke("switch_active_tree", { treeId });
+
+			const updatedPeople = await invoke<Person[]>("get_all_people");
+			personTreeStore.set(updatedPeople);
+
 			handleClose();
-			toasts.success(`Switched to '${getActiveTree()?.name}' family tree.`);
+			toasts.success(
+				`Switched to '${getActiveTree()?.name}' family tree.`,
+			);
 			logger.info(`Successfully switched to tree with ID: ${treeId}`);
 		} catch (error) {
 			console.error("Failed to switch active tree:", error);

@@ -56,5 +56,6 @@ jobs:
             - People are no longer shared between trees as this was a bug. Each tree now has their own set of people that aren't shared between other trees.
             - When saving a person to your tree, the next time you go to create a new person, it will default to opening on the "overview" section.
             - A bug was fixed where the daate picker calendar would default to light mode when settings was set to "system" with no detection for whether "system" was in light or dark mode.
+            - When there is nobody available to add as a relationship, the "add relationship" button will be disabled to avoid confusion.
           releaseDraft: false
           prerelease: false

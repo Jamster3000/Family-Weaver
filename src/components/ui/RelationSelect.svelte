@@ -1,122 +1,137 @@
 <script lang="ts">
-  import { personTreeStore, type Person } from "$personTreeStore";
-  import { personData } from "$personStore";
-  import { IconChevronDown, IconSearch, IconCheck } from "@tabler/icons-svelte-runes";
-  import { getSuggestedPeople, type RelationType } from "$lib/relationSuggestions";
+	import { personTreeStore, type Person } from "$personTreeStore";
+	import { personData } from "$personStore";
+	import {
+		IconChevronDown,
+		IconSearch,
+		IconCheck,
+	} from "@tabler/icons-svelte-runes";
+	import {
+		getSuggestedPeople,
+		type RelationType,
+	} from "$lib/relationSuggestions";
 
-  interface Props {
-    placeholder?: string;
-    relationType?: RelationType;
-    excludeIds?: string[];
-    onSelect: (selectedIds: string[]) => void;
-  }
+	let {
+		placeholder = "Add relations",
+		relationType,
+		excludeIds = [],
+		onSelect,
+		disabled = false,
+	}: {
+		placeholder?: string;
+		relationType?: RelationType;
+		excludeIds?: string[];
+		onSelect: (selectedIds: string[]) => void;
+		disabled?: boolean;
+	} = $props();
 
-  let {
-    placeholder = "Add relations",
-    relationType,
-    excludeIds = [],
-    onSelect,
-  }: Props = $props();
+	let isOpen = $state(false);
+	let searchQuery = $state("");
+	let selectedIds = $state<string[]>([]);
+	let triggerEl = $state<HTMLButtonElement | null>(null);
+	let dropdownPanelEl = $state<HTMLDivElement | null>(null);
+	let coords = $state({ top: 0, left: 0, width: 0 });
 
-  let isOpen = $state(false);
-  let searchQuery = $state("");
-  let selectedIds = $state<string[]>([]);
-  let triggerEl = $state<HTMLButtonElement | null>(null);
-  let dropdownPanelEl = $state<HTMLDivElement | null>(null);
-  let coords = $state({ top: 0, left: 0, width: 0 });
+	function formatName(person: Person): string {
+		const name = [person.firstName, person.lastName]
+			.filter(Boolean)
+			.join(" ");
+		return name || "Unnamed Person";
+	}
 
-  function formatName(person: Person): string {
-    const name = [person.firstName, person.lastName].filter(Boolean).join(" ");
-    return name || "Unnamed Person";
-  }
+	// Everyone section: completely unfiltered by genealogical tree rules
+	let availablePeople = $derived(
+		$personTreeStore.filter((p) => !excludeIds.includes(p.id)),
+	);
 
-  // Everyone section: completely unfiltered by genealogical tree rules
-  let availablePeople = $derived(
-    $personTreeStore.filter((p) => !excludeIds.includes(p.id))
-  );
+	let searchResults = $derived(
+		searchQuery.trim()
+			? availablePeople.filter((p) => {
+					const fullName =
+						`${p.firstName ?? ""} ${p.lastName ?? ""}`.toLowerCase();
+					return fullName.includes(searchQuery.trim().toLowerCase());
+				})
+			: [],
+	);
 
-  let searchResults = $derived(
-    searchQuery.trim()
-      ? availablePeople.filter((p) => {
-          const fullName = `${p.firstName ?? ""} ${p.lastName ?? ""}`.toLowerCase();
-          return fullName.includes(searchQuery.trim().toLowerCase());
-        })
-      : []
-  );
+	// Suggested section: applies logical tree rules and DOB checks
+	let suggestedPeople = $derived(
+		getSuggestedPeople(
+			relationType,
+			$personData,
+			$personTreeStore,
+			excludeIds,
+		),
+	);
 
-  // Suggested section: applies logical tree rules and DOB checks
-  let suggestedPeople = $derived(
-    getSuggestedPeople(relationType, $personData, $personTreeStore, excludeIds)
-  );
+	function updatePosition() {
+		if (triggerEl) {
+			const rect = triggerEl.getBoundingClientRect();
+			coords = {
+				top: rect.bottom + 4,
+				left: rect.left,
+				width: rect.width,
+			};
+		}
+	}
 
-  function updatePosition() {
-    if (triggerEl) {
-      const rect = triggerEl.getBoundingClientRect();
-      coords = {
-        top: rect.bottom + 4,
-        left: rect.left,
-        width: rect.width,
-      };
-    }
-  }
+	function toggleOpen() {
+		if (!isOpen) {
+			updatePosition();
+			isOpen = true;
+		} else {
+			closeDropdown();
+		}
+	}
 
-  function toggleOpen() {
-    if (!isOpen) {
-      updatePosition();
-      isOpen = true;
-    } else {
-      closeDropdown();
-    }
-  }
+	function closeDropdown() {
+		isOpen = false;
+		searchQuery = "";
+		selectedIds = [];
+	}
 
-  function closeDropdown() {
-    isOpen = false;
-    searchQuery = "";
-    selectedIds = [];
-  }
+	function togglePerson(id: string) {
+		if (selectedIds.includes(id)) {
+			selectedIds = selectedIds.filter((selectedId) => selectedId !== id);
+		} else {
+			selectedIds = [...selectedIds, id];
+		}
+	}
 
-  function togglePerson(id: string) {
-    if (selectedIds.includes(id)) {
-      selectedIds = selectedIds.filter((selectedId) => selectedId !== id);
-    } else {
-      selectedIds = [...selectedIds, id];
-    }
-  }
+	function handleConfirm() {
+		if (selectedIds.length > 0) {
+			onSelect(selectedIds);
+		}
+		closeDropdown();
+	}
 
-  function handleConfirm() {
-    if (selectedIds.length > 0) {
-      onSelect(selectedIds);
-    }
-    closeDropdown();
-  }
+	function focusOnMount(node: HTMLInputElement) {
+		node.focus();
+	}
 
-  function focusOnMount(node: HTMLInputElement) {
-    node.focus();
-  }
+	function handleWindowClick(e: MouseEvent) {
+		if (!isOpen) return;
+		const target = e.target as Node;
 
-  function handleWindowClick(e: MouseEvent) {
-    if (!isOpen) return;
-    const target = e.target as Node;
+		const isOutside =
+			triggerEl &&
+			!triggerEl.contains(target) &&
+			dropdownPanelEl &&
+			!dropdownPanelEl.contains(target);
 
-    const isOutside =
-      triggerEl &&
-      !triggerEl.contains(target) &&
-      dropdownPanelEl &&
-      !dropdownPanelEl.contains(target);
+		if (isOutside) {
+			if (selectedIds.length > 0) {
+				onSelect(selectedIds);
+			}
+			closeDropdown();
+		}
+	}
 
-    if (isOutside) {
-      if (selectedIds.length > 0) {
-        onSelect(selectedIds);
-      }
-      closeDropdown();
-    }
-  }
-
-  function handleWindowScrollOrResize() {
-    if (isOpen) {
-      updatePosition();
-    }
-  }
+	function handleWindowScrollOrResize() {
+		if (isOpen) {
+			updatePosition();
+		}
+	}
 </script>
 
 <svelte:window
@@ -133,6 +148,7 @@
 		onclick={toggleOpen}
 		aria-haspopup="listbox"
 		aria-expanded={isOpen}
+		{disabled}
 	>
 		<span>
 			{selectedIds.length > 0
@@ -549,5 +565,24 @@
 		color: var(--text-colour);
 		opacity: 0.7;
 		text-align: left;
+	}
+
+	.select-trigger:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background: var(--primary-background);
+		border-color: var(--border-colour);
+	}
+
+	.select-trigger:disabled:hover {
+		border-color: var(--border-colour);
+	}
+
+	.select-trigger:disabled span {
+		color: var(--secondary-colour);
+	}
+
+	.select-trigger:disabled :global(.chevron) {
+		opacity: 0.5;
 	}
 </style>

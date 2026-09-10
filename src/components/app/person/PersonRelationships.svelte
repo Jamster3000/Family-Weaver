@@ -19,6 +19,11 @@
 		return name || "Unnamed Person";
 	}
 
+	function getRelationLabel(prefix: string): string {
+		const name = formatName($personData);
+		return name === "Unnamed Person" ? prefix : `${prefix} to ${name}`;
+	}
+
 	let peopleById = $derived(new Map($personTreeStore.map((p) => [p.id, p])));
 
 	// Combine all assigned relationships so a person can't be added to multiple categories simultaneously
@@ -27,6 +32,10 @@
 		...($personData.childrenIds || []),
 		...($personData.partnerIds || []),
 	]);
+
+	// Keep track of the number of available people to add to relationships
+	// Used to disable elements and make it clear there is nobody to add yet
+	let availablePeopleCount = $derived($personTreeStore.length);
 
 	function handleAddRelation(
 		field: "parentIds" | "childrenIds" | "partnerIds",
@@ -52,6 +61,12 @@
 	}
 </script>
 
+{#if availablePeopleCount === 0}
+	<div class="no-people-banner">
+		<p>No other people have been added to this family tree yet.</p>
+	</div>
+{/if}
+
 <div class="relationships-container">
 	<div class="relation-group">
 		<div class="group-header">
@@ -65,10 +80,11 @@
 				relationType="parent"
 				excludeIds={allAssignedIds}
 				onSelect={(ids) => handleAddRelation("parentIds", ids)}
+				disabled={availablePeopleCount === 0}
 			/>
 
 			{#if $personData.parentIds.length === 0}
-				<p class="empty-state">Add parent(s) to {formatName($personData)}</p>
+				<p class="empty-state">{getRelationLabel("Add parent(s)")}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.parentIds as parentId (parentId)}
@@ -108,10 +124,11 @@
 				relationType="child"
 				excludeIds={allAssignedIds}
 				onSelect={(ids) => handleAddRelation("childrenIds", ids)}
+				disabled={availablePeopleCount === 0}
 			/>
 
 			{#if $personData.childrenIds.length === 0}
-				<p class="empty-state">Add child(ren) to {formatName($personData)}</p>
+				<p class="empty-state">{getRelationLabel("Add child(ren)")}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.childrenIds as childId (childId)}
@@ -154,10 +171,11 @@
 				relationType="partner"
 				excludeIds={allAssignedIds}
 				onSelect={(ids) => handleAddRelation("partnerIds", ids)}
+				disabled={availablePeopleCount === 0}
 			/>
 
 			{#if $personData.partnerIds.length === 0}
-				<p class="empty-state">Add partner(s) to {formatName($personData)}</p>
+				<p class="empty-state">{getRelationLabel("Add partner(s)")}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.partnerIds as partnerId (partnerId)}
@@ -188,6 +206,21 @@
 </div>
 
 <style>
+	.no-people-banner {
+		padding: 10px 14px;
+		margin-bottom: 16px;
+		background: color-mix(in srgb, var(--primary-colour) 8%, transparent);
+		border: 1px solid color-mix(in srgb, var(--primary-colour) 20%, transparent);
+		border-radius: 6px;
+	}
+
+	.no-people-banner p {
+		margin: 0;
+		font-size: var(--font-medium);
+		color: var(--text-colour);
+		opacity: 0.7;
+	}
+
 	.relationships-container {
 		display: grid;
 		grid-template-columns: 1fr 1px 1fr 1px 1fr;

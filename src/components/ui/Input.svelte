@@ -1,27 +1,13 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
-	import Tooltip from "$components/ui/Tooltip.svelte";
 	import flatpickr from "flatpickr";
 	import "flatpickr/dist/flatpickr.min.css";
 	import { IconCalendarWeek } from "@tabler/icons-svelte-runes";
 	import { settingsData } from "$lib/stores/settingsStore";
+	import { getFlatpickrFormat, attachCustomYearSelect } from "$lib/flatpickrUtils";
 
 	import darkTheme from "flatpickr/dist/themes/dark.css?inline";
 	import lightTheme from "flatpickr/dist/themes/light.css?inline";
-
-	// Derived values
-	let appearanceMode = $derived($settingsData.find(s => s.key === 'appearance_mode'));
-
-	let isDark = $derived(
-		!appearanceMode?.value ? false :
-		(() => {
-			const val = appearanceMode.value as Record<string, any>;
-			const modeVal = (val.Enum || val.Text || "") as string;
-			return modeVal.toLowerCase() === "dark";
-		})()
-	);
-
-	let currentTheme = $derived(isDark ? darkTheme : lightTheme);
 
 	let {
 		label = "",
@@ -59,63 +45,61 @@
 		onfocus?: (e: FocusEvent) => void;
 	} = $props();
 
+	//valid types the input is allowed to be.
 	const validTypes = [
-		"text",
-		"email",
-		"hidden",
-		"number",
-		"search",
-		"tel",
-		"url",
-		"date",
-		"datetime-local",
-		"month",
-		"time",
-		"week",
-		"color",
+		"text", "email", "hidden", "number", "search",
+		"tel", "url", "date", "datetime-local", "month",
+		"time", "week", "color",
 	];
 
+	// Ensure the type is valid, defaulting to "text" if not
 	let safeType = $derived(
 		type === "date" ? "text" : validTypes.includes(type) ? type : "text"
 	);
 
+	// Calculate width based on placeholder length
 	const charWidth = 8.5;
 	const bufferPixels = 56;
 	let calculatedWidth = $derived(
 		placeholder ? `${placeholder.length * charWidth + bufferPixels}px` : "auto"
 	);
 
-	let inputNode: HTMLInputElement | undefined = $state();
-	let fpNode: HTMLInputElement | undefined = $state();
-	let fp: flatpickr.Instance | undefined = $state();
+	// Get the theme based on the appearance mode setting
+	// This is specifically for light and dark css themes available for flatpickr.
+	let appearanceMode = $derived($settingsData.find((s) => s.key === "appearance_mode"));
+	let isDark = $derived(
+		!appearanceMode?.value ? false :
+		(() => {
+			const val = appearanceMode.value as Record<string, any>;
+			const modeVal = (val.Enum || val.Text || "") as string;
+			return modeVal.toLowerCase() === "dark";
+		})()
+	);
+	let currentTheme = $derived(isDark ? darkTheme : lightTheme);
 
-	let dateSetting = $derived($settingsData.find(s => s.key === "date_format"));
+	//The user's prefered date format, changing in settings.
+	let dateSetting = $derived($settingsData.find((s) => s.key === "date_format"));
 	let rawFormatString = $derived(
 		dateSetting?.value && "Text" in dateSetting.value ? dateSetting.value.Text : ""
 	);
-
-	function getFlatpickrFormat(enumString: string): string {
-		if (enumString.includes("14 December 2025")) return "d F Y";
-		if (enumString.includes("12/14/2025")) return "m/d/Y";
-		if (enumString.includes("YYYY-MM-DD")) return "Y-m-d";
-		if (enumString.includes("Month DD, YYYY")) return "F j, Y";
-		return "d-m-Y";
-	}
-
 	let activeDateFormat = $derived(getFlatpickrFormat(rawFormatString));
+
+	// Flatpickr refs
+	let inputNode: HTMLInputElement | undefined = $state();
+	let fpNode: HTMLInputElement | undefined = $state();
+	let fp: flatpickr.Instance | undefined = $state();
 
 	onMount(() => {
 		if (type === "date" && fpNode) {
 			fp = flatpickr(fpNode, {
 				dateFormat: activeDateFormat,
 				clickOpens: false,
-				onChange: (selectedDates, dateStr) => {
+				onReady: (_, __, instance) => attachCustomYearSelect(instance),
+				onChange: (_, dateStr) => {
 					value = dateStr;
 					if (inputNode) {
 						inputNode.value = dateStr;
-						inputNode.dispatchEvent(
-							new Event("input", { bubbles: true }),
-						);
+						inputNode.dispatchEvent(new Event("input", { bubbles: true }));
 					}
 				},
 			});
@@ -126,7 +110,6 @@
 		if (fp) fp.destroy();
 	});
 
-	// Update flatpickr when date format changes
 	$effect(() => {
 		if (fp && activeDateFormat) {
 			fp.set("dateFormat", activeDateFormat);
@@ -137,7 +120,6 @@
 		}
 	});
 
-	// Update flatpickr when value changes
 	$effect(() => {
 		if (fp && typeof value === "string") {
 			fp.setDate(value || "", false);
@@ -236,6 +218,7 @@
 </div>
 
 <style>
+	/* CSS styles remain identical */
 	.field {
 		display: flex;
 		flex-direction: column;

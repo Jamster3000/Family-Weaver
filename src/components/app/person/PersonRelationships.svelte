@@ -68,7 +68,7 @@
 			/>
 
 			{#if $personData.parentIds.length === 0}
-				<p class="empty-state">No parents added</p>
+				<p class="empty-state">Add parent(s) to {formatName($personData)}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.parentIds as parentId (parentId)}
@@ -111,7 +111,7 @@
 			/>
 
 			{#if $personData.childrenIds.length === 0}
-				<p class="empty-state">No children added</p>
+				<p class="empty-state">Add child(ren) to {formatName($personData)}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.childrenIds as childId (childId)}
@@ -157,7 +157,7 @@
 			/>
 
 			{#if $personData.partnerIds.length === 0}
-				<p class="empty-state">No partners added</p>
+				<p class="empty-state">Add partner(s) to {formatName($personData)}</p>
 			{:else}
 				<div class="relations-list">
 					{#each $personData.partnerIds as partnerId (partnerId)}

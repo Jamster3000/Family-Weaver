@@ -67,14 +67,19 @@
 	// Get the theme based on the appearance mode setting
 	// This is specifically for light and dark css themes available for flatpickr.
 	let appearanceMode = $derived($settingsData.find((s) => s.key === "appearance_mode"));
-	let isDark = $derived(
-		!appearanceMode?.value ? false :
-		(() => {
-			const val = appearanceMode.value as Record<string, any>;
-			const modeVal = (val.Enum || val.Text || "") as string;
-			return modeVal.toLowerCase() === "dark";
-		})()
-	);
+	let systemPrefersDark = $state(false);
+
+	let isDark = $derived.by(() => {
+		if (!appearanceMode?.value) return systemPrefersDark;
+		const val = appearanceMode.value as Record<string, any>;
+		const modeVal = ((val.Enum || val.Text || "") as string).toLowerCase();
+
+		if (modeVal === "dark") return true;
+		if (modeVal === "light") return false;
+
+		return systemPrefersDark;
+	});
+
 	let currentTheme = $derived(isDark ? darkTheme : lightTheme);
 
 	//The user's prefered date format, changing in settings.
@@ -90,6 +95,14 @@
 	let fp: flatpickr.Instance | undefined = $state();
 
 	onMount(() => {
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		systemPrefersDark = mediaQuery.matches;
+
+		const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+			systemPrefersDark = e.matches;
+		};
+		mediaQuery.addEventListener("change", handleSystemThemeChange);
+
 		if (type === "date" && fpNode) {
 			fp = flatpickr(fpNode, {
 				dateFormat: activeDateFormat,
@@ -104,6 +117,10 @@
 				},
 			});
 		}
+
+		return () => {
+			mediaQuery.removeEventListener("change", handleSystemThemeChange);
+		};
 	});
 
 	onDestroy(() => {

@@ -12,7 +12,8 @@ export type ModalType =
 	| 'timelineEntry'
 	| 'settings'
 	| 'deleteAllData'
-	| 'logs';
+	| 'logs'
+	| 'confirmSavePerson';
 
 type ModalState = Record<ModalType, boolean>;
 
@@ -29,6 +30,7 @@ const initialState: ModalState = {
 	settings: false,
 	deleteAllData: false,
     logs: false,
+	confirmSavePerson: false,
 };
 
 function createModalStore() {

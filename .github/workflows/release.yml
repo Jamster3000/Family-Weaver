@@ -49,10 +49,12 @@ jobs:
             ## What's new
             - When creating a new person, the "relationship" tab has been redesigned to support finding the right parents/children/partners more easily and quicker - Including a quick search for names and "suggested" people that seem most logical.
             - When using the calendar to pick a date, the year had to be typed or manually increased/decreased one year at a time. This has been changed to allow you to select a year quicker without the need to type in a year.
+            - To avoid accidentally creating a new person without connecting any relationships, a warning will appear when saving a person without any relationships.
 
             ## Under the Hood
             - Fixed a bug where deleting the last/only tree wouldn't correctly delete and continue to show the same tree.
             - People are no longer shared between trees as this was a bug. Each tree now has their own set of people that aren't shared between other trees.
             - When saving a person to your tree, the next time you go to create a new person, it will default to opening on the "overview" section.
+            - A bug was fixed where the daate picker calendar would default to light mode when settings was set to "system" with no detection for whether "system" was in light or dark mode.
           releaseDraft: false
           prerelease: false

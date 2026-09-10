@@ -37,8 +37,26 @@
 
 	let hasChanges = $derived($personData ? hasPersonChanged() : false);
 
-	async function handlePersonSave() {
+	function handlePersonSave() {
+		const rawData = $personData;
+		const hasRelationships = Boolean(
+			(rawData?.parentIds && rawData.parentIds.length > 0) ||
+			(rawData?.partnerIds && rawData.partnerIds.length > 0) ||
+			(rawData?.childrenIds && rawData.childrenIds.length > 0)
+		);
+
+		if (!hasRelationships) {
+			modals.open("confirmSavePerson");
+			return;
+		}
+
+		executePersonSave();
+	}
+
+	async function executePersonSave() {
 		logger.info("Starting saving person");
+		modals.close("confirmSavePerson");
+
 		const rawData = $personData;
 		const currentTreeId = $activeTree?.id ? String($activeTree.id) : "";
 
@@ -78,6 +96,11 @@
 		}
 
 		modals.close("addPerson");
+	}
+
+	function handleConfirmSavePersonClose() {
+		modals.close("confirmSavePerson");
+		activeTab = "relationships";
 	}
 
 	function handlePersonDiscard() {
@@ -223,6 +246,16 @@
 	cancelLabel="No, continue editing"
 	onConfirm={handleDiscard}
 	onClose={handleDiscardChangesClose}/>
+
+<ConfirmModal
+	isOpen={$modals.confirmSavePerson}
+	width="50%"
+	title="No Relationships Added"
+	message="This person is not connected to any parents, partners, or children. Are you sure you want to save them unlinked?"
+	confirmLabel="Yes, save person"
+	cancelLabel="No, add relationships"
+	onConfirm={executePersonSave}
+	onClose={handleConfirmSavePersonClose}/>
 
 <style>
 	.modal-header {

@@ -26,6 +26,8 @@ export function attachCustomYearSelect(instance: flatpickr.Instance): void {
 	select.style.cursor = "pointer";
 	select.style.outline = "none";
 	select.style.marginLeft = "6px";
+	select.style.scrollbarColor = "var(--primary-colour) var(--secondary-background)";
+	select.style.scrollbarWidth = "auto";
 
 	// Populate the year ranges (from current today's date to 100 years back)
 	const currentYear = new Date().getFullYear();

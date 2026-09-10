@@ -57,5 +57,6 @@ jobs:
             - When saving a person to your tree, the next time you go to create a new person, it will default to opening on the "overview" section.
             - A bug was fixed where the daate picker calendar would default to light mode when settings was set to "system" with no detection for whether "system" was in light or dark mode.
             - When there is nobody available to add as a relationship, the "add relationship" button will be disabled to avoid confusion.
+            - Made the `remove` button on the "relationship" tab after adding one or more relationships more clear that it is for removing the relationship and not the person.
           releaseDraft: false
           prerelease: false

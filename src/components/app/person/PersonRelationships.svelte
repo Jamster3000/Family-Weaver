@@ -8,6 +8,7 @@
 		IconTrash,
 	} from "@tabler/icons-svelte-runes";
 	import RelationSelect from "$components/ui/RelationSelect.svelte";
+	import Tooltip from "$components/ui/Tooltip.svelte";
 
 	function formatName(person: {
 		firstName?: string;
@@ -93,16 +94,22 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<button
-								type="button"
-								class="remove-btn"
-								onclick={() =>
-									handleRemoveRelation("parentIds", parentId)}
-								aria-label="Remove {formatName(person || {})}"
-								title="Remove {formatName(person || {})}"
-							>
-								<IconTrash size={18} /> Remove
-							</button>
+							<Tooltip text="Remove {formatName(person || {})}">
+								<button
+									type="button"
+									class="remove-btn"
+									onclick={() =>
+										handleRemoveRelation(
+											"parentIds",
+											parentId,
+										)}
+									aria-label="Remove {formatName(
+										person || {},
+									)}"
+								>
+									<IconTrash size={18} /> Remove
+								</button>
+							</Tooltip>
 						</div>
 					{/each}
 				</div>
@@ -137,19 +144,22 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<button
-								type="button"
-								class="remove-btn"
-								onclick={() =>
-									handleRemoveRelation(
-										"childrenIds",
-										childId,
-									)}
-								aria-label="Remove {formatName(person || {})}"
-								title="Remove {formatName(person || {})}"
-							>
-								<IconTrash size={18} /> Remove
-							</button>
+							<Tooltip text="Remove {formatName(person || {})}">
+								<button
+									type="button"
+									class="remove-btn"
+									onclick={() =>
+										handleRemoveRelation(
+											"childrenIds",
+											childId,
+										)}
+									aria-label="Remove {formatName(
+										person || {},
+									)}"
+								>
+									<IconTrash size={18} /> Remove
+								</button>
+							</Tooltip>
 						</div>
 					{/each}
 				</div>
@@ -184,19 +194,22 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<button
-								type="button"
-								class="remove-btn"
-								onclick={() =>
-									handleRemoveRelation(
-										"partnerIds",
-										partnerId,
-									)}
-								aria-label="Remove {formatName(person || {})}"
-								title="Remove {formatName(person || {})}"
-							>
-								<IconTrash size={18} /> Remove
-							</button>
+							<Tooltip text="Remove {formatName(person || {})}">
+								<button
+									type="button"
+									class="remove-btn"
+									onclick={() =>
+										handleRemoveRelation(
+											"partnerIds",
+											partnerId,
+										)}
+									aria-label="Remove {formatName(
+										person || {},
+									)}"
+								>
+									<IconTrash size={18} /> Remove
+								</button>
+							</Tooltip>
 						</div>
 					{/each}
 				</div>
@@ -210,7 +223,8 @@
 		padding: 10px 14px;
 		margin-bottom: 16px;
 		background: color-mix(in srgb, var(--primary-colour) 8%, transparent);
-		border: 1px solid color-mix(in srgb, var(--primary-colour) 20%, transparent);
+		border: 1px solid
+			color-mix(in srgb, var(--primary-colour) 20%, transparent);
 		border-radius: 6px;
 	}
 
@@ -342,30 +356,42 @@
 	}
 
 	.remove-btn {
-		background: transparent;
-		border: none;
-		color: var(--text-colour);
-		cursor: pointer;
-		padding: 4px;
-		opacity: 0.55;
-		transition:
-			opacity 0.15s ease,
-			background 0.15s ease,
-			color 0.15s ease;
-		border-radius: 3px;
-		display: flex;
+		display: inline-flex;
 		align-items: center;
-		justify-content: center;
+		gap: 6px;
+		padding: 6px 10px;
+		background: color-mix(in srgb, var(--red-error) 12%, transparent);
+		border: 1px solid color-mix(in srgb, var(--red-error) 30%, transparent);
+		border-radius: 4px;
+		color: var(--red-error);
+		font-size: var(--font-small);
+		font-family: var(--font-primary);
+		font-weight: 600;
+		cursor: pointer;
 		flex-shrink: 0;
+		transition:
+			background 0.15s ease,
+			border-color 0.15s ease,
+			transform 0.1s ease;
 	}
 
 	.remove-btn:hover {
-		opacity: 1;
-		background: color-mix(in srgb, var(--red-error) 20%, transparent);
-		color: var(--red-error);
+		background: var(--red-error);
+		border-color: var(--red-error);
+		color: var(--white);
+	}
+
+	.remove-btn:focus-visible {
+		outline: 2px solid var(--red-error);
+		outline-offset: 2px;
+	}
+
+	.remove-btn:active {
+		transform: scale(0.97);
 	}
 
 	.remove-btn :global(svg) {
 		display: block;
+		flex-shrink: 0;
 	}
 </style>

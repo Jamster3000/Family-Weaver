@@ -52,5 +52,6 @@ jobs:
             ## Under the Hood
             - Fixed a bug where deleting the last/only tree wouldn't correctly delete and continue to show the same tree.
             - People are no longer shared between trees as this was a bug. Each tree now has their own set of people that aren't shared between other trees.
+            - When saving a person to your tree, the next time you go to create a new person, it will default to opening on the "overview" section.
           releaseDraft: false
           prerelease: false

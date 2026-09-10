@@ -5,7 +5,7 @@ use crate::models::tree::Tree;
 use tauri::AppHandle;
 
 #[tauri::command]
-pub async fn delete_tree(tree_id: String, state: tauri::State<'_, AppState>) -> Result<(), String> {
+pub async fn delete_tree(tree_id: String, state: tauri::State<'_, AppState>, app: AppHandle) -> Result<(), String> {
     let conn = state.conn.lock().map_err(|e| {
         tracing::error!("Error locking database connection: {}", e);
         e.to_string()
@@ -21,6 +21,17 @@ pub async fn delete_tree(tree_id: String, state: tauri::State<'_, AppState>) -> 
             tracing::error!("Error deleting tree: {}", e);
             e.to_string()
         })?;
+
+    let count: i64 = conn
+        .query_row("SELECT COUNT(*) FROM trees", [], |row| row.get(0))
+        .map_err(|e| {
+            tracing::error!("Error counting trees: {}", e);
+            e.to_string()
+        })?;
+
+    if count == 0 {
+        let _ = app.emit("tree-changed", Option::<Tree>::None);
+    }
 
     Ok(())
 }

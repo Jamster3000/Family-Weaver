@@ -17,7 +17,7 @@
 </script>
 
 <div class="overview-container">
-  <div class="row-three-col">
+  <div class="row-four-col">
     <Input
       label="First Name"
       placeholder="e.g. Margaret"
@@ -37,6 +37,13 @@
       placeholder="e.g. Smith"
       value={$personData.lastName}
       oninput={(e) => handleInput('lastName', e)}
+      centerPlaceholder={false}
+    />
+    <Input
+      label="Gender"
+      placeholder="e.g. Female"
+      value={$personData.gender ?? ""}
+      oninput={(e) => handleInput('gender', e)}
       centerPlaceholder={false}
     />
   </div>
@@ -107,9 +114,9 @@
     box-sizing: border-box;
   }
 
-  .row-three-col {
+  .row-four-col {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 300px;
     gap: 16px;
     width: 100%;
   }

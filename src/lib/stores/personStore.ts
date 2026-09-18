@@ -20,6 +20,7 @@ export interface PersonData {
     firstName: string;
     middleNames: string;
     lastName: string;
+    gender: string;
     dob: string | null;
     birthLocation: string;
     dod: string | null;
@@ -39,6 +40,7 @@ export function createDefaultPersonData(): PersonData {
         firstName: '',
         middleNames: '',
         lastName: '',
+        gender: '',
         dob: null,
         birthLocation: '',
         dod: null,
@@ -77,6 +79,7 @@ export function hasPersonChanged(): boolean {
         'firstName',
         'middleNames',
         'lastName',
+        'gender',
         'birthLocation',
         'deathLocation',
         'importantNotes'

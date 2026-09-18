@@ -3,11 +3,15 @@ use rusqlite::{Connection, Result};
 pub fn open(path: &str) -> Result<Connection> {
     let conn = Connection::open(path)?;
 
-    conn.execute_batch(
+    /*conn.execute_batch(
         "
         PRAGMA journal_mode=WAL;
         PRAGMA foreign_keys=ON;
+        ",
+    )?;*/
 
+    conn.execute_batch(
+        "
         CREATE TABLE IF NOT EXISTS person (
             id TEXT PRIMARY KEY,
             tree_id TEXT NOT NULL,
@@ -103,5 +107,29 @@ pub fn open(path: &str) -> Result<Connection> {
         CREATE INDEX IF NOT EXISTS idx_person_children_child_id ON person_children(child_id);
     ",
     )?;
+
+    let version: i32 = conn.pragma_query_value(None, "user_version", |row| row.get(0))?;
+
+    println!("{}", version);
+
+    if version < 1 {
+        let mut stmt = conn.prepare("PRAGMA table_info(person)")?;
+        let columns = stmt.query_map([], |row| row.get::<_, String>(1))?;
+        let mut has_gender = false;
+
+        for col in columns {
+            if col? == "gender" {
+                has_gender = true;
+                break;
+            }
+        }
+
+        if !has_gender {
+            conn.execute("ALTER TABLE person ADD COLUMN gender TEXT DEFAULT NULL", [])?;
+        }
+
+        conn.pragma_update(None, "user_version", 1)?;
+    }
+
     Ok(conn)
 }

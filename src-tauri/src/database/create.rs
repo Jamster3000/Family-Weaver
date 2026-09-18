@@ -71,14 +71,15 @@ pub async fn create_person(
 
     // Insert the person
     conn.execute(
-        "INSERT INTO person (id, tree_id, first_name, middle_names, last_name, dob, birth_location, dod, death_location, important_notes, created_at, updated_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+        "INSERT INTO person (id, tree_id, first_name, middle_names, last_name, gender, dob, birth_location, dod, death_location, important_notes, created_at, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
         params![
             &person.id,
             &person.tree_id,
             &person.first_name,
             &person.middle_names,
             &person.last_name,
+            &person.gender,
             &person.dob,
             &person.birth_location,
             &person.dod,

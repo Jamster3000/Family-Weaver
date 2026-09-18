@@ -91,6 +91,7 @@ pub struct Person {
     pub middle_names: Option<String>,
     #[serde(rename = "lastName")]
     pub last_name: Option<String>,
+    pub gender: Option<String>,
     pub dob: Option<String>,
     #[serde(rename = "birthLocation")]
     pub birth_location: Option<String>,
@@ -128,6 +129,7 @@ impl Person {
             first_name: None,
             middle_names: None,
             last_name: None,
+            gender: None,
             dob: None,
             birth_location: None,
             dod: None,

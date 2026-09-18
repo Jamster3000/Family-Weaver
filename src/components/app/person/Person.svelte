@@ -65,6 +65,7 @@
 			firstName: rawData.firstName.trim(),
 			middleNames: rawData.middleNames.trim(),
 			lastName: rawData.lastName.trim(),
+			gender: rawData.gender.trim(),
 			birthLocation: rawData.birthLocation.trim(),
 			deathLocation: rawData.deathLocation.trim(),
 			importantNotes: rawData.importantNotes.trim(),

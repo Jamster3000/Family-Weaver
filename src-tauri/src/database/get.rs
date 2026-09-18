@@ -193,7 +193,7 @@ pub async fn get_all_people(
     //Query for person table records
     let mut stmt = conn
         .prepare(
-            "SELECT id, tree_id, first_name, middle_names, last_name,
+            "SELECT id, tree_id, first_name, middle_names, last_name, gender,
                     dob, birth_location, dod, death_location, important_notes
              FROM person
              WHERE tree_id = (SELECT id FROM trees WHERE active_tree = 1 LIMIT 1)",
@@ -214,12 +214,13 @@ pub async fn get_all_people(
                     first_name: row.get(2)?,
                     middle_names: row.get(3)?,
                     last_name: row.get(4)?,
-                    dob: row.get(5)?,
-                    birth_location: row.get(6)?,
-                    dod: row.get(7)?,
-                    death_location: row.get(8)?,
+                    gender: row.get(5)?,
+                    dob: row.get(6)?,
+                    birth_location: row.get(7)?,
+                    dod: row.get(8)?,
+                    death_location: row.get(9)?,
                     key_facts: None,
-                    important_notes: row.get(9)?,
+                    important_notes: row.get(10)?,
                     parent_ids: Vec::new(),
                     partner_ids: Vec::new(),
                     children_ids: Vec::new(),

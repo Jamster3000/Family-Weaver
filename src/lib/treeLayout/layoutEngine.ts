@@ -59,6 +59,22 @@ export function calculateLevels(members: Person[]): Map<string, number> {
     return levels;
 }
 
+function orderCouple(p1: Person, p2: Person): [Person, Person] {
+    const g1 = p1.gender?.trim().toLowerCase();
+    const g2 = p2.gender?.trim().toLowerCase();
+
+    const isP1Male = g1 === 'male' || g1 === 'm';
+    const isP2Male = g2 === 'male' || g2 === 'm';
+    const isP1Female = g1 === 'female' || g1 === 'f';
+
+    // Swap if partner 2 is male and partner 1 is not (males should always be on the left side of the tree)
+    if ((isP2Male && !isP1Male) || (isP1Female && !isP2Male)) {
+        return [p2, p1];
+    }
+
+    return [p1, p2];
+}
+
 /*export function calculatePositions(
     members: Person[],
     config: LayoutConfig
@@ -179,6 +195,7 @@ export function calculateLevels(members: Person[]): Map<string, number> {
 
     return { positions, levels };
 }*/
+
 export function calculatePositions(
     members: Person[],
     config: LayoutConfig
@@ -228,7 +245,9 @@ export function calculatePositions(
                 .find((p) => p && levels.get(p.id) === level && !processed.has(p!.id));
 
             if (partner) {
-                units.push([person, partner]);
+                const couple = orderCouple(person, partner);
+                units.push(couple);
+
                 processed.add(person.id);
                 processed.add(partner.id);
                 seatedPairs.add([person.id, partner.id].sort().join('-'));

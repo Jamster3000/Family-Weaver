@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import type { TreeConfig, BranchData, LeafData } from "$lib/treeSpinner/treeSpinnerModels";
+	import { isSakuraSeason, isAutumnSeason, isWinterSeason } from "$lib/treeSpinner/treeSpinnerSeasons";
 
 	let {
 		isVisible = $bindable(true),
@@ -23,30 +25,6 @@
 	let isFadingOut = $state(false);
 	let leafTargetOpacity = $state(0.8);
 
-	interface BranchData {
-		id: number;
-		d: string;
-		strokeWidth: number;
-		length: number;
-		startTime: number;
-	}
-
-	interface LeafData {
-		id: number;
-		cx: number;
-		cy: number;
-		r: number;
-		delay: number;
-	}
-
-	interface TreeConfig {
-		leafUrl: string;
-		barkUrl: string;
-		isSakura: boolean;
-		isAutumn: boolean;
-		isWinter: boolean;
-	}
-
 	let activeConfig = $state<TreeConfig | null>(null);
 	let branches = $state<BranchData[]>([]);
 	let leaves = $state<LeafData[]>([]);
@@ -61,49 +39,15 @@
 		path.replace(/^\/static/, ""),
 	);
 
-	function isSakuraSeason(): boolean {
-		const currentDate = new Date();
-		const month = currentDate.getMonth() + 1;
-		const day = currentDate.getDate();
-		return (month === 3 && day >= 20) || (month === 4 && day <= 15);
-	}
-
-	function isAutumnSeason(): boolean {
-		const currentDate = new Date();
-		const month = currentDate.getMonth() + 1;
-		const day = currentDate.getDate();
-		return (
-			(month === 9 && day >= 22) ||
-			month === 10 ||
-			month === 11 ||
-			(month === 12 && day <= 20)
-		);
-	}
-
-	function isWinterSeason(): boolean {
-		const currentDate = new Date();
-		const month = currentDate.getMonth() + 1;
-		const day = currentDate.getDate();
-		return (month === 12 && day >= 21) || month === 1 || month === 2 || (month === 3 && day <= 19);
-	}
-
 	function getTreeConfig(): TreeConfig {
 		const isSakura = isSakuraSeason();
 		const isAutumn = isAutumnSeason();
 		const isWinter = isWinterSeason();
 
-		const barks =
-			barkUrls.length > 0
-				? barkUrls
-				: ["/images/tree/bark/pine-bark.webp"];
-		const leavesList =
-			leafUrls.length > 0
-				? leafUrls
-				: ["/images/tree/leaves/leaves.webp"];
+		const barks = barkUrls.length > 0 ? barkUrls : ["/images/tree/bark/pine-bark.webp"];
+		const leavesList = leafUrls.length > 0 ? leafUrls : ["/images/tree/leaves/leaves.webp"];
 
-		const sakuraBark =
-			barks.find((url) => url.toLowerCase().includes("sakura")) ||
-			barks[0];
+		const sakuraBark = barks.find((url) => url.toLowerCase().includes("sakura")) || barks[0];
 		const regularBarks = barks.filter((url) => url !== sakuraBark);
 
 		const sakuraLeaf =

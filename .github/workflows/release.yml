@@ -60,5 +60,6 @@ jobs:
             - When there is nobody available to add as a relationship, the "add relationship" button will be disabled to avoid confusion.
             - Made the `remove` button on the "relationship" tab after adding one or more relationships more clear that it is for removing the relationship and not the person.
             - Fixed a bug where the tree visual wasn't updated correctly when the last tree was deleted.
+            - The tree now uses equinox calculations to determine the seasons for the northern and southern hemispheres instead of using fixed dates.
           releaseDraft: false
           prerelease: false

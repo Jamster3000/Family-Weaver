@@ -3,7 +3,7 @@ import type { Person, ThemeColors, LayoutConfig, LayoutOptions } from './models'
 import { DEFAULT_LAYOUT_CONFIG, DEFAULT_THEME_COLORS } from './models';
 import { normalizeMembers } from './normalize';
 import { calculatePositions } from './layoutEngine';
-import { drawLines, drawNodes } from './d3Renderers';
+import { drawLines, drawNodes, updateNodeSelection } from './d3Renderers';
 
 export class FamilyTreeLayout {
     private container: HTMLElement;
@@ -14,6 +14,10 @@ export class FamilyTreeLayout {
     private config: LayoutConfig = DEFAULT_LAYOUT_CONFIG;
     private colors: ThemeColors = DEFAULT_THEME_COLORS;
     private toolbarSelector?: string;
+
+    private selectedPersonId: string | null = null;
+    private onSelectPerson?: (person: Person | null) => void;
+    private currentMembers: Person[] = [];
 
     constructor(
         container: HTMLElement,
@@ -33,12 +37,27 @@ export class FamilyTreeLayout {
             this.toolbarSelector = options.toolbarSelector;
         }
 
+        if (options?.selectedPersonId !== undefined) {
+            this.selectedPersonId = options.selectedPersonId;
+        }
+
+        if (options?.onSelectPerson) {
+            this.onSelectPerson = options.onSelectPerson;
+        }
+
         // Creates a responsive SVG element which fills the entire container
         this.svg = d3
             .select(this.container)
             .append('svg')
             .attr('width', '100%')
             .attr('height', '100%');
+
+        // Deselect when clicking on empty SVG space
+        this.svg.on('click', (event: MouseEvent) => {
+            if (event.target === this.svg.node() || event.target === this.g.node()) {
+                this.selectPerson(null);
+            }
+        });
 
         // Initializes D3 zoom behavior
         this.zoom = d3
@@ -53,22 +72,56 @@ export class FamilyTreeLayout {
     }
 
     public render(rawMembers: Person[], themeColors?: Partial<ThemeColors>): void {
+        if (themeColors) {
+            this.colors = { ...this.colors, ...themeColors };
+        }
+
         if (!rawMembers || rawMembers.length === 0) {
             this.g.selectAll('*').remove();
+            this.currentMembers = [];
             return;
         }
 
-        const members = normalizeMembers(rawMembers);
-        const { positions, seatedPairs } = calculatePositions(members, this.config);
+        this.currentMembers = normalizeMembers(rawMembers);
+        const { positions, seatedPairs } = calculatePositions(this.currentMembers, this.config);
 
         //draw lines first so they appear behind the nodes
-        drawLines(this.g, members, positions, this.colors, this.config, seatedPairs);
-        drawNodes(this.g, members, positions, this.colors, this.config);
+        drawLines(this.g, this.currentMembers, positions, this.colors, this.config, seatedPairs);
+        drawNodes(
+            this.g,
+            this.currentMembers,
+            positions,
+            this.colors,
+            this.config,
+            this.selectedPersonId,
+            (person) => this.handleNodeClick(person)
+        );
 
         // request animation frame for better performance and to ensure the DOM is updated before fitting
         requestAnimationFrame(() => {
             this.fit();
         });
+    }
+
+    private handleNodeClick(person: Person): void {
+        const newSelectedId = this.selectedPersonId === person.id ? null : person.id;
+        this.selectPerson(newSelectedId);
+    }
+
+    public selectPerson(personId: string | null): void {
+        this.selectedPersonId = personId;
+        updateNodeSelection(this.g, this.selectedPersonId);
+
+        if (this.onSelectPerson) {
+            const selectedPerson = personId
+                ? this.currentMembers.find((m) => m.id === personId) || null
+                : null;
+            this.onSelectPerson(selectedPerson);
+        }
+    }
+
+    public getSelectedPersonId(): string | null {
+        return this.selectedPersonId;
     }
 
     public fit(overrideSelector?: string): void {

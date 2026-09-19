@@ -7,6 +7,7 @@
 
 	let container = $state<HTMLDivElement | null>(null);
 	let layoutInstance = $state<FamilyTreeLayout | null>(null);
+	let selectedPerson = $state<Person | null>(null);
 
 	async function fetchPeople() {
 		try {
@@ -26,7 +27,10 @@
 
 		if (container) {
 			layoutInstance = new FamilyTreeLayout(container, {
-				toolbarSelector: ".toolbar", //passing this class means the tree scale takes into account the toolbar existance
+				toolbarSelector: ".toolbar",
+				onSelectPerson: (person) => {
+					selectedPerson = person;
+				}
 			});
 		}
 

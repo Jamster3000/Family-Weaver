@@ -9,6 +9,7 @@ import {
     IconZoomOut,
     IconDownload,
     IconBug,
+    IconUser
 } from "@tabler/icons-svelte-runes";
 import { modals } from "$modalStore";
 import { zoomIn, zoomOut } from "$networkStore";
@@ -73,6 +74,35 @@ export const getLeftItems = (hasUpdate: boolean = false): ToolbarItem[] => [
                 icon: IconEdit,
                 action: () => modals.open("renameTree"),
             },
+        ],
+    },
+    {
+        id: "person",
+        label: "Person",
+        tooltip: "Open person options.",
+        icon: IconUser,
+        submenu: [
+            {
+                id: "edit-person",
+                label: "Edit Person",
+                tooltip: "Edit the selected person's details.",
+                icon: IconEdit,
+                action: () => modals.open("addPerson"),
+            },
+            {
+                id: "view-person",
+                label: "View Person",
+                tooltip: "View the selected person's details.",
+                icon: IconUser,
+                action: () => modals.open("addPerson"),
+            },
+            {
+                id: "delete-person",
+                label: "Delete Person",
+                tooltip: "Delete the selected person.",
+                icon: IconTrash,
+                action: () => modals.open("deletePersonConfirm"),
+            }
         ],
     },
     {

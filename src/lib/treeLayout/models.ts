@@ -16,6 +16,7 @@ export interface ThemeColors {
     textSecondary: string;
     highlight: string;
     cardBorder: string;
+    selectedBorder: string;
 }
 
 export const DEFAULT_THEME_COLORS: ThemeColors = {
@@ -26,7 +27,8 @@ export const DEFAULT_THEME_COLORS: ThemeColors = {
     textPrimary: 'var(--text-colour)',
     textSecondary: 'var(--text-colour)',
     highlight: 'var(--border-colour)',
-    cardBorder: 'var(--code-background)'
+    cardBorder: 'var(--code-background)',
+    selectedBorder: 'var(--secondary-colour)'
 };
 
 export interface LayoutConfig {
@@ -47,4 +49,6 @@ export interface LayoutOptions {
     colors?: Partial<ThemeColors>;
     config?: Partial<LayoutConfig>;
     toolbarSelector?: string;
+    selectedPersonId?: string | null;
+    onSelectPerson?: (person: Person) => void;
 }

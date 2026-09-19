@@ -1,4 +1,4 @@
-import type * as d3 from 'd3';
+import * as d3 from 'd3';
 import type { Person, Position, ThemeColors, LayoutConfig } from './models';
 
 type D3Group = d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -146,7 +146,9 @@ export function drawNodes(
     members: Person[],
     positions: Map<string, Position>,
     colors: ThemeColors,
-    config: LayoutConfig
+    config: LayoutConfig,
+    selectedPersonId: string | null = null,
+    onNodeClick?: (person: Person, event: MouseEvent) => void
 ): void {
     //Draws the nodes for each person in the tree
 
@@ -158,11 +160,18 @@ export function drawNodes(
         .data(members)
         .enter()
         .append('g')
+        .attr('class', 'node-group')
+        .style('cursor', 'pointer')
         .attr('transform', (d) => {
             const pos = positions.get(d.id) || { x: 0, y: 0 };
             return `translate(${pos.x}, ${pos.y})`;
+        })
+        .on('click', (event: MouseEvent, d: Person) => {
+            event.stopPropagation();
+            if (onNodeClick) {
+                onNodeClick(d, event);
+            }
         });
-
 
     const getName = (d: Person): string => {
         const parts = [d.firstName, d.middleNames, d.lastName].filter(Boolean);
@@ -183,11 +192,32 @@ export function drawNodes(
         if (birthYear && !deathYear) return `${birthYear} - Living`;
 
         return `${birthYear || 'Unknown'} - ${deathYear}`;
-    }
+    };
+
+    // Selection ring drawn around the card when selected
+    groups
+        .append('rect')
+        .attr('class', 'node-selection-ring')
+        .attr('x', -config.NODE_WIDTH / 2 - 5)
+        .attr('y', -config.NODE_HEIGHT / 2 - 5)
+        .attr('width', config.NODE_WIDTH + 10)
+        .attr('height', config.NODE_HEIGHT + 10)
+        .attr('rx', 12)
+        .attr('fill', 'none')
+        .attr('stroke', colors.selectedBorder)
+        .attr('stroke-width', 3)
+        .style('opacity', 0)
+        .on('update', function (d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .style('opacity', d.id === selectedPersonId ? 1 : 0);
+        });
 
     // draws the main card rectable for the node
     groups
         .append('rect')
+        .attr('class', 'node-card')
         .attr('x', -config.NODE_WIDTH / 2)
         .attr('y', -config.NODE_HEIGHT / 2)
         .attr('width', config.NODE_WIDTH)
@@ -205,6 +235,7 @@ export function drawNodes(
         .attr('fill', colors.textPrimary)
         .style('font-size', '14px')
         .style('font-weight', 'bold')
+        .style('pointer-events', 'none')
         .text(getName);
 
     groups
@@ -214,5 +245,16 @@ export function drawNodes(
         .attr('fill', colors.textSecondary)
         .style('font-family', 'var(--font-primary)')
         .style('font-size', 'var(--font-xsmall)')
+        .style('pointer-events', 'none')
         .text(getBirthDeath);
+}
+export function updateNodeSelection(
+    g: D3Group,
+    selectedPersonId: string | null
+): void {
+    g.selectAll<SVGGElement, Person>('.node-group')
+        .select<SVGRectElement>('.node-selection-ring')
+        .transition()
+        .duration(200)
+        .style('opacity', (d) => (d.id === selectedPersonId ? 1 : 0));
 }

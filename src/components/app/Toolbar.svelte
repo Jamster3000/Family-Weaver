@@ -6,10 +6,12 @@
 	import CreateTree from "$components/app/toolbarActions/CreateTree.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
 	import Person from "$components/app/person/Person.svelte";
+	import { selectedPersonStore } from "$personTreeStore";
 	import { activeTree } from "$treeStore";
 	import RenameTreeTitle from "$components/app/toolbarActions/RenameTreeTitle.svelte";
 	import SwitchTreeModal from "$components/app/toolbarActions/SwitchTreeModal.svelte";
 	import DeleteTreeConfirm from "$components/app/toolbarActions/DeleteTreeConfirm.svelte";
+	import DeletePersonConfirm from "$components/app/toolbarActions/DeletePersonConfirm.svelte";
 	import Settings from "$components/app/toolbarActions/settings/SettingsModal.svelte";
 	import Logs from "$components/app/toolbarActions/Logs.svelte";
 	import { modals } from "$modalStore";
@@ -30,6 +32,7 @@
 	let CreateTree_first_time: boolean = false;
 	let hasUpdate: boolean = false;
 	let updateAvailable: Update | null = null;
+	let selectedPersonId: string | null = $state(null);
 	let leftItems: ToolbarItem[] = $state([]);
 
 	async function checkForUpdate() {
@@ -51,10 +54,15 @@
 	}
 
 	onMount(() => {
+		const unsubscribe = selectedPersonStore.subscribe(person => {
+			selectedPersonId = person.id || null;
+			leftItems = getLeftItems(hasUpdate, !!selectedPersonId);
+		});
+
 		// Subscribe to updateStore for reactive updates
 		updateStore.subscribe(state => {
 			hasUpdate = state.hasUpdate;
-			leftItems = getLeftItems(state.hasUpdate);
+			leftItems = getLeftItems(state.hasUpdate, !!selectedPersonId);
 		})();
 	});
 
@@ -91,6 +99,8 @@
 
 <DeleteTreeConfirm />
 
+<DeletePersonConfirm />
+
 <Settings />
 
 <Logs />
@@ -100,11 +110,12 @@
 		{#each leftItems as item (item.id)}
 			{@const Icon = item.icon}
 			<div class="toolbar-item">
-				<Tooltip text={item.tooltip} position="bottom">
+				<Tooltip text={item.disabled ? item.disabled_tooltip : item.tooltip} position="top">
 					<Button
 						variant={item.submenu ? "secondary" : "primary"}
 						onclick={() => handleClick(item)}
 						ariaLabel={item.label}
+						disabled={item.disabled}
 					>
 						<Icon size={28} />
 						{item.label}

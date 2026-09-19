@@ -7,7 +7,15 @@ export interface Person extends PersonData {
     tree_id?: string;
 }
 
+export interface SelectedPerson {
+    id?: string;
+    treeId?: string;
+    name?: string;
+}
+
 export const personTreeStore = writable<Person[]>([]);
+
+export const selectedPersonStore = writable<SelectedPerson>({});
 
 export function updatePersonTreeData(newPerson: Person) {
     personTreeStore.update((people) => {

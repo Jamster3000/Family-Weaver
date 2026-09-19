@@ -58,3 +58,23 @@ pub async fn delete_all_trees(state: tauri::State<'_, AppState>, app: AppHandle)
 
     Ok(())
 }
+
+#[tauri::command]
+pub async fn delete_person(state: tauri::State<'_, AppState>, app: AppHandle, person_id: String, tree_id: String) -> Result<(), String> {
+    let conn = state.conn.lock().map_err(|e| {
+        tracing::error!("Error locking database connection: {}", e);
+        e.to_string()
+    })?;
+
+    tracing::info!("Deleting person with ID: {}", person_id);
+
+    conn.execute("DELETE FROM person WHERE id = ?1 AND tree_id = ?2", params![&person_id, &tree_id])
+        .map_err(|e| {
+            tracing::error!("Error deleting person: {}", e);
+            e.to_string()
+        })?;
+
+    let _ = app.emit("tree-changed", Option::<String>::None);
+
+    Ok(())
+}

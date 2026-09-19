@@ -6,6 +6,7 @@ export type ModalType =
 	| 'renameTree'
 	| 'switchTree'
 	| 'deleteTreeConfirm'
+	| 'deletePersonConfirm'
 	| 'discardPersonChanges'
 	| 'whatsNew'
 	| 'appUpdate'
@@ -23,6 +24,7 @@ const initialState: ModalState = {
 	renameTree: false,
 	switchTree: false,
 	deleteTreeConfirm: false,
+	deletePersonConfirm: false,
 	discardPersonChanges: false,
 	whatsNew: false,
 	appUpdate: false,

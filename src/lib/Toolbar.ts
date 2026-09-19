@@ -22,9 +22,11 @@ export interface ToolbarItem {
     action?: () => void;
     submenu?: ToolbarItem[];
     hidden?: boolean;
+    disabled?: boolean;
+    disabled_tooltip?: string;
 }
 
-export const getLeftItems = (hasUpdate: boolean = false): ToolbarItem[] => [
+export const getLeftItems = (hasUpdate: boolean = false, hasSelectedPerson: boolean = false): ToolbarItem[] => [
     {
         id: "create",
         label: "Create",
@@ -81,6 +83,8 @@ export const getLeftItems = (hasUpdate: boolean = false): ToolbarItem[] => [
         label: "Person",
         tooltip: "Open person options.",
         icon: IconUser,
+        disabled: !hasSelectedPerson,
+        disabled_tooltip: "Select a person to see person options.",
         submenu: [
             {
                 id: "edit-person",

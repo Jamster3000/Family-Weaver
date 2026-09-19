@@ -4,6 +4,7 @@
 	import { listen } from "@tauri-apps/api/event";
 	import { personTreeStore, type Person } from "$personTreeStore";
 	import { FamilyTreeLayout } from "$lib/treeLayout/index";
+	import { selectedPersonStore } from "$lib/stores/personTreeStore";
 
 	let container = $state<HTMLDivElement | null>(null);
 	let layoutInstance = $state<FamilyTreeLayout | null>(null);
@@ -30,6 +31,16 @@
 				toolbarSelector: ".toolbar",
 				onSelectPerson: (person) => {
 					selectedPerson = person;
+					console.log("Selected person:", person);
+					if (person) {
+						selectedPersonStore.set({
+							id: person.id,
+							treeId: person.tree_id,
+							name: person.firstName
+						});
+					} else {
+						selectedPersonStore.set({});
+					}
 				}
 			});
 		}

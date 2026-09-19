@@ -110,8 +110,6 @@ pub fn open(path: &str) -> Result<Connection> {
 
     let version: i32 = conn.pragma_query_value(None, "user_version", |row| row.get(0))?;
 
-    println!("{}", version);
-
     if version < 1 {
         let mut stmt = conn.prepare("PRAGMA table_info(person)")?;
         let columns = stmt.query_map([], |row| row.get::<_, String>(1))?;

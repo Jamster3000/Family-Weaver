@@ -30,7 +30,7 @@
 		if (container) {
 			layoutInstance = new FamilyTreeLayout(container, {
 				toolbarSelector: ".toolbar",
-				onSelectPerson: (person) => {
+				onSelectPerson: (person: Person | null) => {
 					if (person) {
 						selectedPersonStore.set({
 							id: person.id,
@@ -71,6 +71,15 @@
 				layoutInstance.destroy();
 			}
 		};
+	});
+
+	$effect(() => {
+		const selectedId = $selectedPersonStore?.id ?? null;
+
+		if (layoutInstance && layoutInstance.getSelectedPersonId() !== selectedId) {
+			// Sync layout visual state without re-triggering store callbacks
+			layoutInstance.selectPerson(selectedId, false);
+		}
 	});
 
 	$effect(() => {

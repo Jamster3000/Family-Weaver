@@ -14,7 +14,7 @@
 		onclick
 	}: {
 		href?: string;
-		variant?: "primary" | "secondary" | "transparent";
+		variant?: "primary" | "secondary" | "transparent" | "danger";
 		type?: "button" | "submit";
 		disabled?: boolean;
 		form?: string;
@@ -180,6 +180,31 @@
 
 	.transparent:focus-visible {
 		outline: 2px solid var(--secondary-colour);
+		outline-offset: 2px;
+	}
+
+	.danger {
+		background: var(--red-error);
+		color: var(--text-colour);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		border: 1px solid var(--red-error);
+	}
+
+	.danger:hover:not(.disabled):not(:disabled) {
+		background: color-mix(in srgb, var(--red-error) 88%, black);
+		border-color: color-mix(in srgb, var(--red-error) 88%, black);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+	}
+
+	.danger:active:not(.disabled):not(:disabled) {
+		background: color-mix(in srgb, var(--red-error) 80%, black);
+		border-color: color-mix(in srgb, var(--red-error) 80%, black);
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+		transform: scale(0.99);
+	}
+
+	.danger:focus-visible {
+		outline: 2px solid var(--red-error);
 		outline-offset: 2px;
 	}
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { personData, updatePersonData } from "$personStore";
 	import { personTreeStore } from "$personTreeStore";
+	import Button from "$components/ui/Button.svelte";
 	import {
 		IconUser,
 		IconUsers,
@@ -9,6 +10,8 @@
 	} from "@tabler/icons-svelte-runes";
 	import RelationSelect from "$components/ui/RelationSelect.svelte";
 	import Tooltip from "$components/ui/Tooltip.svelte";
+
+	let { mode } = $props();
 
 	function formatName(person: {
 		firstName?: string;
@@ -56,8 +59,10 @@
 		idToRemove: string,
 	) {
 		const currentList = $personData[field] || [];
+		const updatedList = currentList.filter((id) => id !== idToRemove);
+
 		updatePersonData({
-			[field]: currentList.filter((id) => id !== idToRemove),
+			[field]: updatedList,
 		});
 	}
 </script>
@@ -76,13 +81,15 @@
 		</div>
 
 		<div class="group-content">
-			<RelationSelect
-				placeholder="Add parent"
-				relationType="parent"
-				excludeIds={allAssignedIds}
-				onSelect={(ids) => handleAddRelation("parentIds", ids)}
-				disabled={availablePeopleCount === 0}
-			/>
+			<Tooltip text={mode === "view" ? "Click Edit to add or remove parents" : ""}>
+				<RelationSelect
+					placeholder="Add parent"
+					relationType="parent"
+					excludeIds={allAssignedIds}
+					onSelect={(ids) => handleAddRelation("parentIds", ids)}
+					disabled={availablePeopleCount === 0 || mode === "view"}
+				/>
+			</Tooltip>
 
 			{#if $personData.parentIds.length === 0}
 				<p class="empty-state">{getRelationLabel("Add parent(s)")}</p>
@@ -94,21 +101,23 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<Tooltip text="Remove {formatName(person || {})}">
-								<button
+							<Tooltip text={mode === "view" ? "Click Edit to remove" : `Remove ${formatName(person || {})}`}>
+								<Button
 									type="button"
-									class="remove-btn"
+									variant="danger"
+									fontSize="small"
 									onclick={() =>
 										handleRemoveRelation(
 											"parentIds",
 											parentId,
 										)}
-									aria-label="Remove {formatName(
+									ariaLabel="Remove {formatName(
 										person || {},
 									)}"
+									disabled={mode === "view"}
 								>
-									<IconTrash size={18} /> Remove
-								</button>
+									<IconTrash size={20} /> Remove
+								</Button>
 							</Tooltip>
 						</div>
 					{/each}
@@ -126,13 +135,15 @@
 		</div>
 
 		<div class="group-content">
-			<RelationSelect
-				placeholder="Add child"
-				relationType="child"
-				excludeIds={allAssignedIds}
-				onSelect={(ids) => handleAddRelation("childrenIds", ids)}
-				disabled={availablePeopleCount === 0}
-			/>
+			<Tooltip text={mode === "view" ? "Click Edit to add or remove children" : ""}>
+				<RelationSelect
+					placeholder="Add child"
+					relationType="child"
+					excludeIds={allAssignedIds}
+					onSelect={(ids) => handleAddRelation("childrenIds", ids)}
+					disabled={availablePeopleCount === 0 || mode === "view"}
+				/>
+			</Tooltip>
 
 			{#if $personData.childrenIds.length === 0}
 				<p class="empty-state">{getRelationLabel("Add child(ren)")}</p>
@@ -144,21 +155,23 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<Tooltip text="Remove {formatName(person || {})}">
-								<button
+							<Tooltip text={mode === "view" ? "Click Edit to remove" : `Remove ${formatName(person || {})}`}>
+								<Button
 									type="button"
-									class="remove-btn"
+									variant="danger"
+									fontSize="small"
 									onclick={() =>
 										handleRemoveRelation(
 											"childrenIds",
 											childId,
 										)}
-									aria-label="Remove {formatName(
+									ariaLabel="Remove {formatName(
 										person || {},
 									)}"
+									disabled={mode === "view"}
 								>
-									<IconTrash size={18} /> Remove
-								</button>
+									<IconTrash size={20} /> Remove
+								</Button>
 							</Tooltip>
 						</div>
 					{/each}
@@ -176,13 +189,15 @@
 		</div>
 
 		<div class="group-content">
-			<RelationSelect
-				placeholder="Add partner"
-				relationType="partner"
-				excludeIds={allAssignedIds}
-				onSelect={(ids) => handleAddRelation("partnerIds", ids)}
-				disabled={availablePeopleCount === 0}
-			/>
+			<Tooltip text={mode === "view" ? "Click Edit to add or remove partners" : ""}>
+				<RelationSelect
+					placeholder="Add partner"
+					relationType="partner"
+					excludeIds={allAssignedIds}
+					onSelect={(ids) => handleAddRelation("partnerIds", ids)}
+					disabled={availablePeopleCount === 0 || mode === "view"}
+				/>
+			</Tooltip>
 
 			{#if $personData.partnerIds.length === 0}
 				<p class="empty-state">{getRelationLabel("Add partner(s)")}</p>
@@ -194,21 +209,23 @@
 							<span class="relation-name"
 								>{person ? formatName(person) : "Unknown"}</span
 							>
-							<Tooltip text="Remove {formatName(person || {})}">
-								<button
+							<Tooltip text={mode === "view" ? "Click Edit to remove" : `Remove ${formatName(person || {})}`}>
+								<Button
 									type="button"
-									class="remove-btn"
+									variant="danger"
+									fontSize="small"
 									onclick={() =>
 										handleRemoveRelation(
 											"partnerIds",
 											partnerId,
 										)}
-									aria-label="Remove {formatName(
+									ariaLabel="Remove {formatName(
 										person || {},
 									)}"
+									disabled={mode === "view"}
 								>
-									<IconTrash size={18} /> Remove
-								</button>
+									<IconTrash size={20} /> Remove
+								</Button>
 							</Tooltip>
 						</div>
 					{/each}
@@ -353,45 +370,5 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-
-	.remove-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 6px 10px;
-		background: color-mix(in srgb, var(--red-error) 12%, transparent);
-		border: 1px solid color-mix(in srgb, var(--red-error) 30%, transparent);
-		border-radius: 4px;
-		color: var(--red-error);
-		font-size: var(--font-small);
-		font-family: var(--font-primary);
-		font-weight: 600;
-		cursor: pointer;
-		flex-shrink: 0;
-		transition:
-			background 0.15s ease,
-			border-color 0.15s ease,
-			transform 0.1s ease;
-	}
-
-	.remove-btn:hover {
-		background: var(--red-error);
-		border-color: var(--red-error);
-		color: var(--white);
-	}
-
-	.remove-btn:focus-visible {
-		outline: 2px solid var(--red-error);
-		outline-offset: 2px;
-	}
-
-	.remove-btn:active {
-		transform: scale(0.97);
-	}
-
-	.remove-btn :global(svg) {
-		display: block;
-		flex-shrink: 0;
 	}
 </style>

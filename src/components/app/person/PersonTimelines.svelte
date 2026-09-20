@@ -9,9 +9,11 @@
 	} from "@tabler/icons-svelte-runes";
 
 	let {
-		isAddingEntry = false
+		isAddingEntry = $bindable(false),
+		mode = "create",
 	}: {
 		isAddingEntry?: boolean;
+		mode?: "create" | "edit" | "view";
 	} = $props();
 
 	type CategoryKey = "lifeEvents" | "workEducation" | "placesLived";
@@ -82,6 +84,7 @@
 			categoryTitle={categories[selectedCategory].title}
 			onBack={() => (selectedCategory = null)}
 			bind:isAddingEntry
+			{mode}
 		/>
 	{/if}
 </div>

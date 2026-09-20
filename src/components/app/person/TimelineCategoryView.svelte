@@ -2,6 +2,7 @@
 	import Card from "$components/ui/Card.svelte";
 	import Button from "$components/ui/Button.svelte";
 	import TimelineEntryForm from "./TimelineEntryForm.svelte";
+	import Tooltip from "$components/ui/Tooltip.svelte";
 	import { personData, updatePersonData } from "$personStore";
 	import {
 		IconArrowLeft,
@@ -16,11 +17,13 @@
 		categoryTitle = "",
 		onBack,
 		isAddingEntry = $bindable(false),
+		mode = "create",
 	}: {
 		categoryKey: CategoryKey;
 		categoryTitle?: string;
 		onBack?: () => void;
 		isAddingEntry?: boolean;
+		mode?: "create" | "edit" | "view";
 	} = $props();
 
 	let entries = $derived(
@@ -57,10 +60,12 @@
 
 			<h2>{categoryTitle}</h2>
 
-			<Button onclick={() => (isAddingEntry = true)}>
-				<IconPlus size={18} stroke={2} />
-				<span>Add Entry</span>
-			</Button>
+			<Tooltip text={mode === "view" ? "Click Edit to add entries" : ""}>
+				<Button disabled={mode === "view"} onclick={() => (isAddingEntry = true)}>
+					<IconPlus size={18} stroke={2} />
+					<span>Add Entry</span>
+				</Button>
+			</Tooltip>
 		</div>
 
 		<div class="entries-container">
@@ -95,14 +100,17 @@
 									{/if}
 								</div>
 
-								<button
-									class="delete-btn"
-									onclick={() => handleDeleteEntry(entry.id)}
-									title="Delete entry"
-									aria-label="Delete entry"
-								>
-									<IconTrash size={18} stroke={1.5} />
-								</button>
+								<Tooltip text={mode === "view" ? "Click Edit to delete entries" : "Delete entry"}>
+									<Button
+										variant="transparent"
+										iconOnly={true}
+										onclick={() => handleDeleteEntry(entry.id)}
+										ariaLabel="Delete entry"
+										disabled={mode === "view"}
+									>
+										<IconTrash size={24} stroke={1.5} />
+									</Button>
+								</Tooltip>
 							</div>
 						</Card>
 					{/each}
@@ -194,23 +202,6 @@
 		opacity: 0.8;
 		margin: 4px 0 0 0;
 		line-height: 1.4;
-	}
-
-	.delete-btn {
-		all: unset;
-		cursor: pointer;
-		color: var(--red-error);
-		padding: 6px;
-		border-radius: 4px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		opacity: 0.7;
-		transition: opacity var(--xshort-transition-duration) ease;
-	}
-
-	.delete-btn:hover {
-		opacity: 1;
 	}
 
 	.empty-state {

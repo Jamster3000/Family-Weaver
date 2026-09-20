@@ -26,18 +26,39 @@
 	let activeTab = $state("overview");
 	let isAddingTimelineEvent = $state(false);
 	const selectedPerson = $derived($selectedPersonStore);
+	let originalPersonData = $state<any>(null);
 
 	const logger = createLogger("Person.svelte");
 
 	let mode = $state<"create" | "edit" | "view">("create");
+	let initialMode = $state<"create" | "edit" | "view">("create");
+
+	let wasOpen = false;
+
+	let personDisplayName = $derived.by(() => {
+		const data = $personData;
+		if (!data) return selectedPerson?.name || "Person";
+
+		const full = [data.firstName, data.middleNames, data.lastName]
+			.filter(Boolean)
+			.join(" ")
+			.trim();
+
+		return full || selectedPerson?.name || "Person";
+	});
 
 	$effect(() => {
-		const data = modals.getData("addPerson");
-		if (data?.mode) {
-			mode = data.mode;
-		} else {
-			mode = "create";
+		const isOpen = $modals.addPerson;
+		if (isOpen && !wasOpen) {
+			const data = modals.getData("addPerson");
+			mode = data?.mode ?? "create";
+			initialMode = mode;
+
+			if (mode !== "create" && $personData) {
+				originalPersonData = JSON.parse(JSON.stringify($personData));
+			}
 		}
+		wasOpen = isOpen;
 	});
 
 	$effect(() => {
@@ -54,8 +75,8 @@
 		const rawData = $personData;
 		const hasRelationships = Boolean(
 			(rawData?.parentIds && rawData.parentIds.length > 0) ||
-			(rawData?.partnerIds && rawData.partnerIds.length > 0) ||
-			(rawData?.childrenIds && rawData.childrenIds.length > 0)
+				(rawData?.partnerIds && rawData.partnerIds.length > 0) ||
+				(rawData?.childrenIds && rawData.childrenIds.length > 0),
 		);
 
 		if (!hasRelationships) {
@@ -99,17 +120,28 @@
 		try {
 			await invoke("create_person", { person: cleanedPerson });
 			updatePersonTreeData(cleanedPerson);
-			resetPersonData();
 			toasts.success("Person created successfully!");
-			activeTab = "overview";
+
+			if (mode === "edit" && initialMode === "view") {
+				originalPersonData = JSON.parse(JSON.stringify($personData));
+				mode = "view";
+				toasts.info("Switched to view.");
+			} else {
+				resetPersonData();
+				activeTab = "overview";
+				modals.close("addPerson");
+				clearSelectedPerson();
+			}
 		} catch (error) {
 			toasts.error("Failed to create person.");
 			logger.error(`Error creating person: ${error}`);
 			activeTab = "overview";
 			return;
 		}
+	}
 
-		modals.close("addPerson");
+	function clearSelectedPerson() {
+		selectedPersonStore.set({});
 	}
 
 	function handleConfirmSavePersonClose() {
@@ -118,31 +150,57 @@
 	}
 
 	function handlePersonDiscard() {
-		if (hasPersonChanged()) {
+		if (mode === "edit") {
+			modals.open("discardPersonChanges");
+		} else if (hasPersonChanged()) {
 			modals.open("discardPersonChanges");
 		} else {
+			clearSelectedPerson();
 			modals.close("addPerson");
 			activeTab = "overview";
 		}
 	}
 
 	function handleDiscard() {
-		resetPersonData();
 		modals.close("discardPersonChanges");
-		setTimeout(() => {
-			modals.close("addPerson");
-			activeTab = "overview";
-		}, 100);
+		if (mode === "edit" && initialMode === "view") {
+			if (originalPersonData) {
+				$personData = JSON.parse(JSON.stringify(originalPersonData));
+			}
+
+			// Return from timeline entry form back to entries list
+			isAddingTimelineEvent = false;
+
+			mode = "view";
+			toasts.info("Switched to view.");
+		} else {
+			isAddingTimelineEvent = false;
+			resetPersonData();
+
+			setTimeout(() => {
+				modals.close("addPerson");
+				activeTab = "overview";
+				clearSelectedPerson();
+			}, 100);
+		}
 	}
 
 	function handleAddPersonClose() {
 		modals.close("addPerson");
 		activeTab = "overview";
+		clearSelectedPerson();
 	}
 
 	function handleDiscardChangesClose() {
-		modals.close("discardPersonChanges");
-		activeTab = "overview";
+		if (mode !== "edit") {
+			modals.close("discardPersonChanges");
+			activeTab = "overview";
+		}
+	}
+
+	function switchToEdit() {
+		toasts.info("Switched to edit.");
+		mode = "edit";
 	}
 </script>
 
@@ -151,9 +209,16 @@
 	width="100%"
 	padding="medium"
 	onClose={handleAddPersonClose}
-	showClose={true}>
+	showClose={true}
+>
 	<div class="modal-header">
-		<h1>Add new family member</h1>
+		{#if mode === "edit"}
+			<h1>Editing {personDisplayName}</h1>
+		{:else if mode === "view"}
+			<h1>Viewing {personDisplayName}</h1>
+		{:else}
+			<h1>Add new family member</h1>
+		{/if}
 	</div>
 
 	<div class="tabs">
@@ -203,14 +268,15 @@
 				class="tab-panel"
 			>
 				{#if activeTab === "overview"}
-					<PersonOverview />
+					<PersonOverview {mode} />
 				{:else if activeTab === "media"}
-					<PersonMedia />
+					<PersonMedia {mode} />
 				{:else if activeTab === "relationships"}
-					<PersonRelationships />
+					<PersonRelationships {mode} />
 				{:else if activeTab === "timelines"}
 					<PersonTimelines
-						isAddingEntry={isAddingTimelineEvent}
+						{mode}
+						bind:isAddingEntry={isAddingTimelineEvent}
 					/>
 				{/if}
 			</div>
@@ -218,7 +284,11 @@
 	</div>
 
 	{#snippet footer()}
-		{#if isAddingTimelineEvent}
+		{#if mode === "view"}
+			<Button
+				onclick={switchToEdit}>Edit</Button
+			>
+		{:else if isAddingTimelineEvent}
 			<Tooltip
 				text="You must finish adding the timeline event before saving this person."
 				position="top"
@@ -259,7 +329,8 @@
 	confirmLabel="Yes, discard"
 	cancelLabel="No, continue editing"
 	onConfirm={handleDiscard}
-	onClose={handleDiscardChangesClose}/>
+	onClose={handleDiscardChangesClose}
+/>
 
 <ConfirmModal
 	isOpen={$modals.confirmSavePerson}
@@ -269,7 +340,8 @@
 	confirmLabel="Yes, save person"
 	cancelLabel="No, add relationships"
 	onConfirm={executePersonSave}
-	onClose={handleConfirmSavePersonClose}/>
+	onClose={handleConfirmSavePersonClose}
+/>
 
 <style>
 	.modal-header {

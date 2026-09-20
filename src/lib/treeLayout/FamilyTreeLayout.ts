@@ -108,11 +108,11 @@ export class FamilyTreeLayout {
         this.selectPerson(newSelectedId);
     }
 
-    public selectPerson(personId: string | null): void {
+    public selectPerson(personId: string | null, notify: boolean = true): void {
         this.selectedPersonId = personId;
         updateNodeSelection(this.g, this.selectedPersonId);
 
-        if (this.onSelectPerson) {
+        if (notify && this.onSelectPerson) {
             const selectedPerson = personId
                 ? this.currentMembers.find((m) => m.id === personId) || null
                 : null;

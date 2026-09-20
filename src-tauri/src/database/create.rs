@@ -53,6 +53,7 @@ pub async fn create_tree(
 pub async fn create_person(
     person: Person,
     state: tauri::State<'_, AppState>,
+    app: AppHandle,
 ) -> Result<String, String> {
     let validator = PersonValidator::default();
     tracing::info!("Creating new person");
@@ -68,20 +69,20 @@ pub async fn create_person(
         e.to_string()
     })?;
 
-    //Ensures that there's no stale relationship data from potential editing parents/children/partners
-    conn.execute("DELETE FROM person_parents WHERE person_id = ?1", params![&person.id])
+    // Ensures that there's no stale bi-directional relationship data
+    conn.execute("DELETE FROM person_parents WHERE person_id = ?1 OR parent_id = ?1", params![&person.id])
         .map_err(|e| {
             tracing::error!("Failed to delete old parent relationships: {}", e);
             e.to_string()
         })?;
 
-    conn.execute("DELETE FROM person_partners WHERE person_id = ?1", params![&person.id])
+    conn.execute("DELETE FROM person_partners WHERE person_id = ?1 OR partner_id = ?1", params![&person.id])
         .map_err(|e| {
             tracing::error!("Failed to delete old partner relationships: {}", e);
             e.to_string()
         })?;
 
-    conn.execute("DELETE FROM person_children WHERE person_id = ?1", params![&person.id])
+    conn.execute("DELETE FROM person_children WHERE person_id = ?1 OR child_id = ?1", params![&person.id])
         .map_err(|e| {
             tracing::error!("Failed to delete old child relationships: {}", e);
             e.to_string()
@@ -134,38 +135,65 @@ pub async fn create_person(
         e.to_string()
     })?;
 
-    // Insert relationships (parents)
+    // Insert relationships (parents & reciprocal child)
     for parent_id in &person.parent_ids {
         conn.execute(
-            "INSERT INTO person_parents (person_id, parent_id) VALUES (?1, ?2)",
+            "INSERT OR IGNORE INTO person_parents (person_id, parent_id) VALUES (?1, ?2)",
             params![&person.id, parent_id],
         )
         .map_err(|e| {
             tracing::error!("Failed to insert parent relationship: {}", e);
             e.to_string()
         })?;
+
+        conn.execute(
+            "INSERT OR IGNORE INTO person_children (person_id, child_id) VALUES (?1, ?2)",
+            params![parent_id, &person.id],
+        )
+        .map_err(|e| {
+            tracing::error!("Failed to insert reciprocal child relationship: {}", e);
+            e.to_string()
+        })?;
     }
 
-    // Insert relationships (partners)
+    // Insert relationships (partners & reciprocal partner)
     for partner_id in &person.partner_ids {
         conn.execute(
-            "INSERT INTO person_partners (person_id, partner_id) VALUES (?1, ?2)",
+            "INSERT OR IGNORE INTO person_partners (person_id, partner_id) VALUES (?1, ?2)",
             params![&person.id, partner_id],
         )
         .map_err(|e| {
             tracing::error!("Failed to insert partner relationship: {}", e);
             e.to_string()
         })?;
+
+        conn.execute(
+            "INSERT OR IGNORE INTO person_partners (person_id, partner_id) VALUES (?1, ?2)",
+            params![partner_id, &person.id],
+        )
+        .map_err(|e| {
+            tracing::error!("Failed to insert reciprocal partner relationship: {}", e);
+            e.to_string()
+        })?;
     }
 
-    // Insert relationships (children)
+    // Insert relationships (children & reciprocal parent)
     for child_id in &person.children_ids {
         conn.execute(
-            "INSERT INTO person_children (person_id, child_id) VALUES (?1, ?2)",
+            "INSERT OR IGNORE INTO person_children (person_id, child_id) VALUES (?1, ?2)",
             params![&person.id, child_id],
         )
         .map_err(|e| {
             tracing::error!("Failed to insert child relationship: {}", e);
+            e.to_string()
+        })?;
+
+        conn.execute(
+            "INSERT OR IGNORE INTO person_parents (person_id, parent_id) VALUES (?1, ?2)",
+            params![child_id, &person.id],
+        )
+        .map_err(|e| {
+            tracing::error!("Failed to insert reciprocal parent relationship: {}", e);
             e.to_string()
         })?;
     }
@@ -250,6 +278,8 @@ pub async fn create_person(
             e.to_string()
         })?;
     }
+
+    app.emit("tree-changed", String::new()).ok();
 
     Ok(person.id)
 }

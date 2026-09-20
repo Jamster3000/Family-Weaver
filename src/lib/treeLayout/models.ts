@@ -50,5 +50,5 @@ export interface LayoutOptions {
     config?: Partial<LayoutConfig>;
     toolbarSelector?: string;
     selectedPersonId?: string | null;
-    onSelectPerson?: (person: Person) => void;
+    onSelectPerson?: ((person: Person | null) => void);
 }

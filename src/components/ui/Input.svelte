@@ -17,6 +17,7 @@
 		error = "",
 		helper = "",
 		disabled = false,
+		readonly = false,
 		required = false,
 		counter = false,
 		maxLength = undefined,
@@ -34,6 +35,7 @@
 		error?: string;
 		helper?: string;
 		disabled?: boolean;
+		readonly?: boolean;
 		required?: boolean;
 		counter?: boolean;
 		maxLength?: number;
@@ -169,6 +171,7 @@
 		class:error={!!error}
 		class:disabled
 		class:multiline
+		class:readonly
 		class:centerPlaceholder
 		style="width: {calculatedWidth}"
 	>
@@ -177,6 +180,7 @@
 				{id}
 				{placeholder}
 				{disabled}
+				{readonly}
 				{required}
 				maxlength={maxLength}
 				data-testid="textarea-field"
@@ -192,6 +196,7 @@
 				type={safeType}
 				{placeholder}
 				{disabled}
+				{readonly}
 				{required}
 				maxlength={maxLength}
 				data-testid="input-field"
@@ -235,7 +240,6 @@
 </div>
 
 <style>
-	/* CSS styles remain identical */
 	.field {
 		display: flex;
 		flex-direction: column;
@@ -336,6 +340,11 @@
 	.input-wrap.centerPlaceholder input,
 	.input-wrap.centerPlaceholder textarea {
 		text-align: center;
+	}
+
+	input:read-only,
+	textarea:read-only {
+		cursor: not-allowed;
 	}
 
 	input:disabled,

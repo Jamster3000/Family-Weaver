@@ -38,7 +38,7 @@ export const getLeftItems = (hasUpdate: boolean = false, hasSelectedPerson: bool
                 label: "Add Person",
                 tooltip: "Add a new person to the active family tree.",
                 icon: IconUserPlus,
-                action: () => modals.open("addPerson"),
+                action: () => modals.open("addPerson", { mode: "create" }),
             },
             {
                 id: "create-tree",

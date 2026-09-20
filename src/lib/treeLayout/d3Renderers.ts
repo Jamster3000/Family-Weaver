@@ -206,13 +206,7 @@ export function drawNodes(
         .attr('fill', 'none')
         .attr('stroke', colors.selectedBorder)
         .attr('stroke-width', 3)
-        .style('opacity', 0)
-        .on('update', function (d) {
-            d3.select(this)
-                .transition()
-                .duration(200)
-                .style('opacity', d.id === selectedPersonId ? 1 : 0);
-        });
+        .style('opacity', (d) => (d.id === selectedPersonId ? 1 : 0));
 
     // draws the main card rectable for the node
     groups

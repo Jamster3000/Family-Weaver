@@ -55,7 +55,6 @@ pub async fn create_person(
     state: tauri::State<'_, AppState>,
 ) -> Result<String, String> {
     let validator = PersonValidator::default();
-
     tracing::info!("Creating new person");
 
     // Validate the person data
@@ -69,10 +68,52 @@ pub async fn create_person(
         e.to_string()
     })?;
 
+    //Ensures that there's no stale relationship data from potential editing parents/children/partners
+    conn.execute("DELETE FROM person_parents WHERE person_id = ?1", params![&person.id])
+        .map_err(|e| {
+            tracing::error!("Failed to delete old parent relationships: {}", e);
+            e.to_string()
+        })?;
+
+    conn.execute("DELETE FROM person_partners WHERE person_id = ?1", params![&person.id])
+        .map_err(|e| {
+            tracing::error!("Failed to delete old partner relationships: {}", e);
+            e.to_string()
+        })?;
+
+    conn.execute("DELETE FROM person_children WHERE person_id = ?1", params![&person.id])
+        .map_err(|e| {
+            tracing::error!("Failed to delete old child relationships: {}", e);
+            e.to_string()
+        })?;
+
+    conn.execute("DELETE FROM marriages WHERE person_id = ?1", params![&person.id])
+        .map_err(|e| {
+            tracing::error!("Failed to delete old marriages: {}", e);
+            e.to_string()
+        })?;
+
+    conn.execute("DELETE FROM timeline_entries WHERE person_id = ?1", params![&person.id])
+        .map_err(|e| {
+            tracing::error!("Failed to delete old timeline entries: {}", e);
+            e.to_string()
+        })?;
+
     // Insert the person
     conn.execute(
         "INSERT INTO person (id, tree_id, first_name, middle_names, last_name, gender, dob, birth_location, dod, death_location, important_notes, created_at, updated_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
+         ON CONFLICT(id) DO UPDATE SET
+            first_name = ?3,
+            middle_names = ?4,
+            last_name = ?5,
+            gender = ?6,
+            dob = ?7,
+            birth_location = ?8,
+            dod = ?9,
+            death_location = ?10,
+            important_notes = ?11,
+            updated_at = ?13",
         params![
             &person.id,
             &person.tree_id,
@@ -89,7 +130,7 @@ pub async fn create_person(
             Utc::now().to_rfc3339()
         ],
     ).map_err(|e| {
-        tracing::error!("Failed to insert person: {}", e);
+        tracing::error!("Failed to upsert person: {}", e);
         e.to_string()
     })?;
 

@@ -3,6 +3,7 @@
 	import { invoke } from "@tauri-apps/api/core";
 	import { listen } from "@tauri-apps/api/event";
 	import { personTreeStore, type Person } from "$personTreeStore";
+	import { personData, resetPersonData } from "$personStore";
 	import { FamilyTreeLayout } from "$lib/treeLayout/index";
 	import { selectedPersonStore } from "$lib/stores/personTreeStore";
 
@@ -30,16 +31,35 @@
 			layoutInstance = new FamilyTreeLayout(container, {
 				toolbarSelector: ".toolbar",
 				onSelectPerson: (person) => {
-					selectedPerson = person;
-					console.log("Selected person:", person);
 					if (person) {
 						selectedPersonStore.set({
 							id: person.id,
 							treeId: person.tree_id,
 							name: person.firstName
 						});
+
+						personData.set({
+							firstName: person.firstName,
+							middleNames: person.middleNames,
+							lastName: person.lastName,
+							gender: person.gender,
+							dob: person.dob,
+							birthLocation: person.birthLocation,
+							dod: person.dod,
+							deathLocation: person.deathLocation,
+							importantNotes: person.importantNotes,
+							parentIds: person.parentIds,
+							partnerIds: person.partnerIds,
+							childrenIds: person.childrenIds,
+							marriages: person.marriages || {},
+							lifeEvents: person.lifeEvents || [],
+							workEducation: person.workEducation || [],
+							placesLived: person.placesLived || []
+						});
+
 					} else {
 						selectedPersonStore.set({});
+						resetPersonData();
 					}
 				}
 			});

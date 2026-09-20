@@ -31,19 +31,24 @@ const initialState: ModalState = {
 	timelineEntry: false,
 	settings: false,
 	deleteAllData: false,
-    logs: false,
+	logs: false,
 	confirmSavePerson: false,
 };
 
 function createModalStore() {
 	const { subscribe, update, set } = writable<ModalState>(initialState);
+	let modalData: Partial<Record<ModalType, Record<string, any>>> = {};
 
 	return {
 		subscribe,
-		open: (modal: ModalType) => update((s) => ({ ...s, [modal]: true })),
+		open: (modal: ModalType, data?: Record<string, any>) => {
+			if (data) modalData[modal] = data;
+			update((s) => ({ ...s, [modal]: true }));
+		},
 		close: (modal: ModalType) => update((s) => ({ ...s, [modal]: false })),
 		toggle: (modal: ModalType) => update((s) => ({ ...s, [modal]: !s[modal] })),
 		closeAll: () => set(initialState),
+		getData: (modal: ModalType) => modalData[modal],
 	};
 }
 

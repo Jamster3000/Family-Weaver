@@ -13,6 +13,7 @@
 		hasPersonChanged,
 		resetPersonData,
 	} from "$personStore";
+	import { selectedPersonStore } from "$personTreeStore";
 	import type { Person } from "$personTreeStore";
 	import { updatePersonTreeData } from "$personTreeStore";
 	import { activeTree } from "$treeStore";
@@ -24,8 +25,20 @@
 
 	let activeTab = $state("overview");
 	let isAddingTimelineEvent = $state(false);
+	const selectedPerson = $derived($selectedPersonStore);
 
 	const logger = createLogger("Person.svelte");
+
+	let mode = $state<"create" | "edit" | "view">("create");
+
+	$effect(() => {
+		const data = modals.getData("addPerson");
+		if (data?.mode) {
+			mode = data.mode;
+		} else {
+			mode = "create";
+		}
+	});
 
 	$effect(() => {
 		if (isAddingTimelineEvent) {
@@ -69,7 +82,7 @@
 			birthLocation: rawData.birthLocation.trim(),
 			deathLocation: rawData.deathLocation.trim(),
 			importantNotes: rawData.importantNotes.trim(),
-			id: crypto.randomUUID(),
+			id: selectedPerson?.id || crypto.randomUUID(),
 			treeId: currentTreeId,
 			tree_id: currentTreeId,
 		};

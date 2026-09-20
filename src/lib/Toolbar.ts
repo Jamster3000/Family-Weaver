@@ -91,14 +91,14 @@ export const getLeftItems = (hasUpdate: boolean = false, hasSelectedPerson: bool
                 label: "Edit Person",
                 tooltip: "Edit the selected person's details.",
                 icon: IconEdit,
-                action: () => modals.open("addPerson"),
+                action: () => modals.open("addPerson", { mode: "edit" }),
             },
             {
                 id: "view-person",
                 label: "View Person",
                 tooltip: "View the selected person's details.",
                 icon: IconUser,
-                action: () => modals.open("addPerson"),
+                action: () => modals.open("addPerson", { mode: "view" }),
             },
             {
                 id: "delete-person",

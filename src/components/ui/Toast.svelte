@@ -4,11 +4,13 @@
 		IconCheck,
 		IconAlertCircle,
 		IconInfoCircle,
+		IconX,
 	} from "@tabler/icons-svelte-runes";
 	import Close from "$components/ui/Close.svelte";
 	import { onMount } from "svelte";
 	import { getAnimationDuration } from "$lib/animationUtils";
 	import { settingsData } from "$settingsStore";
+	import Button from "$components/ui/Button.svelte";
 
 	let {
 		message = "",
@@ -22,20 +24,7 @@
 		duration?: number | undefined;
 	} = $props();
 
-	let effectiveDuration = $derived(
-		duration !== undefined
-			? duration
-			: (() => {
-				const toastSetting = $settingsData.find(
-					(s) => s.key === "toast_appearance_time",
-				);
-				const seconds = toastSetting?.value && "Float" in toastSetting.value
-					? toastSetting.value.Float
-					: 4;
-				return seconds * 1000;
-			})()
-	);
-
+	let effectiveDuration = $state<number>(0);
 	let isVisible = $state(true);
 
 	const icons = {
@@ -53,14 +42,19 @@
 
 	let timeout: ReturnType<typeof setTimeout>;
 
-	$effect(() => {
-		if (effectiveDuration > 0 && isVisible) {
-			clearTimeout(timeout);
+	onMount(() => {
+		const toastSetting = $settingsData.find(
+			(s) => s.key === "toast_appearance_time",
+		);
+		const seconds = toastSetting?.value && "Float" in toastSetting.value
+			? toastSetting.value.Float
+			: 4;
+		effectiveDuration = duration !== undefined ? duration : seconds * 1000;
+
+		if (effectiveDuration > 0) {
 			timeout = setTimeout(handleDismiss, effectiveDuration);
 		}
-	});
 
-	onMount(() => {
 		return () => clearTimeout(timeout);
 	});
 </script>
@@ -82,7 +76,14 @@
 		</div>
 
 		<div class="toast-close">
-			<Close onclick={handleDismiss} size={16} />
+			<Button
+				variant="transparent"
+				iconOnly={true}
+				onclick={handleDismiss}
+				ariaLabel="Close notification"
+			>
+				<IconX size={22} />
+			</Button>
 		</div>
 	</div>
 {/if}
@@ -101,6 +102,7 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 		min-width: 300px;
 		max-width: 400px;
+		overflow: visible;
 	}
 
 	.toast-icon {
@@ -126,6 +128,8 @@
 		justify-content: center;
 		flex-shrink: 0;
 		margin-left: 18px;
+		z-index: 10;
+		cursor: pointer;
 	}
 
 	.toast-success {

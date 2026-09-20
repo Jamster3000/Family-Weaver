@@ -51,6 +51,7 @@ jobs:
             - When using the calendar to pick a date, the year had to be typed or manually increased/decreased one year at a time. This has been changed to allow you to select a year quicker without the need to type in a year.
             - To avoid accidentally creating a new person without connecting any relationships, a warning will appear when saving a person without any relationships.
             - Added "gender" to the "overview" section of creating a person and updated the tree so that male members are always on the left hand side.
+            - Added "Edit", "delete" and "view" buttons in "Person" option in the toolbar. To access these options in "person" you must first select a person in the tree by left clicking on them.
 
             ## Under the Hood
             - Fixed a bug where deleting the last/only tree wouldn't correctly delete and continue to show the same tree.
@@ -61,5 +62,6 @@ jobs:
             - Made the `remove` button on the "relationship" tab after adding one or more relationships more clear that it is for removing the relationship and not the person.
             - Fixed a bug where the tree visual wasn't updated correctly when the last tree was deleted.
             - The tree now uses equinox calculations to determine the seasons for the northern and southern hemispheres instead of using fixed dates.
+            - Fixed some visual bugs with the toast notifications where more than 1 notification would mean only the last one had a close button.
           releaseDraft: false
           prerelease: false

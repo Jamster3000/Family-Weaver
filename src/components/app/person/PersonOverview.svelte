@@ -25,6 +25,16 @@
 
 <div class="overview-container">
 	<div class="row-four-col">
+		<Tooltip text={mode === "view" ? "Click Edit to change gender" : ""}>
+			<Input
+				label="Gender"
+				placeholder="e.g. Female"
+				value={$personData.gender ?? ""}
+				oninput={(e) => handleInput("gender", e)}
+				centerPlaceholder={false}
+				readonly={mode === "view"}
+			/>
+		</Tooltip>
 		<Tooltip text={mode === "view" ? "Click Edit to change first name" : ""}>
 			<Input
 				label="First Name"
@@ -51,16 +61,6 @@
 				placeholder="e.g. Smith"
 				value={$personData.lastName}
 				oninput={(e) => handleInput("lastName", e)}
-				centerPlaceholder={false}
-				readonly={mode === "view"}
-			/>
-		</Tooltip>
-		<Tooltip text={mode === "view" ? "Click Edit to change gender" : ""}>
-			<Input
-				label="Gender"
-				placeholder="e.g. Female"
-				value={$personData.gender ?? ""}
-				oninput={(e) => handleInput("gender", e)}
 				centerPlaceholder={false}
 				readonly={mode === "view"}
 			/>
